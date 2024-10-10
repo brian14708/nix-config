@@ -6,9 +6,15 @@
 
   home.stateVersion = "24.05";
 
-  home.packages = [
-    pkgs.devenv
-  ];
+  home.packages =
+    with pkgs;
+    [
+      devenv
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      colima
+      docker-client
+    ];
 
   home.file.".ssh/authorized_keys" = {
     source = pkgs.fetchurl {
@@ -30,6 +36,7 @@
   nix = {
     package = pkgs.nix;
     settings = {
+      use-xdg-base-directories = true;
       experimental-features = [
         "nix-command"
         "flakes"

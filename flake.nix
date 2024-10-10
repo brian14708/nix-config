@@ -35,6 +35,11 @@
       devShells = forEachSystem (pkgs: import ./shell.nix { inherit pkgs; });
 
       homeConfigurations = {
+        "brian@MacBookPro" = home-manager.lib.homeManagerConfiguration {
+          pkgs = pkgsFor.aarch64-darwin;
+          modules = [ ./home.nix ];
+          extraSpecialArgs = { };
+        };
         "brian" = home-manager.lib.homeManagerConfiguration {
           pkgs = pkgsFor.x86_64-linux;
           modules = [ ./home.nix ];
