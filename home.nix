@@ -16,13 +16,6 @@
       docker-client
     ];
 
-  home.file.".ssh/authorized_keys" = {
-    source = pkgs.fetchurl {
-      url = "https://brian14708.dev/ssh-key";
-      hash = "sha256-4rgJi2M8DUyuD6xB91ZMUe6TgdMzEdXqtL4A/6ZOXSo=";
-    };
-  };
-
   programs = {
     home-manager.enable = true;
     git = {
