@@ -14,33 +14,64 @@
   };
 
   outputs =
-    {
+    inputs@{
       self,
       nixpkgs,
       home-manager,
       flake-parts,
-    }@inputs:
+    }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      flake = {
-        path = ./.;
+      flake =
+        let
+          inherit (self) outputs;
+          pkgsFor =
+            system:
+            import nixpkgs {
+              inherit system;
+            };
+        in
+        {
+          path = ./.;
 
-        homeConfigurations = {
-          "brian@MacBookPro" = home-manager.lib.homeManagerConfiguration {
-            pkgs = import nixpkgs { system = "aarch64-darwin"; };
-            modules = [
-              ./base.nix
-              ./home.nix
-            ];
-          };
-          "brian" = home-manager.lib.homeManagerConfiguration {
-            pkgs = import nixpkgs { system = "x86_64-linux"; };
-            modules = [
-              ./base.nix
-              ./home.nix
-            ];
+          homeConfigurations = {
+            "brian@MacBookPro" = home-manager.lib.homeManagerConfiguration {
+              pkgs = pkgsFor "aarch64-darwin";
+              modules = [
+                ./home/brian/mbp.nix
+              ];
+              extraSpecialArgs = {
+                inherit inputs outputs;
+              };
+            };
+            "brian@aether" = home-manager.lib.homeManagerConfiguration {
+              pkgs = pkgsFor "x86_64-linux";
+              modules = [
+                ./home/brian/aether.nix
+              ];
+              extraSpecialArgs = {
+                inherit inputs outputs;
+              };
+            };
+            "brian@shiva" = home-manager.lib.homeManagerConfiguration {
+              pkgs = pkgsFor "x86_64-linux";
+              modules = [
+                ./home/brian/shiva.nix
+              ];
+              extraSpecialArgs = {
+                inherit inputs outputs;
+              };
+            };
+            "brian@fuxi" = home-manager.lib.homeManagerConfiguration {
+              pkgs = pkgsFor "x86_64-linux";
+              modules = [
+                ./home/brian/fuxi.nix
+              ];
+              extraSpecialArgs = {
+                inherit inputs outputs;
+              };
+            };
           };
         };
-      };
       systems = [
         "aarch64-linux"
         "x86_64-linux"
