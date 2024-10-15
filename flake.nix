@@ -11,6 +11,10 @@
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -19,6 +23,7 @@
       nixpkgs,
       home-manager,
       flake-parts,
+      ...
     }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       flake =
@@ -31,8 +36,6 @@
             };
         in
         {
-          path = ./.;
-
           homeConfigurations = {
             "brian@MacBookPro" = home-manager.lib.homeManagerConfiguration {
               pkgs = pkgsFor "aarch64-darwin";
