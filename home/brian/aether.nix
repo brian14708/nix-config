@@ -13,11 +13,4 @@
     with pkgs;
     [
     ];
-
-  programs.git = {
-    enable = true;
-    userName = "Brian Li";
-    userEmail = "me@brian14708.dev";
-    difftastic.enable = true;
-  };
 }
