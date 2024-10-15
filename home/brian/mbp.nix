@@ -5,18 +5,15 @@
   ...
 }:
 {
+  imports = [ ./global ];
   home.username = "brian";
   home.stateVersion = "24.05";
 
-  home.packages =
-    with pkgs;
-    [
-      devenv
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      colima
-      docker-client
-    ];
+  home.packages = with pkgs; [
+    colima
+    docker-client
+  ];
+
   programs.git = {
     enable = true;
     userName = "Brian Li";
