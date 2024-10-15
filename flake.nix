@@ -15,6 +15,14 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -36,6 +44,18 @@
             };
         in
         {
+          nixosConfigurations = {
+            aether = nixpkgs.lib.nixosSystem {
+              system = "x86_64-linux";
+              modules = [
+                ./hosts/aether
+              ];
+              specialArgs = {
+                inherit inputs outputs;
+              };
+            };
+          };
+
           homeConfigurations = {
             "brian@MacBookPro" = home-manager.lib.homeManagerConfiguration {
               pkgs = pkgsFor "aarch64-darwin";
