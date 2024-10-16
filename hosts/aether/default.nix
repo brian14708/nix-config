@@ -8,6 +8,7 @@
   imports = [
     inputs.disko.nixosModules.disko
     ./disko.nix
+    inputs.impermanence.nixosModules.impermanence
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -72,5 +73,14 @@
       ];
       trusted-users = [ "@wheel" ];
     };
+  };
+
+  fileSystems."/nix/persist".neededForBoot = true;
+
+  programs.fuse.userAllowOther = true;
+  environment.persistence."/nix/persist" = {
+    files = [
+      #      "/etc/machine-id"
+    ];
   };
 }
