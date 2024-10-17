@@ -61,6 +61,9 @@
               ];
               extraSpecialArgs = {
                 inherit inputs outputs;
+                machine = {
+                  trusted = true;
+                };
               };
             };
             "brian@aether" = home-manager.lib.homeManagerConfiguration {
@@ -70,6 +73,9 @@
               ];
               extraSpecialArgs = {
                 inherit inputs outputs;
+                machine = {
+                  trusted = true;
+                };
               };
             };
             "brian@shiva" = home-manager.lib.homeManagerConfiguration {
@@ -79,6 +85,9 @@
               ];
               extraSpecialArgs = {
                 inherit inputs outputs;
+                machine = {
+                  trusted = true;
+                };
               };
             };
             "brian@fuxi" = home-manager.lib.homeManagerConfiguration {
@@ -88,6 +97,9 @@
               ];
               extraSpecialArgs = {
                 inherit inputs outputs;
+                machine = {
+                  trusted = true;
+                };
               };
             };
           };
