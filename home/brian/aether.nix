@@ -4,7 +4,7 @@
   ...
 }:
 {
-  imports = [ ./global ];
+  imports = [ ./common ];
   home.username = "brian";
   home.stateVersion = "24.11";
 
