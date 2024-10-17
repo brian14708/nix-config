@@ -7,27 +7,27 @@ keys:
     - &fuxi age1g6grh79z90kk3pauwgqhlvawdmgwuhwds7rn0hd6k8e70tme958s2suxc0
     - &mbp age13v8s5p9zyvwle0reln03chxkxefwl6l4zn2ellmhcurxu0z6gdqqp7fanc
 creation_rules:
-  - path_regex: secrets\/aether(\..*)?\.yaml$
+  - path_regex: \/aether\/(.*\.)?secret\.yaml$
     key_groups:
       - age:
           - *aether
         pgp: *users
-  - path_regex: secrets\/shiva(\..*)?\.yaml$
+  - path_regex: \/shiva\/(.*\.)?secret\.yaml$
     key_groups:
       - age:
           - *shiva
         pgp: *users
-  - path_regex: secrets\/fuxi(\..*)?\.yaml$
+  - path_regex: \/fuxi\/(.*\.)?secret\.yaml$
     key_groups:
       - age:
           - *fuxi
         pgp: *users
-  - path_regex: secrets\/mbp(\..*)?\.yaml$
+  - path_regex: \/mbp\/(.*\.)?secret\.yaml$
     key_groups:
       - age:
           - *mbp
         pgp: *users
-  - path_regex: secrets\/global(\..*).*\.yaml$
+  - path_regex: \/common\/(.*\.)?secret\.yaml$
     key_groups:
       - age: *hosts
         pgp: *users

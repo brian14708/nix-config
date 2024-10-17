@@ -26,7 +26,7 @@
 
   sops.secrets = lib.optionalAttrs machine.trusted {
     "nix.conf" = {
-      sopsFile = ../secrets/global.nix.yaml;
+      sopsFile = ./nix.secret.yaml;
     };
   };
 
