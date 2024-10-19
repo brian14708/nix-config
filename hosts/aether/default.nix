@@ -11,18 +11,24 @@
     inputs.impermanence.nixosModules.impermanence
     inputs.sops-nix.nixosModules.sops
     inputs.disko.nixosModules.disko
+    inputs.lanzaboote.nixosModules.lanzaboote
     "${inputs.home-manager}/nixos"
     ./disko.nix
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.initrd.systemd.enable = true;
   boot.loader = {
     systemd-boot = {
-      enable = true;
+      enable = false;
       configurationLimit = 5;
     };
     efi.canTouchEfiVariables = true;
     timeout = 3;
+  };
+  boot.lanzaboote = {
+    enable = true;
+    pkiBundle = "/etc/secureboot";
   };
 
   sops = {
@@ -104,6 +110,7 @@
     hideMounts = true;
 
     directories = [
+      "/etc/secureboot"
       "/var/log"
       "/var/lib/iwd"
       "/var/lib/tailscale"
