@@ -3,7 +3,7 @@
   pkgs,
   inputs,
   outputs,
-  mcachine,
+  machine,
   ...
 }:
 {
@@ -92,6 +92,7 @@
         "nix-command"
         "flakes"
       ];
+      auto-optimise-store = true;
       substituters = [
         "https://nix-community.cachix.org"
         "https://mirrors.cernet.edu.cn/nix-channels/store"
@@ -103,6 +104,12 @@
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       ];
       trusted-users = [ "@wheel" ];
+    };
+    gc = {
+      automatic = true;
+      persistent = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
     };
   };
 
@@ -138,14 +145,9 @@
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
   home-manager.extraSpecialArgs = {
-    inherit inputs outputs;
-    machine = {
-      trusted = true;
-    };
-
+    inherit inputs outputs machine;
   };
   home-manager.users.brian = {
     imports = [ ../../home/brian/aether.nix ];
   };
-
 }

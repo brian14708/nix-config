@@ -10,8 +10,7 @@
   home.username = "brian";
   home.stateVersion = "24.11";
 
-  home.packages =
-    with pkgs;
-    [
-    ];
+  home.packages = with pkgs; [
+    vscode
+  ];
 }

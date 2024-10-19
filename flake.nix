@@ -44,11 +44,13 @@
             system:
             import nixpkgs {
               inherit system;
+              config.allowUnfree = true;
             };
         in
         {
           nixosConfigurations = {
             aether = nixpkgs.lib.nixosSystem {
+              pkgs = pkgsFor "x86_64-linux";
               system = "x86_64-linux";
               modules = [
                 ./hosts/aether
