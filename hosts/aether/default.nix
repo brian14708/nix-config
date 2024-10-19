@@ -25,6 +25,7 @@
   sops = {
     defaultSopsFile = ./secret.yaml;
     age.sshKeyPaths = [ "/nix/persist/etc/ssh/ssh_host_ed25519_key" ];
+    gnupg.sshKeyPaths = [ ];
     secrets."brian-password".neededForUsers = true;
     secrets."brian-password" = { };
   };
@@ -46,6 +47,7 @@
     networkConfig.DHCP = "yes";
   };
 
+  users.mutableUsers = false;
   users.users.brian = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
@@ -95,6 +97,7 @@
 
     directories = [
       "/var/log"
+      "/var/lib/iwd"
       "/var/lib/nixos"
       "/var/lib/systemd/coredump"
     ];
@@ -106,6 +109,14 @@
       "/etc/ssh/ssh_host_rsa_key.pub"
       "/etc/ssh/ssh_host_rsa_key"
     ];
+
+    users.brian = {
+
+      directories = [
+        "nix-config"
+        ".ssh"
+      ];
+    };
   };
   fileSystems."/nix/persist".neededForBoot = true;
 }
