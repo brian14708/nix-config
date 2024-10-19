@@ -50,6 +50,9 @@
               ];
               specialArgs = {
                 inherit inputs outputs;
+                machine = {
+                  trusted = true;
+                };
               };
             };
           };
@@ -59,18 +62,6 @@
               pkgs = pkgsFor "aarch64-darwin";
               modules = [
                 ./home/brian/mbp.nix
-              ];
-              extraSpecialArgs = {
-                inherit inputs outputs;
-                machine = {
-                  trusted = true;
-                };
-              };
-            };
-            "brian@aether" = home-manager.lib.homeManagerConfiguration {
-              pkgs = pkgsFor "x86_64-linux";
-              modules = [
-                ./home/brian/aether.nix
               ];
               extraSpecialArgs = {
                 inherit inputs outputs;
