@@ -2,6 +2,8 @@
   config,
   pkgs,
   inputs,
+  outputs,
+  mcachine,
   ...
 }:
 {
@@ -9,6 +11,7 @@
     inputs.impermanence.nixosModules.impermanence
     inputs.sops-nix.nixosModules.sops
     inputs.disko.nixosModules.disko
+    "${inputs.home-manager}/nixos"
     ./disko.nix
   ];
 
@@ -60,6 +63,8 @@
   environment.systemPackages = with pkgs; [
     vim
     git
+    gnumake
+    tmux
   ];
 
   hardware.enableRedistributableFirmware = true;
@@ -67,7 +72,10 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   services.openssh.enable = true;
-  services.tailscale.enable = true;
+  services.tailscale = {
+    enable = true;
+    extraUpFlags = [ "--accept-routes" ];
+  };
 
   system.stateVersion = "24.11";
 
@@ -98,6 +106,7 @@
     directories = [
       "/var/log"
       "/var/lib/iwd"
+      "/var/lib/tailscale"
       "/var/lib/nixos"
       "/var/lib/systemd/coredump"
     ];
@@ -111,7 +120,6 @@
     ];
 
     users.brian = {
-
       directories = [
         "nix-config"
         ".ssh"
@@ -119,4 +127,18 @@
     };
   };
   fileSystems."/nix/persist".neededForBoot = true;
+
+  home-manager.useGlobalPkgs = true;
+  home-manager.useUserPackages = true;
+  home-manager.extraSpecialArgs = {
+    inherit inputs outputs;
+    machine = {
+      trusted = true;
+    };
+
+  };
+  home-manager.users.brian = {
+    imports = [ ../../home/brian/aether.nix ];
+  };
+
 }
