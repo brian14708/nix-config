@@ -41,7 +41,7 @@
     };
     extraConfig = {
       gpg.format = "ssh";
-      gpg.ssh.allowedSignersFile = "~/.ssh/allowed_signers";
+      gpg.ssh.allowedSignersFile = "~/.config/git/allowed_signers";
     };
     lfs.enable = true;
     ignores = [
@@ -52,7 +52,7 @@
       ".aider.*"
     ];
   };
-  home.file.".ssh/allowed_signers" = {
+  home.file.".config/git/allowed_signers" = {
     text = ''
       # personal machines
       me+tyr@brian14708.dev ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFcqBFMZB3bOLhrGpQ7TmGORGuHrrbLrK7jqv50wrtTM
