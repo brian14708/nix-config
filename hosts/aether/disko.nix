@@ -59,15 +59,6 @@
       mountOptions = [
         "size=2G"
         "defaults"
-        "mode=755"
-      ];
-    };
-    nodev."/home/brian" = {
-      fsType = "tmpfs";
-      mountOptions = [
-        "size=2G"
-        "defaults"
-        "mode=777"
       ];
     };
   };

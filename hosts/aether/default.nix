@@ -154,11 +154,17 @@
         "documents"
         "projects"
         ".ssh"
+        ".local/state/syncthing"
+        ".local/state/nix"
+      ];
+      files = [
+        ".config/sops/age/keys.txt"
       ];
     };
   };
   fileSystems."/nix/persist".neededForBoot = true;
 
+  programs.fuse.userAllowOther = true;
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
   home-manager.extraSpecialArgs = {

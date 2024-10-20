@@ -19,6 +19,11 @@
 
   programs = {
     home-manager.enable = true;
+    neovim = {
+      enable = true;
+      vimAlias = true;
+      defaultEditor = true;
+    };
   };
 
   sops = {
