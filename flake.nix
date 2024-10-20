@@ -59,6 +59,7 @@
                 inherit inputs outputs;
                 machine = {
                   trusted = true;
+                  nixos = true;
                 };
               };
             };
@@ -74,6 +75,7 @@
                 inherit inputs outputs;
                 machine = {
                   trusted = true;
+                  nixos = false;
                 };
               };
             };
@@ -86,6 +88,7 @@
                 inherit inputs outputs;
                 machine = {
                   trusted = true;
+                  nixos = false;
                 };
               };
             };
@@ -98,6 +101,7 @@
                 inherit inputs outputs;
                 machine = {
                   trusted = true;
+                  nixos = false;
                 };
               };
             };

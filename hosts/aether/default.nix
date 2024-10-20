@@ -14,14 +14,17 @@
     inputs.lanzaboote.nixosModules.lanzaboote
     "${inputs.home-manager}/nixos"
     ./disko.nix
+    ./mihomo.nix
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelParams = [ "mitigations=off" ];
   boot.initrd.systemd.enable = true;
   boot.loader = {
     systemd-boot = {
       enable = false;
       configurationLimit = 5;
+      editor = false;
     };
     efi.canTouchEfiVariables = true;
     timeout = 3;
@@ -35,29 +38,30 @@
     defaultSopsFile = ./secret.yaml;
     age.sshKeyPaths = [ "/nix/persist/etc/ssh/ssh_host_ed25519_key" ];
     gnupg.sshKeyPaths = [ ];
-    secrets."brian-password".neededForUsers = true;
-    secrets."brian-password" = { };
+    secrets."brian-password" = {
+      neededForUsers = true;
+    };
+    secrets."mihomo-url" =
+      {
+      };
   };
 
   networking.hostName = "aether";
-  networking.wireless.iwd.enable = true;
+  networking.networkmanager.enable = false;
   networking.useDHCP = false;
-  networking.wireless.iwd.settings = {
-    IPv6 = {
-      Enabled = true;
-    };
-    Settings = {
-      AutoConnect = true;
-    };
-  };
+  networking.wireless.iwd.enable = true;
   systemd.network.enable = true;
   systemd.network.networks."20-wireless" = {
-    matchConfig.Name = "wlan*";
+    matchConfig.Type = "wlan";
     networkConfig.DHCP = "yes";
+    dhcpV4Config.RouteMetric = 20;
+    ipv6AcceptRAConfig.RouteMetric = 20;
   };
 
   users.mutableUsers = false;
   users.users.brian = {
+    uid = 1000;
+    description = "Brian";
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     openssh.authorizedKeys.keys = [
@@ -113,16 +117,24 @@
     };
   };
 
-  environment.persistence."/nix/persist" = {
+  environment.persistence.default = {
+    persistentStoragePath = "/nix/persist";
     hideMounts = true;
 
     directories = [
       "/etc/secureboot"
-      "/var/log"
       "/var/lib/iwd"
       "/var/lib/tailscale"
       "/var/lib/nixos"
+      "/var/log"
       "/var/lib/systemd/coredump"
+      {
+        directory = "/var/lib/private/mihomo";
+        mode = "0700";
+        defaultPerms = {
+          mode = "0700";
+        };
+      }
     ];
 
     files = [
@@ -135,7 +147,12 @@
 
     users.brian = {
       directories = [
-        "nix-config"
+        "nixos"
+        "public"
+        "media"
+        "downloads"
+        "documents"
+        "projects"
         ".ssh"
       ];
     };
@@ -150,4 +167,10 @@
   home-manager.users.brian = {
     imports = [ ../../home/brian/aether.nix ];
   };
+
+  services.xserver.enable = true;
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.desktopManager.gnome.enable = true;
+
+  security.sudo.extraConfig = "Defaults lecture = never";
 }
