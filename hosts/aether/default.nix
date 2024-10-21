@@ -11,7 +11,6 @@
     inputs.sops-nix.nixosModules.sops
     inputs.disko.nixosModules.disko
     inputs.lanzaboote.nixosModules.lanzaboote
-    "${inputs.home-manager}/nixos"
     ./disko.nix
     ./mihomo.nix
   ];
@@ -119,15 +118,5 @@
     };
   };
 
-  programs.fuse.userAllowOther = true;
-  home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    extraSpecialArgs = {
-      inherit inputs outputs machine;
-    };
-    users.brian = {
-      imports = [ ../../home/brian/aether.nix ];
-    };
-  };
+  programs.hyprland.enable = true;
 }

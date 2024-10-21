@@ -32,7 +32,7 @@
     };
   };
 
-  nix = lib.optionalAttrs (!machine.nixos) (
+  nix =
     {
       package = lib.mkDefault pkgs.nixVersions.latest;
       settings = {
@@ -56,6 +56,5 @@
     // lib.optionalAttrs machine.trusted {
       extraOptions = "include ${config.sops.secrets."nix.conf".path}\n";
       checkConfig = false;
-    }
-  );
+    };
 }

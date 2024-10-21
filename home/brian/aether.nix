@@ -11,15 +11,21 @@
     username = "brian";
     stateVersion = "24.11";
     packages = with pkgs; [
-      firefox
-      kitty
+      chromium
+      alacritty
     ];
   };
   programs.bash.enable = true;
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
-    systemd.enable = true;
+    settings = {
+      "$mod" = "SUPER";
+      bind = [
+        "$mod, F, exec, firefox"
+        "$mod, S, exec, alacritty"
+      ];
+    };
   };
 
   xdg.userDirs = {

@@ -62,7 +62,6 @@
                 inherit inputs outputs;
                 machine = {
                   trusted = true;
-                  nixos = true;
                 };
               };
             };
@@ -78,7 +77,6 @@
                 inherit inputs outputs;
                 machine = {
                   trusted = true;
-                  nixos = false;
                 };
               };
             };
@@ -91,7 +89,6 @@
                 inherit inputs outputs;
                 machine = {
                   trusted = true;
-                  nixos = false;
                 };
               };
             };
@@ -104,7 +101,18 @@
                 inherit inputs outputs;
                 machine = {
                   trusted = true;
-                  nixos = false;
+                };
+              };
+            };
+            "brian@aether" = home-manager.lib.homeManagerConfiguration {
+              pkgs = pkgsFor "x86_64-linux";
+              modules = [
+                ./home/brian/aether.nix
+              ];
+              extraSpecialArgs = {
+                inherit inputs outputs;
+                machine = {
+                  trusted = true;
                 };
               };
             };
