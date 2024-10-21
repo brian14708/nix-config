@@ -10,6 +10,7 @@
       [
       ];
     extraPackages = with pkgs; [
+      gcc
       nil
       nixfmt-rfc-style
       lua-language-server

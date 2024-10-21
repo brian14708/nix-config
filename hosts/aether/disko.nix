@@ -28,19 +28,23 @@
                 type = "btrfs";
                 subvolumes = {
                   "@" = { };
+                  "@/root" = {
+                    mountpoint = "/";
+                    mountOptions = [
+                      "compress=zstd"
+                    ];
+                  };
+                  "@/home" = {
+                    mountpoint = "/home";
+                    mountOptions = [
+                      "compress=zstd"
+                    ];
+                  };
                   "@/nix" = {
                     mountpoint = "/nix";
                     mountOptions = [
                       "compress=zstd"
                       "noatime"
-                    ];
-                  };
-                  "@/persist" = {
-                    mountpoint = "/nix/persist";
-                    mountOptions = [
-                      "compress=zstd"
-                      "noatime"
-                      "noexec"
                     ];
                   };
                   "@/swap" = {
@@ -53,13 +57,6 @@
           };
         };
       };
-    };
-    nodev."/" = {
-      fsType = "tmpfs";
-      mountOptions = [
-        "size=2G"
-        "defaults"
-      ];
     };
   };
 }

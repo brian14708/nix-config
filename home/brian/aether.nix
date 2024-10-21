@@ -11,14 +11,13 @@
     username = "brian";
     stateVersion = "24.11";
     packages = with pkgs; [
-      vscode
       firefox
+      kitty
     ];
   };
   programs.bash.enable = true;
   wayland.windowManager.hyprland = {
     enable = true;
-    package = pkgs.hyprland;
     xwayland.enable = true;
     systemd.enable = true;
   };

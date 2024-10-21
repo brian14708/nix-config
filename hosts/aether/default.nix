@@ -8,7 +8,6 @@
 }:
 {
   imports = [
-    inputs.impermanence.nixosModules.impermanence
     inputs.sops-nix.nixosModules.sops
     inputs.disko.nixosModules.disko
     inputs.lanzaboote.nixosModules.lanzaboote
@@ -38,7 +37,7 @@
 
   sops = {
     defaultSopsFile = ./secret.yaml;
-    age.sshKeyPaths = [ "/nix/persist/etc/ssh/ssh_host_ed25519_key" ];
+    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
     gnupg.sshKeyPaths = [ ];
     secrets."brian-password" = {
       neededForUsers = true;
@@ -120,53 +119,6 @@
     };
   };
 
-  environment.persistence.default = {
-    persistentStoragePath = "/nix/persist";
-    hideMounts = true;
-
-    directories = [
-      "/etc/secureboot"
-      "/var/lib/iwd"
-      "/var/lib/tailscale"
-      "/var/lib/nixos"
-      "/var/log"
-      "/var/lib/systemd/coredump"
-      {
-        directory = "/var/lib/private/mihomo";
-        mode = "0700";
-        defaultPerms = {
-          mode = "0700";
-        };
-      }
-    ];
-
-    files = [
-      "/etc/machine-id"
-      "/etc/ssh/ssh_host_ed25519_key.pub"
-      "/etc/ssh/ssh_host_ed25519_key"
-      "/etc/ssh/ssh_host_rsa_key.pub"
-      "/etc/ssh/ssh_host_rsa_key"
-    ];
-
-    users.brian = {
-      directories = [
-        "nixos"
-        "public"
-        "media"
-        "downloads"
-        "documents"
-        "projects"
-        ".ssh"
-        ".local/state/syncthing"
-        ".local/state/nix"
-      ];
-      files = [
-        ".config/sops/age/keys.txt"
-      ];
-    };
-  };
-  fileSystems."/nix/persist".neededForBoot = true;
-
   programs.fuse.userAllowOther = true;
   home-manager = {
     useGlobalPkgs = true;
@@ -178,10 +130,4 @@
       imports = [ ../../home/brian/aether.nix ];
     };
   };
-
-  services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-
-  security.sudo.extraConfig = "Defaults lecture = never";
 }
