@@ -25,10 +25,9 @@
       url = "github:nix-community/lanzaboote";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixvim = {
-      url = "github:nix-community/nixvim";
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
     };
   };
 
@@ -41,6 +40,7 @@
       ...
     }:
     flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [ inputs.treefmt-nix.flakeModule ];
       flake =
         let
           inherit (self) outputs;
@@ -119,7 +119,18 @@
       perSystem =
         { config, pkgs, ... }:
         {
-          formatter = pkgs.nixfmt-rfc-style;
+          treefmt.config = {
+            projectRootFile = "flake.nix";
+            programs = {
+              nixfmt.enable = true;
+              stylua.enable = true;
+              prettier.enable = true;
+            };
+            settings.formatter.stylua.options = [
+              "--indent-type=Spaces"
+              "--indent-width=2"
+            ];
+          };
           devShells = import ./shell.nix pkgs;
         };
     };

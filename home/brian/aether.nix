@@ -7,13 +7,14 @@
   imports = [
     ./common
   ];
-  home.username = "brian";
-  home.stateVersion = "24.11";
-
-  home.packages = with pkgs; [
-    vscode
-    firefox
-  ];
+  home = {
+    username = "brian";
+    stateVersion = "24.11";
+    packages = with pkgs; [
+      vscode
+      firefox
+    ];
+  };
   programs.bash.enable = true;
   wayland.windowManager.hyprland = {
     enable = true;
