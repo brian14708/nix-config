@@ -9,6 +9,7 @@
 {
   imports = [
     inputs.sops-nix.homeManagerModules.sops
+    inputs.nixvim.homeManagerModules.nixvim
     ./git.nix
   ];
 
@@ -19,7 +20,7 @@
 
   programs = {
     home-manager.enable = true;
-    neovim = {
+    nixvim = {
       enable = true;
       vimAlias = true;
       defaultEditor = true;
