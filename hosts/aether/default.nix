@@ -17,21 +17,23 @@
     ./mihomo.nix
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelParams = [ "mitigations=off" ];
-  boot.initrd.systemd.enable = true;
-  boot.loader = {
-    systemd-boot = {
-      enable = false;
-      configurationLimit = 5;
-      editor = false;
+  boot = {
+    kernelPackages = pkgs.linuxPackages_latest;
+    kernelParams = [ "mitigations=off" ];
+    initrd.systemd.enable = true;
+    loader = {
+      systemd-boot = {
+        enable = false;
+        configurationLimit = 5;
+        editor = false;
+      };
+      efi.canTouchEfiVariables = true;
+      timeout = 3;
     };
-    efi.canTouchEfiVariables = true;
-    timeout = 3;
-  };
-  boot.lanzaboote = {
-    enable = true;
-    pkiBundle = "/etc/secureboot";
+    lanzaboote = {
+      enable = true;
+      pkiBundle = "/etc/secureboot";
+    };
   };
 
   sops = {
@@ -41,15 +43,15 @@
     secrets."brian-password" = {
       neededForUsers = true;
     };
-    secrets."mihomo-url" =
-      {
-      };
+    secrets."mihomo-url" = { };
   };
 
-  networking.hostName = "aether";
-  networking.networkmanager.enable = false;
-  networking.useDHCP = false;
-  networking.wireless.iwd.enable = true;
+  networking = {
+    hostName = "aether";
+    networkmanager.enable = false;
+    useDHCP = false;
+    wireless.iwd.enable = true;
+  };
   systemd.network.enable = true;
   systemd.network.networks."20-wireless" = {
     matchConfig.Type = "wlan";
@@ -71,7 +73,6 @@
   };
 
   environment.systemPackages = with pkgs; [
-    vim
     git
     gnumake
     tmux
@@ -81,10 +82,12 @@
   time.timeZone = "Asia/Hong_Kong";
   i18n.defaultLocale = "en_US.UTF-8";
 
-  services.openssh.enable = true;
-  services.tailscale = {
-    enable = true;
-    extraUpFlags = [ "--accept-routes" ];
+  services = {
+    openssh.enable = true;
+    tailscale = {
+      enable = true;
+      extraUpFlags = [ "--accept-routes" ];
+    };
   };
 
   system.stateVersion = "24.11";
@@ -165,13 +168,15 @@
   fileSystems."/nix/persist".neededForBoot = true;
 
   programs.fuse.userAllowOther = true;
-  home-manager.useGlobalPkgs = true;
-  home-manager.useUserPackages = true;
-  home-manager.extraSpecialArgs = {
-    inherit inputs outputs machine;
-  };
-  home-manager.users.brian = {
-    imports = [ ../../home/brian/aether.nix ];
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    extraSpecialArgs = {
+      inherit inputs outputs machine;
+    };
+    users.brian = {
+      imports = [ ../../home/brian/aether.nix ];
+    };
   };
 
   services.xserver.enable = true;

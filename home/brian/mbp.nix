@@ -6,11 +6,12 @@
 }:
 {
   imports = [ ./common ];
-  home.username = "brian";
-  home.stateVersion = "24.05";
-
-  home.packages = with pkgs; [
-    colima
-    docker-client
-  ];
+  home = {
+    username = "brian";
+    stateVersion = "24.05";
+    packages = with pkgs; [
+      colima
+      docker-client
+    ];
+  };
 }
