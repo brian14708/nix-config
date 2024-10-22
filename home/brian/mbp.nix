@@ -12,6 +12,7 @@
     packages = with pkgs; [
       colima
       docker-client
+      (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
     ];
   };
 }

@@ -8,6 +8,7 @@
     extraPackages = with pkgs; [
       gcc
       gnumake
+      nodejs
       ripgrep
       git
       wget
