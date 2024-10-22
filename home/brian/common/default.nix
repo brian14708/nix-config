@@ -40,7 +40,7 @@
     {
       package = lib.mkDefault pkgs.nixVersions.latest;
       settings = {
-        use-xdg-base-directories = true;
+        use-xdg-base-directories = !config.targets.genericLinux.enable;
         experimental-features = [
           "nix-command"
           "flakes"
