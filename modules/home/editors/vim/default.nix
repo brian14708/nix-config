@@ -5,12 +5,14 @@
     viAlias = true;
     vimAlias = true;
     defaultEditor = true;
-    plugins =
-      with pkgs.vimPlugins;
-      [
-      ];
     extraPackages = with pkgs; [
-      clang
+      gcc
+      gnumake
+      ripgrep
+      git
+      wget
+      fd
+
       nil
       nixfmt-rfc-style
       lua-language-server
@@ -18,7 +20,7 @@
   };
 
   xdg.configFile."nvim" = {
-    source = ./nvchad;
+    source = ./nvim;
     recursive = true;
   };
 }

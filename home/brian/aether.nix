@@ -13,6 +13,16 @@
     packages = with pkgs; [
       chromium
       alacritty
+
+      # fonts
+      (pkgs.nerdfonts.override { fonts = [ "CascadiaCode" ]; })
+      inter
+      noto-fonts
+      noto-fonts-cjk-sans
+      noto-fonts-cjk-serif
+      noto-fonts-color-emoji
+
+      tofi
     ];
   };
   programs.bash.enable = true;
@@ -22,8 +32,43 @@
     settings = {
       "$mod" = "SUPER";
       bind = [
-        "$mod, F, exec, firefox"
-        "$mod, S, exec, alacritty"
+        "$mod, Return, exec, footclient -N || foot"
+        "$mod, Space, exec, tofi-run | xargs hyprctl dispatch exec --"
+      ];
+    };
+  };
+
+  programs.foot = {
+    enable = true;
+    server.enable = true;
+    settings = {
+      font = "code";
+      fontSize = 10;
+    };
+  };
+
+  fonts.fontconfig = {
+    enable = true;
+    defaultFonts = {
+      sans = [
+        "Inter"
+        "Noto Sans"
+        "Noto Color Emoji"
+        "Noto Sans CJK SC"
+      ];
+      serif = [
+        "Noto Serif"
+        "Noto Serif CJK SC"
+      ];
+      code = [
+        "CaskaydiaCove Nerd Font"
+        "Noto Color Emoji"
+        "Noto Sans Mono"
+        "Noto Sans Mono CJK SC"
+      ];
+      monospace = [
+        "Noto Sans Mono"
+        "Noto Sans Mono CJK SC"
       ];
     };
   };
