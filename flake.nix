@@ -68,7 +68,7 @@
           };
 
           homeConfigurations = {
-            "brian@MacBookPro" = home-manager.lib.homeManagerConfiguration {
+            "brian@macbookpro" = home-manager.lib.homeManagerConfiguration {
               pkgs = pkgsFor "aarch64-darwin";
               modules = [
                 ./home/brian/mbp.nix
