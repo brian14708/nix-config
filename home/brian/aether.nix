@@ -15,7 +15,7 @@
       alacritty
 
       # fonts
-      (pkgs.nerdfonts.override { fonts = [ "CascadiaCode" ]; })
+      (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
       inter
       noto-fonts
       noto-fonts-cjk-sans
