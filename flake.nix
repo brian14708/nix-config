@@ -116,6 +116,18 @@
                 };
               };
             };
+            "brian" = home-manager.lib.homeManagerConfiguration {
+              pkgs = pkgsFor "x86_64-linux";
+              modules = [
+                ./home/brian/generic.nix
+              ];
+              extraSpecialArgs = {
+                inherit inputs outputs;
+                machine = {
+                  trusted = false;
+                };
+              };
+            };
           };
         };
       systems = [
