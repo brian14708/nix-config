@@ -6,8 +6,15 @@
 }:
 {
   imports = [
+    inputs.catppuccin.homeManagerModules.catppuccin
     ./common
   ];
+  catppuccin.flavor = "mocha";
+  catppuccin.enable = true;
+  catppuccin.pointerCursor = {
+    enable = true;
+    accent = "dark";
+  };
 
   home = {
     username = "brian";
@@ -31,10 +38,6 @@
   services.gpg-agent = {
     enable = true;
   };
-  home.pointerCursor = {
-    name = "Vimix-Cursors";
-    package = pkgs.vimix-cursor-theme;
-  };
 
   programs.bash.enable = true;
   programs.fuzzel = {
@@ -47,6 +50,7 @@
       exec-once = [
         "${pkgs.foot}/bin/foot --server"
         "${pkgs.waybar}/bin/waybar"
+        "${pkgs.swaybg}/bin/swaybg -i $(find ${config.xdg.userDirs.pictures}/wallpapers/ -type f | shuf -n 1)"
       ];
       monitor = ",preferred,auto,auto";
       "$mod" = "SUPER";
@@ -104,8 +108,6 @@
         gaps_out = 10;
         border_size = 1;
         layout = "master";
-        "col.active_border" = "rgb(999999)";
-        "col.inactive_border" = "rgb(333333)";
       };
       animations.enabled = false;
       master = {
@@ -136,6 +138,9 @@
     settings = {
       main = {
         font = "monospace:size=10";
+      };
+      colors = {
+        alpha = 0.9;
       };
     };
   };
