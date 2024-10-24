@@ -130,4 +130,9 @@
       };
     };
   };
+
+  hardware.graphics = {
+    enable = true;
+  };
+
 }
