@@ -828,6 +828,7 @@ require("lazy").setup({
 }, {
   rocks = { enabled = false },
   ui = {
+    border = "single",
     icons = vim.g.have_nerd_font and {} or {
       cmd = "⌘",
       config = "🛠",
