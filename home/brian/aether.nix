@@ -8,6 +8,7 @@
   imports = [
     inputs.catppuccin.homeManagerModules.catppuccin
     ./common
+    ../../modules/home/desktop/fcitx5
   ];
   catppuccin.flavor = "mocha";
   catppuccin.enable = true;
@@ -20,7 +21,7 @@
     username = "brian";
     stateVersion = "24.11";
     packages = with pkgs; [
-      chromium
+      (chromium.override { commandLineArgs = [ "--enable-wayland-ime" ]; })
       alacritty
 
       # fonts
@@ -39,6 +40,7 @@
     enable = true;
   };
 
+  programs.starship.enable = true;
   programs.bash.enable = true;
   programs.fuzzel = {
     enable = true;
@@ -109,10 +111,13 @@
         border_size = 1;
         layout = "master";
       };
-      animations.enabled = false;
+      animations = {
+        animation = [
+          "global, 1, 4, default"
+        ];
+      };
       master = {
         new_status = "master";
-        no_gaps_when_only = true;
         mfact = 0.6;
       };
       misc = {
@@ -176,19 +181,11 @@
     music = "${config.home.homeDirectory}/media/music";
     pictures = "${config.home.homeDirectory}/media/pictures";
     videos = "${config.home.homeDirectory}/media/videos";
-
     desktop = "${config.home.homeDirectory}/public";
     publicShare = "${config.home.homeDirectory}/public";
     templates = "${config.home.homeDirectory}/public";
   };
-  i18n.inputMethod = {
-    enabled = "fcitx5";
-    fcitx5.addons = with pkgs; [
-      fcitx5-rime
-      rime-data
-      fcitx5-tokyonight
-    ];
-  };
+
   dconf = {
     enable = true;
     settings = {
