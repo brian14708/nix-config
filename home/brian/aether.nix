@@ -134,8 +134,112 @@
     enable = true;
     enableBashIntegration = true;
   };
+  gtk = {
+    catppuccin.icon.enable = true;
+    enable = true;
+  };
   programs.waybar = {
     enable = true;
+    settings = {
+      mainBar = {
+        layer = "top";
+        spacing = 0;
+        modules-left = [ "hyprland/workspaces" ];
+        modules-center = [ ];
+        modules-right = [
+          "pulseaudio"
+          "network"
+          "memory"
+          "battery"
+          "clock"
+          "tray"
+        ];
+        "hyprland/workspaces" = {
+          sort-by-number = true;
+          on-click = "activate";
+        };
+        pulseaudio = {
+          tooltip = false;
+          format = "VOL {volume}%";
+          format-muted = "MUTE";
+          on-click = "${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle";
+        };
+        tray = {
+          icon-size = 14;
+          spacing = 10;
+        };
+        clock = {
+          format = "{=%Y-%m-%d %H=%M}";
+        };
+        battery = {
+          tooltip = false;
+          format = "BAT {capacity}%";
+          format-charging = "CHR {capacity}%";
+          format-full = "FULL";
+        };
+        memory = {
+          tooltip = false;
+          format = "MEM {}%";
+        };
+        network = {
+          tooltip = false;
+          format = "{ipaddr}";
+          format-disconnected = "WLAN DISCONNECTED";
+        };
+      };
+    };
+    style = ''
+      * {
+        font-family: monospace;
+        font-size: 12px;
+      }
+
+      #waybar {
+        background: @base;
+        color: @text;
+      }
+
+      #workspaces button {
+        padding: 0 5px;
+        color: @surface2;
+        border: none;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        text-shadow: none;
+      }
+
+      #workspaces button.active {
+        color: @text;
+      }
+
+      #workspaces button.urgent {
+        color: @red;
+      }
+
+      #workspaces button:hover {
+        color: @sapphire;
+      }
+
+      #clock,
+      #battery,
+      #cpu,
+      #memory,
+      #disk,
+      #temperature,
+      #backlight,
+      #network,
+      #pulseaudio,
+      #wireplumber,
+      #custom-media,
+      #tray,
+      #mode,
+      #idle_inhibitor,
+      #scratchpad,
+      #mpd {
+          padding: 0 10px;
+      }
+    '';
   };
 
   programs.foot = {
