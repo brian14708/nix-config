@@ -21,8 +21,6 @@
     username = "brian";
     stateVersion = "24.11";
     packages = with pkgs; [
-      alacritty
-
       # fonts
       (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
       inter
@@ -69,6 +67,12 @@
   programs.bash.enable = true;
   programs.fuzzel = {
     enable = true;
+    settings = {
+      border = {
+        width = 2;
+        raidus = 0;
+      };
+    };
   };
   wayland.windowManager.hyprland = {
     enable = true;
@@ -99,7 +103,7 @@
         "$mod, 7, workspace, 7"
         "$mod, 8, workspace, 8"
         "$mod, 9, workspace, 9"
-        "$mod, 0, workspace, 0"
+        "$mod, 0, workspace, 10"
 
         "$mod SHIFT, 1, movetoworkspace, 1"
         "$mod SHIFT, 2, movetoworkspace, 2"
@@ -110,7 +114,35 @@
         "$mod SHIFT, 7, movetoworkspace, 7"
         "$mod SHIFT, 8, movetoworkspace, 8"
         "$mod SHIFT, 9, movetoworkspace, 9"
-        "$mod SHIFT, 0, movetoworkspace, 0"
+        "$mod SHIFT, 0, movetoworkspace, 10"
+
+        "$mod, x, exec, loginctl lock-session"
+
+        (
+          ", Print, exec, "
+          + "${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\" - | "
+          + "tee \"${config.xdg.userDirs.download}/screenshot-$(date +%Y-%m-%d-%H-%M-%S-%N).png\" | "
+          + "${pkgs.wl-clipboard}/bin/wl-copy"
+        )
+        ", XF86AudioMute, exec, ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle"
+        ", XF86AudioMicMute, exec, ${pkgs.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle"
+        (
+          ", XF86AudioLowerVolume, exec, "
+          + "${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ 0 && "
+          + "${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -5%"
+        )
+        (
+          ", XF86AudioRaiseVolume, exec, "
+          + "${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ 0 && "
+          + "${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +5%"
+        )
+        ", XF86AudioPlay, exec, ${pkgs.playerctl}/bin/playerctl play-pause"
+        ", XF86AudioStop, exec, ${pkgs.playerctl}/bin/playerctl stop"
+        ", XF86AudioNext, exec, ${pkgs.playerctl}/bin/playerctl next"
+        ", XF86AudioPrev, exec, ${pkgs.playerctl}/bin/playerctl previous"
+
+        ", XF86MonBrightnessUp, exec, ${pkgs.brightnessctl}/bin/brightnessctl set +10%"
+        ", XF86MonBrightnessDown, exec, ${pkgs.brightnessctl}/bin/brightnessctl set 10%-"
       ];
       binde = [
         "$mod, h, resizeactive, -50 0"
@@ -194,7 +226,7 @@
           spacing = 10;
         };
         clock = {
-          format = "{=%Y-%m-%d %H=%M}";
+          format = "{:%Y-%m-%d %H:%M}";
         };
         battery = {
           tooltip = false;
@@ -305,6 +337,13 @@
       colors = {
         alpha = 0.9;
       };
+      scrollback = {
+        multiplier = 8;
+      };
+      text-bindings = {
+        "\\x0a" = "Shift+Return Control+Return Shift+Control+Return";
+        "\\x09" = "Control+Tab";
+      };
     };
   };
 
@@ -352,4 +391,14 @@
       };
     };
   };
+
+  qt = {
+    enable = true;
+    platformTheme.name = "kvantum";
+    style.name = "kvantum";
+    # XXX https://github.com/catppuccin/nix/pull/358
+    style.catppuccin.enable = false;
+  };
+
+  services.mako.enable = true;
 }
