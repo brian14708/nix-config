@@ -23,6 +23,7 @@
   };
 
   sops = {
+    gnupg.home = "${config.xdg.configHome}/sops-nix/gnupg";
     age.sshKeyPaths = [ "${config.home.homeDirectory}/.ssh/id_ed25519" ];
   };
 
