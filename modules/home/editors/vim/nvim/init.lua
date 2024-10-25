@@ -60,6 +60,12 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
+-- Fold based on syntax
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldlevelstart = 2
+vim.opt.foldnestmax = 4
+
 vim.opt.shm:append("I")
 
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
