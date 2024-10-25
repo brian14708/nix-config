@@ -37,12 +37,23 @@
   };
   services.gpg-agent = {
     enable = true;
+    pinentryPackage = pkgs.pinentry-tty;
   };
 
   programs.chromium = {
-    package = pkgs.ungoogled-chromium;
     enable = true;
-    commandLineArgs = [ "--enable-wayland-ime" ];
+    commandLineArgs = [
+      "--enable-wayland-ime"
+      "--ignore-gpu-blocklist"
+      "--enable-gpu-rasterization"
+      "--enable-oop-rasterization"
+      "--enable-zero-copy"
+      "--enable-accelerated-video-decode"
+      "--password-store=basic"
+      "--disable-sync-preferences"
+      "--enable-features=WebUIDarkMode,VaapiVideoDecodeLinuxGL,VaapiVideoEncoder"
+      "--disable-features=UseChromeOSDirectVideoDecoder"
+    ];
     extensions = [
       # 1Password
       { id = "aeblfdkhhhdcdjpifhhbdiojplfjncoa"; }
