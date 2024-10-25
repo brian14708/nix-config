@@ -135,4 +135,5 @@
     enable = true;
   };
 
+  services.dbus.implementation = "broker";
 }
