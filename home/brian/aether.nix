@@ -21,7 +21,6 @@
     username = "brian";
     stateVersion = "24.11";
     packages = with pkgs; [
-      (chromium.override { commandLineArgs = [ "--enable-wayland-ime" ]; })
       alacritty
 
       # fonts
@@ -40,6 +39,21 @@
     enable = true;
   };
 
+  programs.chromium = {
+    package = pkgs.ungoogled-chromium;
+    enable = true;
+    commandLineArgs = [ "--enable-wayland-ime" ];
+    extensions = [
+      # 1Password
+      { id = "aeblfdkhhhdcdjpifhhbdiojplfjncoa"; }
+      # uBlock Origin Lite
+      { id = "ddkjiahejlhfcafbddmgiahcphecmpfh"; }
+      # Vimium
+      { id = "dbepggeogbaibhgnhhndojpepiihcmeb"; }
+      # Catppuccin Chrome Theme
+      { id = "bkkmolkhemgaeaeggcmfbghljjjoofoh"; }
+    ];
+  };
   programs.starship.enable = true;
   programs.bash.enable = true;
   programs.fuzzel = {
