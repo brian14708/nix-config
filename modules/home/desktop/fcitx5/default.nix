@@ -18,19 +18,12 @@ in
   i18n.inputMethod = {
     enabled = "fcitx5";
     fcitx5 = {
-      catppuccin.enable = false;
       addons = with pkgs; [
         fcitx5-rime
-        catppuccin-fcitx5
       ];
     };
   };
 
-  xdg.configFile."fcitx5/conf/classicui.conf" = {
-    text = lib.generators.toINIWithGlobalSection { } {
-      globalSection.Theme = "catppuccin-${config.catppuccin.flavor}-${config.catppuccin.accent}";
-    };
-  };
   xdg.configFile."fcitx5/profile" = {
     force = true;
     text = lib.generators.toINI { } {

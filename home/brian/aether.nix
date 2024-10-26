@@ -6,30 +6,15 @@
 }:
 {
   imports = [
-    inputs.catppuccin.homeManagerModules.catppuccin
+    ../../modules/home/themes/catppuccin
     ./common
-    ../../modules/home/desktop/fcitx5
     ../../modules/home/desktop/hyprland
+    ../../modules/home/desktop/fcitx5
   ];
-  catppuccin.flavor = "mocha";
-  catppuccin.enable = true;
-  catppuccin.pointerCursor = {
-    enable = true;
-    accent = "dark";
-  };
 
   home = {
     username = "brian";
     stateVersion = "24.11";
-    packages = with pkgs; [
-      # fonts
-      (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
-      inter
-      noto-fonts
-      noto-fonts-cjk-sans
-      noto-fonts-cjk-serif
-      noto-fonts-color-emoji
-    ];
   };
   programs.gpg = {
     enable = true;
@@ -60,8 +45,6 @@
       { id = "ddkjiahejlhfcafbddmgiahcphecmpfh"; }
       # Vimium
       { id = "dbepggeogbaibhgnhhndojpepiihcmeb"; }
-      # Catppuccin Chrome Theme
-      { id = "bkkmolkhemgaeaeggcmfbghljjjoofoh"; }
     ];
   };
   programs.bash.enable = true;
@@ -69,31 +52,7 @@
   programs.zoxide.enable = true;
   programs.direnv.enable = true;
   gtk = {
-    catppuccin.icon.enable = true;
     enable = true;
-  };
-
-  fonts.fontconfig = {
-    enable = true;
-    defaultFonts = {
-      sansSerif = [
-        "Inter"
-        "Noto Sans"
-        "Noto Sans CJK SC"
-      ];
-      serif = [
-        "Noto Serif"
-        "Noto Serif CJK SC"
-      ];
-      emoji = [
-        "Noto Color Emoji"
-      ];
-      monospace = [
-        "CaskaydiaCove Nerd Font"
-        "Noto Sans Mono"
-        "Noto Sans Mono CJK SC"
-      ];
-    };
   };
 
   xdg.userDirs = {
