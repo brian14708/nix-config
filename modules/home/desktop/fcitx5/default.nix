@@ -103,4 +103,11 @@ in
       };
     };
   };
+  xdg.dataFile."fcitx5/rime/default.custom.yaml" = {
+    text = lib.generators.toYAML { } {
+      patch = {
+        "menu/page_size" = 5;
+      };
+    };
+  };
 }

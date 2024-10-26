@@ -10,7 +10,10 @@
     enable = true;
     userName = "Brian Li";
     userEmail = "me@brian14708.dev";
-    difftastic.enable = true;
+    difftastic = {
+      enable = true;
+      display = "inline";
+    };
     signing = {
       key = "91C32271A5A151D38526881FD03DD6ED48DEE9CE";
     };
@@ -42,5 +45,8 @@
       ".clangd/"
       ".aider.*"
     ];
+    extraConfig = {
+      pull.rebase = true;
+    };
   };
 }

@@ -121,7 +121,5 @@
     enable = true;
     platformTheme.name = "kvantum";
     style.name = "kvantum";
-    # XXX https://github.com/catppuccin/nix/pull/358
-    style.catppuccin.enable = false;
   };
 }
