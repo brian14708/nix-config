@@ -117,14 +117,17 @@
       };
     };
   };
+  programs.hyprlock = {
+    enable = true;
+    settings = {
+      general = {
+        hide_cursor = true;
+        disable_loading_bar = true;
+      };
+    };
+  };
   programs.waybar = {
     enable = true;
-  };
-  programs.swaylock = {
-    enable = true;
-    settings =
-      {
-      };
   };
   services.hypridle = {
     enable = true;
@@ -132,13 +135,13 @@
       general = {
         after_sleep_cmd = "hyprctl dispatch dpms on";
         ignore_dbus_inhibit = false;
-        lock_cmd = "${pkgs.swaylock}/bin/swaylock";
+        lock_cmd = "${pkgs.hyprlock}/bin/hyprlock";
       };
 
       listener = [
         {
           timeout = 120;
-          on-timeout = "${pkgs.swaylock}/bin/swaylock";
+          on-timeout = "${pkgs.hyprlock}/bin/hyprlock";
         }
         {
           timeout = 180;
