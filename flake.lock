@@ -15,6 +15,26 @@
         "type": "github"
       }
     },
+    "catppuccin-vsc": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1725822842,
+        "narHash": "sha256-fOR805OwfINbMFzqSmE8piFAFHM9fE+BDdQQUahqDaQ=",
+        "owner": "catppuccin",
+        "repo": "vscode",
+        "rev": "54316f9afc31c3b5070a242cd3ca47d66ab0e9ac",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "vscode",
+        "type": "github"
+      }
+    },
     "crane": {
       "locked": {
         "lastModified": 1728776144,
@@ -236,6 +256,7 @@
     "root": {
       "inputs": {
         "catppuccin": "catppuccin",
+        "catppuccin-vsc": "catppuccin-vsc",
         "disko": "disko",
         "flake-parts": "flake-parts",
         "home-manager": "home-manager",

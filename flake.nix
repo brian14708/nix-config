@@ -3,7 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    catppuccin.url = "github:catppuccin/nix";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -27,6 +26,11 @@
     };
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    catppuccin.url = "github:catppuccin/nix";
+    catppuccin-vsc = {
+      url = "github:catppuccin/vscode";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

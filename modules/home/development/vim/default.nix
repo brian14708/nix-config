@@ -34,9 +34,8 @@
         git
         wget
         fd
-        wl-clipboard
 
-        nixd
+        nil
         nixfmt-rfc-style
         lua-language-server
       ];

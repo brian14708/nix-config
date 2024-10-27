@@ -207,7 +207,9 @@ in
   };
   programs.vscode = {
     extensions = with pkgs.vscode-extensions; [
-      catppuccin.catppuccin-vsc
+      (inputs.catppuccin-vsc.packages.${pkgs.system}.catppuccin-vsc.override {
+        accent = accent;
+      })
       catppuccin.catppuccin-vsc-icons
     ];
     userSettings = {

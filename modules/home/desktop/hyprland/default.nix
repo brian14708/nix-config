@@ -166,4 +166,7 @@
       };
     };
   };
+  programs.neovim.extraPackages = [
+    pkgs.wl-clipboard
+  ];
 }
