@@ -52,9 +52,8 @@
 
         (
           ", Print, exec, "
-          + "${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\" - | "
-          + "tee \"${config.xdg.userDirs.download}/screenshot-$(date +%Y-%m-%d-%H-%M-%S-%N).png\" | "
-          + "${pkgs.wl-clipboard}/bin/wl-copy"
+          + "${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\" |"
+          + "${pkgs.wl-clipboard}/bin/wl-copy -t image/png"
         )
         ", XF86AudioMute, exec, ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle"
         ", XF86AudioMicMute, exec, ${pkgs.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle"

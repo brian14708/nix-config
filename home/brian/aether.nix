@@ -9,6 +9,7 @@
     ./common
     ../../modules/home/desktop/hyprland
     ../../modules/home/desktop/fcitx5
+    ../../modules/home/desktop/media
     ../../modules/home/development/vscode
     ../../modules/home/themes/catppuccin
   ];
