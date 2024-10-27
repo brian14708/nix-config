@@ -93,6 +93,7 @@
   system.stateVersion = "24.11";
 
   nix = {
+    package = pkgs.lix;
     settings = {
       use-xdg-base-directories = true;
       experimental-features = [
