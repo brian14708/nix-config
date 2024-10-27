@@ -7,7 +7,7 @@
 {
   imports = [
     ./common
-    ../../modules/home/editors/vim
+    ../../modules/home/development/vim
   ];
   targets.genericLinux.enable = true;
   programs.fish.enable = true;

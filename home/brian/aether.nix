@@ -6,10 +6,11 @@
 }:
 {
   imports = [
-    ../../modules/home/themes/catppuccin
     ./common
     ../../modules/home/desktop/hyprland
     ../../modules/home/desktop/fcitx5
+    ../../modules/home/development/vscode
+    ../../modules/home/themes/catppuccin
   ];
 
   home = {

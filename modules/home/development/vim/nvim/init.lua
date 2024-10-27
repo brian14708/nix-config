@@ -15,14 +15,6 @@ vim.opt.mouse = "a"
 -- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
 
--- Sync clipboard between OS and Neovim.
---  Schedule the setting after `UiEnter` because it can increase startup-time.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
-vim.schedule(function()
-  vim.opt.clipboard = "unnamedplus"
-end)
-
 -- Enable break indent
 vim.opt.breakindent = true
 
@@ -67,6 +59,8 @@ vim.opt.foldlevel = 20
 
 vim.opt.shm:append("I")
 
+vim.keymap.set("", "<leader>y", '"+y', { noremap = true, desc = "Yank to clipboard" })
+vim.keymap.set("", "<leader>p", '"+p', { noremap = true, desc = "Paste from clipboard" })
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
@@ -486,7 +480,7 @@ require("lazy").setup({
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
         --
-        nil_ls = {},
+        nixd = {},
 
         lua_ls = {
           -- cmd = {...},
@@ -668,19 +662,6 @@ require("lazy").setup({
     end,
   },
 
-  {
-    "catppuccin/nvim",
-    name = "catppuccin",
-    priority = 1000,
-    opts = {
-      flavor = "mocha",
-      transparent_background = true,
-    },
-    init = function()
-      vim.cmd.colorscheme("catppuccin")
-    end,
-  },
-
   { -- Collection of various small independent plugins/modules
     "echasnovski/mini.nvim",
     config = function()
@@ -832,6 +813,8 @@ require("lazy").setup({
       },
     },
   },
+
+  require("theme"),
 }, {
   rocks = { enabled = false },
   ui = {

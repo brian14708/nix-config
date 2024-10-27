@@ -9,7 +9,7 @@
 {
   imports = [
     inputs.sops-nix.homeManagerModules.sops
-    ../../../modules/home/editors/vim
+    ../../../modules/home/development/vim
     ./git.nix
   ];
 

@@ -5,12 +5,20 @@
   lib,
   ...
 }:
+let
+  flavor = "mocha";
+  accent = "blue";
+  mkUpper =
+    str:
+    (lib.toUpper (builtins.substring 0 1 str)) + (builtins.substring 1 (builtins.stringLength str) str);
+in
 {
   imports = [
     inputs.catppuccin.homeManagerModules.catppuccin
   ];
 
-  catppuccin.flavor = "mocha";
+  catppuccin.flavor = flavor;
+  catppuccin.accent = accent;
   catppuccin.enable = true;
   catppuccin.pointerCursor = {
     enable = true;
@@ -52,7 +60,7 @@
   };
   programs.chromium = {
     extensions = [
-      # Catppuccin Chrome Theme
+      # Catppuccin Chrome Theme - Mocha
       { id = "bkkmolkhemgaeaeggcmfbghljjjoofoh"; }
     ];
   };
@@ -197,4 +205,32 @@
       };
     };
   };
+  programs.vscode = {
+    extensions = with pkgs.vscode-extensions; [
+      catppuccin.catppuccin-vsc
+      catppuccin.catppuccin-vsc-icons
+    ];
+    userSettings = {
+      "workbench.colorTheme" = "Catppuccin ${mkUpper flavor}";
+      "catppuccin.accentColor" = accent;
+      "workbench.iconTheme" = "catppuccin-${flavor}";
+      "editor.fontFamily" = "monospace";
+      "editor.fontLigatures" = true;
+      "editor.fontSize" = 13;
+    };
+  };
+  programs.neovim.lua.theme = ''
+    return {
+      "catppuccin/nvim",
+      name = "catppuccin",
+      priority = 1000,
+      opts = {
+        flavor = "${flavor}",
+        transparent_background = true,
+      },
+      init = function()
+        vim.cmd.colorscheme("catppuccin")
+      end,
+    };
+  '';
 }
