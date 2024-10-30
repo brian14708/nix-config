@@ -17,12 +17,13 @@ in
     inputs.catppuccin.homeManagerModules.catppuccin
   ];
 
-  catppuccin.flavor = flavor;
-  catppuccin.accent = accent;
-  catppuccin.enable = true;
-  catppuccin.pointerCursor = {
+  catppuccin = {
+    inherit flavor accent;
     enable = true;
-    accent = "dark";
+    pointerCursor = {
+      enable = true;
+      accent = "dark";
+    };
   };
   home.packages = with pkgs; [
     # fonts

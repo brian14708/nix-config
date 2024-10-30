@@ -12,6 +12,8 @@
     packages = with pkgs; [
       colima
       docker-client
+      nil
+      nixfmt-rfc-style
       (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
     ];
   };
