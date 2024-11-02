@@ -65,19 +65,6 @@ in
       { id = "bkkmolkhemgaeaeggcmfbghljjjoofoh"; }
     ];
   };
-  i18n.inputMethod = {
-    fcitx5 = {
-      catppuccin.enable = false;
-      addons = with pkgs; [
-        catppuccin-fcitx5
-      ];
-    };
-  };
-  xdg.configFile."fcitx5/conf/classicui.conf" = {
-    text = lib.generators.toINIWithGlobalSection { } {
-      globalSection.Theme = "catppuccin-${config.catppuccin.flavor}-${config.catppuccin.accent}";
-    };
-  };
 
   wayland.windowManager.hyprland = {
     settings.general = {
