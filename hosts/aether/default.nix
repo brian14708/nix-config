@@ -16,7 +16,7 @@
   ];
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_xanmod_latest;
+    kernelPackages = pkgs.linuxPackages_latest;
     kernelParams = [ "mitigations=off" ];
     initrd.systemd.enable = true;
     loader = {
@@ -93,7 +93,6 @@
   system.stateVersion = "24.11";
 
   nix = {
-    package = pkgs.lix;
     settings = {
       use-xdg-base-directories = true;
       experimental-features = [
@@ -102,13 +101,9 @@
       ];
       auto-optimise-store = true;
       substituters = [
-        "https://nix-community.cachix.org"
         "https://mirrors.cernet.edu.cn/nix-channels/store"
         "https://mirror.sjtu.edu.cn/nix-channels/store"
         "https://cache.nixos.org"
-      ];
-      extra-trusted-public-keys = [
-        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
       trusted-users = [ "@wheel" ];
     };
