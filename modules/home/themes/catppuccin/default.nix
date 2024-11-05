@@ -209,20 +209,22 @@ in
       "editor.fontSize" = 13;
     };
   };
-  programs.neovim.lua.theme = ''
-    return {
-      "catppuccin/nvim",
-      name = "catppuccin",
-      priority = 1000,
-      opts = {
-        flavor = "${flavor}",
-        transparent_background = true,
-      },
-      init = function()
-        vim.cmd.colorscheme("catppuccin")
-      end,
-    };
-  '';
+  xdg.configFile."nvim/override/lua/theme.lua" = {
+    text = ''
+      return {
+        "catppuccin/nvim",
+        name = "catppuccin",
+        priority = 1000,
+        opts = {
+          flavor = "${flavor}",
+          transparent_background = true,
+        },
+        init = function()
+          vim.cmd.colorscheme("catppuccin")
+        end,
+      };
+    '';
+  };
   programs.hyprlock.settings = {
     background = {
       color = "$base";
