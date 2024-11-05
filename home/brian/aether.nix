@@ -11,6 +11,7 @@
     ../../modules/home/desktop/fcitx5
     ../../modules/home/desktop/media
     ../../modules/home/development/vscode
+    ../../modules/home/development/emacs
     ../../modules/home/themes/catppuccin
   ];
 
@@ -52,7 +53,10 @@
   programs.bash.enable = true;
   programs.starship.enable = true;
   programs.zoxide.enable = true;
-  programs.direnv.enable = true;
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
   gtk = {
     enable = true;
   };

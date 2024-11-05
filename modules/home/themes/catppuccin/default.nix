@@ -262,4 +262,14 @@ in
       }
     ];
   };
+  programs.emacs = {
+    extraPackages =
+      epkgs: with epkgs; [
+        catppuccin-theme
+      ];
+    extraConfig = lib.mkAfter ''
+      (setq catppuccin-flavor '${flavor})
+      (load-theme 'catppuccin :no-confirm)
+    '';
+  };
 }
