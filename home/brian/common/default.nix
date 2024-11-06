@@ -10,13 +10,21 @@
   imports = [
     inputs.sops-nix.homeManagerModules.sops
     ../../../modules/home/development/vim
-    ./git.nix
+    ../../../modules/home/development/git
   ];
 
   news.display = "silent";
   home.preferXdgDirectories = true;
   home.homeDirectory =
     if pkgs.stdenv.isDarwin then "/Users/${config.home.username}" else "/home/${config.home.username}";
+  
+  programs.git = {
+    userName = "Brian Li";
+    userEmail = "me@brian14708.dev";
+    signing = {
+      key = "91C32271A5A151D38526881FD03DD6ED48DEE9CE";
+    };
+  };
 
   programs = {
     home-manager.enable = true;
