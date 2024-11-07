@@ -18,7 +18,10 @@
   home = {
     username = "brian";
     stateVersion = "24.11";
-    packages = with pkgs; [ cachix ];
+    packages = with pkgs; [
+      cachix
+      android-studio
+    ];
   };
   programs.gpg = {
     enable = true;

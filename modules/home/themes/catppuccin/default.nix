@@ -274,4 +274,7 @@ in
       (load-theme 'catppuccin :no-confirm)
     '';
   };
+  programs.eza = {
+    icons = "auto";
+  };
 }
