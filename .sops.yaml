@@ -31,3 +31,7 @@ creation_rules:
     key_groups:
       - age: *hosts
         pgp: *users
+  - path_regex: ^infra\/(.*\.)?secret\.yaml$
+    key_groups:
+      - age: *hosts
+        pgp: *users
