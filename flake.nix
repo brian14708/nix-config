@@ -174,11 +174,13 @@
 
   nixConfig = {
     extra-substituters = [
-      "https://nix-community.cachix.org"
-      "https://mirrors.cernet.edu.cn/nix-channels/store"
+      "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
       "https://mirror.sjtu.edu.cn/nix-channels/store"
+      "https://brian14708.cachix.org"
+      "https://nix-community.cachix.org"
     ];
     extra-trusted-public-keys = [
+      "brian14708.cachix.org-1:ZTO1dfqDryBeRpLJwn/czQj0HFC0TPuV2aK+81o2mSs="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
   };

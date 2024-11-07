@@ -52,7 +52,7 @@
 
         (
           ", Print, exec, "
-          + "${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\" |"
+          + "${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\" - |"
           + "${pkgs.wl-clipboard}/bin/wl-copy -t image/png"
         )
         ", XF86AudioMute, exec, ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle"
