@@ -11,5 +11,5 @@ vm:
 	./result/bin/run-nixos-vm
 
 lab:
-	cd infra/lab && [ -d .terraform ] || sops exec-env ./env.secret.yaml 'tofu init'
-	cd infra/lab && sops exec-env ./env.secret.yaml 'tofu apply'
+	cd infra/lab && [ -d .terraform ] || nix run nixpkgs#sops exec-env ./env.secret.yaml 'nix run nixpkgs#opentofu init'
+	cd infra/lab && nix run nixpkgs#sops exec-env ./env.secret.yaml 'nix run nixpkgs#opentofu apply'

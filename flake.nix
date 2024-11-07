@@ -70,6 +70,19 @@
                 };
               };
             };
+            lab01 = nixpkgs.lib.nixosSystem {
+              pkgs = pkgsFor "x86_64-linux";
+              system = "x86_64-linux";
+              modules = [
+                ./hosts/lab01
+              ];
+              specialArgs = {
+                inherit inputs outputs;
+                machine = {
+                  trusted = false;
+                };
+              };
+            };
             vmtest = nixpkgs.lib.nixosSystem {
               pkgs = pkgsFor "x86_64-linux";
               system = "x86_64-linux";
