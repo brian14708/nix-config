@@ -48,22 +48,34 @@
       deploy-rs,
       ...
     }:
+    let
+      systems = [
+        "x86_64-linux"
+        "aarch64-darwin"
+      ];
+      pkgsFor = nixpkgs.lib.genAttrs systems (
+        system:
+        import nixpkgs {
+          inherit system;
+          overlays = [
+            deploy-rs.overlay
+            (import ./overlays)
+          ];
+          config.allowUnfree = true;
+        }
+      );
+    in
     flake-parts.lib.mkFlake { inherit inputs; } {
+      inherit systems;
       imports = [ inputs.treefmt-nix.flakeModule ];
       flake =
         let
           inherit (self) outputs;
-          pkgsFor =
-            system:
-            import nixpkgs {
-              inherit system;
-              config.allowUnfree = true;
-            };
         in
         {
           nixosConfigurations = {
             aether = nixpkgs.lib.nixosSystem {
-              pkgs = pkgsFor "x86_64-linux";
+              pkgs = pkgsFor.x86_64-linux;
               system = "x86_64-linux";
               modules = [
                 ./hosts/aether
@@ -76,7 +88,7 @@
               };
             };
             lab01 = nixpkgs.lib.nixosSystem {
-              pkgs = pkgsFor "x86_64-linux";
+              pkgs = pkgsFor.x86_64-linux;
               system = "x86_64-linux";
               modules = [
                 ./hosts/lab01
@@ -88,8 +100,16 @@
                 };
               };
             };
+            aliyun = nixpkgs.lib.nixosSystem {
+              pkgs = pkgsFor.x86_64-linux;
+              system = "x86_64-linux";
+              modules = [ ./hosts/aliyun ];
+              specialArgs = {
+                inherit inputs outputs;
+              };
+            };
             vmtest = nixpkgs.lib.nixosSystem {
-              pkgs = pkgsFor "x86_64-linux";
+              pkgs = pkgsFor.x86_64-linux;
               system = "x86_64-linux";
               modules = [
                 ./hosts/vmtest
@@ -104,17 +124,17 @@
           };
 
           deploy.nodes.lab01 = {
-            hostname = "lab01.brian14708.dev";
+            hostname = "lab01";
+            sshUser = "ops";
             profiles.system = {
               user = "root";
               path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.lab01;
             };
           };
-          checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
 
           homeConfigurations = {
             "brian@macbookpro" = home-manager.lib.homeManagerConfiguration {
-              pkgs = pkgsFor "aarch64-darwin";
+              pkgs = pkgsFor.aarch64-darwin;
               modules = [
                 ./home/brian/mbp.nix
               ];
@@ -126,7 +146,7 @@
               };
             };
             "brian@shiva" = home-manager.lib.homeManagerConfiguration {
-              pkgs = pkgsFor "x86_64-linux";
+              pkgs = pkgsFor.x86_64-linux;
               modules = [
                 ./home/brian/shiva.nix
               ];
@@ -138,7 +158,7 @@
               };
             };
             "brian@fuxi" = home-manager.lib.homeManagerConfiguration {
-              pkgs = pkgsFor "x86_64-linux";
+              pkgs = pkgsFor.x86_64-linux;
               modules = [
                 ./home/brian/fuxi.nix
               ];
@@ -150,7 +170,7 @@
               };
             };
             "brian@aether" = home-manager.lib.homeManagerConfiguration {
-              pkgs = pkgsFor "x86_64-linux";
+              pkgs = pkgsFor.x86_64-linux;
               modules = [
                 ./home/brian/aether.nix
               ];
@@ -162,7 +182,7 @@
               };
             };
             "brian" = home-manager.lib.homeManagerConfiguration {
-              pkgs = pkgsFor "x86_64-linux";
+              pkgs = pkgsFor.x86_64-linux;
               modules = [
                 ./home/brian/generic.nix
               ];
@@ -175,11 +195,6 @@
             };
           };
         };
-      systems = [
-        "aarch64-linux"
-        "x86_64-linux"
-        "aarch64-darwin"
-      ];
       perSystem =
         {
           config,
@@ -188,12 +203,7 @@
           ...
         }:
         {
-          _module.args = {
-            pkgs = import inputs.nixpkgs {
-              inherit system;
-              overlays = [ deploy-rs.overlay ];
-            };
-          };
+          _module.args.pkgs = pkgsFor.${system};
           treefmt.config = {
             projectRootFile = "flake.nix";
             programs = {

@@ -8,21 +8,9 @@
 }:
 {
   imports = [
-    (modulesPath + "/profiles/qemu-guest.nix")
-    inputs.disko.nixosModules.disko
     inputs.home-manager.nixosModules.home-manager
-    ./disko.nix
+    ../aliyun
   ];
-
-  boot = {
-    kernelPackages = pkgs.linuxPackages_xanmod_latest;
-    kernelParams = [ "mitigations=off" ];
-    loader.grub = {
-      efiSupport = true;
-      efiInstallAsRemovable = true;
-      device = "nodev";
-    };
-  };
 
   networking = {
     hostName = "lab01";
@@ -53,65 +41,5 @@
     git
     gnumake
     tmux
-
-    (tailscale.derper.overrideAttrs (
-      final: prev: {
-        patches = prev.patches ++ [ ./derper.patch ];
-      }
-    ))
   ];
-
-  time.timeZone = "Asia/Hong_Kong";
-  i18n.defaultLocale = "en_US.UTF-8";
-
-  services = {
-    openssh.enable = true;
-  };
-
-  system.stateVersion = "24.11";
-
-  security.sudo.extraRules = [
-    {
-      groups = [ "wheel" ];
-      commands = [
-        {
-          command = "ALL";
-          options = [ "NOPASSWD" ];
-        }
-      ];
-    }
-  ];
-
-  nix = {
-    settings = {
-      use-xdg-base-directories = true;
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
-      auto-optimise-store = true;
-      substituters = [
-        "https://mirrors.cernet.edu.cn/nix-channels/store"
-        "https://mirror.sjtu.edu.cn/nix-channels/store"
-        "https://cache.nixos.org"
-      ];
-      trusted-users = [ "@wheel" ];
-    };
-    gc = {
-      automatic = true;
-      persistent = true;
-      dates = "weekly";
-      options = "--delete-older-than 7d";
-    };
-  };
-  services.tailscale = {
-    enable = true;
-    package = (
-      pkgs.tailscale.overrideAttrs (
-        final: prev: {
-          patches = prev.patches ++ [ ./tailscale.patch ];
-        }
-      )
-    );
-  };
 }

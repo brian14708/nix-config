@@ -1,3 +1,7 @@
+data "sops_file" "vars" {
+  source_file = "vars.secret.yaml"
+}
+
 resource "alicloud_instance" "derp" {
   instance_name   = "derp"
   image_id        = "debian_12_4_x64_20G_alibase_20240126.vhd"
@@ -7,11 +11,12 @@ resource "alicloud_instance" "derp" {
 }
 
 resource "alicloud_eip_address" "derp" {
-  isp          = "BGP"
-  address_name = "derp"
-  netmode      = "public"
-  bandwidth    = "200"
-  payment_type = "PayAsYouGo"
+  isp                  = "BGP"
+  address_name         = "derp"
+  netmode              = "public"
+  bandwidth            = "200"
+  payment_type         = "PayAsYouGo"
+  internet_charge_type = "PayByTraffic"
 }
 
 resource "alicloud_ecs_network_interface" "derp" {
@@ -26,7 +31,8 @@ resource "alicloud_ecs_network_interface_attachment" "derp" {
 
 resource "alicloud_instance" "lab01" {
   instance_name                 = "lab01"
-  image_id                      = "debian_12_6_x64_20G_alibase_20240819.vhd"
+  host_name                     = "lab01"
+  image_id                      = alicloud_image_import.cn_nixos.id
   instance_charge_type          = "PostPaid"
   spot_strategy                 = "SpotAsPriceGo"
   spot_duration                 = 0
@@ -34,17 +40,20 @@ resource "alicloud_instance" "lab01" {
   security_enhancement_strategy = "Deactive"
   security_groups               = [alicloud_security_group.cn.id]
   vswitch_id                    = alicloud_vswitch.cn.id
-  user_data                     = base64gzip(templatefile("${path.module}/cloud-init.tpl", {}))
-  system_disk_category          = "cloud_essd_entry"
-  system_disk_size              = "20"
+  user_data = base64gzip(templatefile("${path.module}/cloud-init.tpl", {
+    ts_auth = data.sops_file.vars.data["ts_auth"]
+  }))
+  system_disk_category = "cloud_essd_entry"
+  system_disk_size     = "20"
 }
 
 resource "alicloud_eip_address" "lab01" {
-  isp          = "BGP"
-  address_name = "lab01"
-  netmode      = "public"
-  bandwidth    = "200"
-  payment_type = "PayAsYouGo"
+  isp                  = "BGP"
+  address_name         = "lab01"
+  netmode              = "public"
+  bandwidth            = "10"
+  payment_type         = "PayAsYouGo"
+  internet_charge_type = "PayByTraffic"
 }
 
 resource "alicloud_eip_association" "lab01" {
@@ -55,6 +64,7 @@ resource "alicloud_eip_association" "lab01" {
 data "cloudflare_zone" "default" {
   name = "brian14708.dev"
 }
+
 resource "cloudflare_record" "lab01" {
   zone_id = data.cloudflare_zone.default.id
   name    = "lab01"
@@ -62,3 +72,21 @@ resource "cloudflare_record" "lab01" {
   type    = "A"
 }
 
+resource "alicloud_oss_bucket" "lab_os" {
+  provider = alicloud.cn
+  bucket   = "lab-os-ees4ushi"
+}
+
+resource "alicloud_oss_bucket_acl" "lab_os" {
+  bucket = alicloud_oss_bucket.lab_os.bucket
+  acl    = "private"
+}
+
+resource "alicloud_image_import" "cn_nixos" {
+  provider   = alicloud.cn
+  image_name = "nixos"
+  disk_device_mapping {
+    oss_bucket = alicloud_oss_bucket.lab_os.bucket
+    oss_object = "nixos-20241108.qcow2"
+  }
+}

@@ -11,6 +11,10 @@ terraform {
       source  = "cloudflare/cloudflare"
       version = "~> 4"
     }
+    sops = {
+      source  = "carlpett/sops"
+      version = "~> 1"
+    }
   }
 
   encryption {
@@ -42,3 +46,5 @@ provider "alicloud" {
   region = "cn-beijing"
   alias  = "cn"
 }
+
+provider "sops" {}
