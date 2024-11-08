@@ -33,6 +33,10 @@
       url = "github:catppuccin/vscode";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    deploy-rs = {
+      url = "github:serokell/deploy-rs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -41,6 +45,7 @@
       nixpkgs,
       home-manager,
       flake-parts,
+      deploy-rs,
       ...
     }:
     flake-parts.lib.mkFlake { inherit inputs; } {
@@ -97,6 +102,15 @@
               };
             };
           };
+
+          deploy.nodes.lab01 = {
+            hostname = "lab01.brian14708.dev";
+            profiles.system = {
+              user = "root";
+              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.lab01;
+            };
+          };
+          checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
 
           homeConfigurations = {
             "brian@macbookpro" = home-manager.lib.homeManagerConfiguration {
@@ -167,8 +181,19 @@
         "aarch64-darwin"
       ];
       perSystem =
-        { config, pkgs, ... }:
         {
+          config,
+          system,
+          pkgs,
+          ...
+        }:
+        {
+          _module.args = {
+            pkgs = import inputs.nixpkgs {
+              inherit system;
+              overlays = [ deploy-rs.overlay ];
+            };
+          };
           treefmt.config = {
             projectRootFile = "flake.nix";
             programs = {
