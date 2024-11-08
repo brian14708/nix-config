@@ -15,7 +15,7 @@
   ];
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_xanmod_latest;
     kernelParams = [ "mitigations=off" ];
     loader.grub = {
       efiSupport = true;
@@ -103,5 +103,15 @@
       dates = "weekly";
       options = "--delete-older-than 7d";
     };
+  };
+  services.tailscale = {
+    enable = true;
+    package = (
+      pkgs.tailscale.overrideAttrs (
+        final: prev: {
+          patches = prev.patches ++ [ ./tailscale.patch ];
+        }
+      )
+    );
   };
 }
