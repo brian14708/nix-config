@@ -108,19 +108,6 @@
                 inherit inputs outputs;
               };
             };
-            vmtest = nixpkgs.lib.nixosSystem {
-              pkgs = pkgsFor.x86_64-linux;
-              system = "x86_64-linux";
-              modules = [
-                ./hosts/vmtest
-              ];
-              specialArgs = {
-                inherit inputs outputs;
-                machine = {
-                  trusted = false;
-                };
-              };
-            };
           };
 
           deploy.nodes.lab01 = {

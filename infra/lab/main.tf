@@ -61,17 +61,6 @@ resource "alicloud_eip_association" "lab01" {
   instance_id   = alicloud_instance.lab01.id
 }
 
-data "cloudflare_zone" "default" {
-  name = "brian14708.dev"
-}
-
-resource "cloudflare_record" "lab01" {
-  zone_id = data.cloudflare_zone.default.id
-  name    = "lab01"
-  content = alicloud_eip_address.lab01.ip_address
-  type    = "A"
-}
-
 resource "alicloud_oss_bucket" "lab_os" {
   provider = alicloud.cn
   bucket   = "lab-os-ees4ushi"
