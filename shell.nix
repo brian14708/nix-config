@@ -12,6 +12,7 @@
       sops
       ssh-to-age
       deploy-rs.deploy-rs
+      just
     ];
   };
 }

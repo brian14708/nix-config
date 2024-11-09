@@ -1,5 +1,3 @@
-.PHONY: nixos home
-
 home:
 	nix run nixpkgs#nh -- home switch . -- --accept-flake-config
 
