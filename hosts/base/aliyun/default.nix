@@ -35,7 +35,7 @@
     uid = 2000;
     isNormalUser = true;
     extraGroups = [ "wheel" ];
-    openssh.authorizedKeys.keys = (import ../../home/brian/_user.nix).ssh;
+    openssh.authorizedKeys.keys = (import ../../../home/brian/_user.nix).ssh;
   };
 
   nix = {

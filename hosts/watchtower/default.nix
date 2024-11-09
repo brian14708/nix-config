@@ -18,7 +18,7 @@ let
 in
 {
   imports = [
-    ../aliyun
+    ../base/aliyun
   ];
 
   system = {

@@ -114,14 +114,6 @@
                 };
               };
             };
-            aliyun = nixpkgs.lib.nixosSystem {
-              pkgs = pkgsFor.x86_64-linux;
-              system = "x86_64-linux";
-              modules = [ ./hosts/aliyun ];
-              specialArgs = {
-                inherit inputs outputs;
-              };
-            };
           };
 
           deploy.nodes = {
@@ -215,6 +207,17 @@
         }:
         {
           _module.args.pkgs = pkgsFor.${system};
+          packages = {
+            aliyun-image =
+              (nixpkgs.lib.nixosSystem rec {
+                system = "x86_64-linux";
+                pkgs = pkgsFor.${system};
+                modules = [ ./hosts/base/aliyun ];
+                specialArgs = {
+                  inherit (self) inputs outputs;
+                };
+              }).config.system.build.qcow2;
+          };
           treefmt.config = {
             projectRootFile = "flake.nix";
             programs = {
