@@ -100,6 +100,19 @@
                 };
               };
             };
+            watchtower = nixpkgs.lib.nixosSystem {
+              pkgs = pkgsFor.x86_64-linux;
+              system = "x86_64-linux";
+              modules = [
+                ./hosts/watchtower
+              ];
+              specialArgs = {
+                inherit inputs outputs;
+                machine = {
+                  trusted = false;
+                };
+              };
+            };
             aliyun = nixpkgs.lib.nixosSystem {
               pkgs = pkgsFor.x86_64-linux;
               system = "x86_64-linux";
@@ -110,12 +123,22 @@
             };
           };
 
-          deploy.nodes.lab01 = {
-            hostname = "lab01";
-            sshUser = "ops";
-            profiles.system = {
-              user = "root";
-              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.lab01;
+          deploy.nodes = {
+            watchtower = {
+              hostname = "watchtower";
+              sshUser = "ops";
+              profiles.system = {
+                user = "root";
+                path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.watchtower;
+              };
+            };
+            lab01 = {
+              hostname = "lab01";
+              sshUser = "ops";
+              profiles.system = {
+                user = "root";
+                path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.lab01;
+              };
             };
           };
 
