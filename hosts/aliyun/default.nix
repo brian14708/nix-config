@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  config,
   inputs,
   modulesPath,
   ...
@@ -92,4 +93,10 @@
   );
   boot.loader.timeout = 0;
 
+  system.build.qcow2 = import "${toString modulesPath}/../lib/make-disk-image.nix" {
+    inherit lib config pkgs;
+    diskSize = "auto";
+    format = "qcow2-compressed";
+    partitionTableType = "hybrid";
+  };
 }
