@@ -60,6 +60,7 @@
           overlays = [
             deploy-rs.overlay
             (import ./overlays)
+            (final: _prev: import ./pkgs { pkgs = final; })
           ];
           config.allowUnfree = true;
         }

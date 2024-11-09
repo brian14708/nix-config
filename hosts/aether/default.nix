@@ -70,12 +70,6 @@
     hashedPasswordFile = config.sops.secrets."brian-password".path;
   };
 
-  environment.systemPackages = with pkgs; [
-    git
-    gnumake
-    tmux
-  ];
-
   hardware.enableRedistributableFirmware = true;
   time.timeZone = "Asia/Hong_Kong";
   i18n.defaultLocale = "en_US.UTF-8";
