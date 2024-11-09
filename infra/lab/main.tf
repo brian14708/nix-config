@@ -32,7 +32,7 @@ resource "alicloud_ecs_network_interface_attachment" "derp" {
 resource "alicloud_instance" "lab01" {
   instance_name                 = "lab01"
   host_name                     = "lab01"
-  image_id                      = alicloud_image_import.cn_nixos.id
+  image_id                      = alicloud_image_import.cn_nixos_20241109.id
   instance_charge_type          = "PostPaid"
   spot_strategy                 = "SpotAsPriceGo"
   spot_duration                 = 0
@@ -71,11 +71,11 @@ resource "alicloud_oss_bucket_acl" "lab_os" {
   acl    = "private"
 }
 
-resource "alicloud_image_import" "cn_nixos" {
+resource "alicloud_image_import" "cn_nixos_20241109" {
   provider   = alicloud.cn
   image_name = "nixos"
   disk_device_mapping {
     oss_bucket = alicloud_oss_bucket.lab_os.bucket
-    oss_object = "nixos-20241108.qcow2"
+    oss_object = "nixos-20241109.qcow2"
   }
 }
