@@ -10,7 +10,7 @@
     inputs.disko.nixosModules.disko
     inputs.lanzaboote.nixosModules.lanzaboote
     ./disko.nix
-    ./mihomo.nix
+    ../aether/mihomo.nix
   ];
 
   boot = {
@@ -34,7 +34,7 @@
 
   sops = {
     defaultSopsFile = ./secret.yaml;
-    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+    age.sshKeyPaths = [ "/etc/sops-nix/id_ed25519" ];
     gnupg.sshKeyPaths = [ ];
     secrets."brian-password" = {
       neededForUsers = true;
@@ -43,7 +43,7 @@
   };
 
   networking = {
-    hostName = "aether";
+    hostName = "fujin";
     networkmanager.enable = true;
   };
 
@@ -54,7 +54,6 @@
     };
     brian = {
       uid = 1000;
-      description = "Brian";
       isNormalUser = true;
       extraGroups = [
         "wheel"
@@ -102,21 +101,6 @@
       dates = "weekly";
       options = "--delete-older-than 7d";
     };
-  };
-
-  programs.hyprland.enable = true;
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time";
-        user = "greeter";
-      };
-    };
-  };
-
-  hardware.graphics = {
-    enable = true;
   };
 
   services.dbus.implementation = "broker";

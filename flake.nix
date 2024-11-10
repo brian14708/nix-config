@@ -8,7 +8,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix = {
-      url = "github:Mic92/sops-nix";
+      url = "github:Mic92/sops-nix/59d6988329626132eaf107761643f55eb979eef1";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs";
     };
@@ -90,6 +90,10 @@
             modules = [ ./hosts/aether ];
             trusted = true;
           };
+          fujin = nixosConfig {
+            modules = [ ./hosts/fujin ];
+            trusted = true;
+          };
           lab01 = nixosConfig {
             modules = [ ./hosts/lab01 ];
           };
@@ -167,6 +171,10 @@
           };
           "brian@aether" = hmConfig {
             modules = [ ./home/brian/aether.nix ];
+            trusted = true;
+          };
+          "brian@fujin" = hmConfig {
+            modules = [ ./home/brian/fujin.nix ];
             trusted = true;
           };
         };

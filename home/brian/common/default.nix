@@ -64,7 +64,7 @@
       };
     }
     // lib.optionalAttrs machine.trusted {
-      extraOptions = "include ${config.sops.secrets."nix.conf".path}\n";
+      extraOptions = "!include ${config.sops.secrets."nix.conf".path}\n";
       checkConfig = false;
     };
 }
