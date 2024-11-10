@@ -64,6 +64,13 @@
   };
 
   hardware.enableRedistributableFirmware = true;
+  services.hardware.bolt.enable = true;
+  hardware.nvidia.open = true;
+  services.xserver.videoDrivers = [
+    "nvidia"
+    "amdgpu"
+  ];
+
   time.timeZone = "Asia/Hong_Kong";
   i18n.defaultLocale = "en_US.UTF-8";
 
