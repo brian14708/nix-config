@@ -8,5 +8,5 @@ lab:
 	cd infra/lab && [ -d .terraform ] || nix run nixpkgs#sops exec-env ./env.secret.yaml 'nix run nixpkgs#opentofu init'
 	cd infra/lab && SOPS_GPG_EXEC=/dev/null nix run nixpkgs#sops exec-env ./env.secret.yaml 'nix run nixpkgs#opentofu apply'
 
-aliyun-image:
-	nix build .#aliyun-image
+aliyun-base:
+	nix build .#nixosConfigurations.aliyun-base.config.system.build.qcow2

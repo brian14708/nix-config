@@ -79,19 +79,20 @@
     fsType = "ext4";
   };
 
-  boot.growPartition = true;
-  boot.kernelParams = [ "console=ttyS0" ];
-  boot.loader.grub.device =
-    if (pkgs.stdenv.system == "x86_64-linux") then
-      (lib.mkDefault "/dev/vda")
-    else
-      (lib.mkDefault "nodev");
-
-  boot.loader.grub.efiSupport = lib.mkIf (pkgs.stdenv.system != "x86_64-linux") (lib.mkDefault true);
-  boot.loader.grub.efiInstallAsRemovable = lib.mkIf (pkgs.stdenv.system != "x86_64-linux") (
-    lib.mkDefault true
-  );
-  boot.loader.timeout = 0;
+  boot = {
+    growPartition = true;
+    kernelParams = [ "console=ttyS0" ];
+    loader.grub = {
+      device =
+        if (pkgs.stdenv.system == "x86_64-linux") then
+          (lib.mkDefault "/dev/vda")
+        else
+          (lib.mkDefault "nodev");
+      efiSupport = lib.mkIf (pkgs.stdenv.system != "x86_64-linux") (lib.mkDefault true);
+      efiInstallAsRemovable = lib.mkIf (pkgs.stdenv.system != "x86_64-linux") (lib.mkDefault true);
+    };
+    loader.timeout = 0;
+  };
 
   system.build.qcow2 = import "${toString modulesPath}/../lib/make-disk-image.nix" {
     inherit lib config pkgs;

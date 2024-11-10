@@ -7,10 +7,6 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    flake-parts = {
-      url = "github:hercules-ci/flake-parts";
-      inputs.nixpkgs-lib.follows = "nixpkgs";
-    };
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -44,7 +40,6 @@
       self,
       nixpkgs,
       home-manager,
-      flake-parts,
       deploy-rs,
       ...
     }:
@@ -65,177 +60,122 @@
           config.allowUnfree = true;
         }
       );
+      forAllSystems = nixpkgs.lib.genAttrs systems;
+      treefmtEval = forAllSystems (
+        system: inputs.treefmt-nix.lib.evalModule pkgsFor.${system} ./treefmt.nix
+      );
     in
-    flake-parts.lib.mkFlake { inherit inputs; } {
-      inherit systems;
-      imports = [ inputs.treefmt-nix.flakeModule ];
-      flake =
+    {
+      nixosConfigurations =
         let
-          inherit (self) outputs;
+          nixosConfig =
+            {
+              system ? "x86_64-linux",
+              modules,
+              trusted ? false,
+            }:
+            nixpkgs.lib.nixosSystem {
+              inherit system modules;
+              pkgs = pkgsFor.${system};
+              specialArgs = {
+                inherit (self) inputs outputs;
+                machine = {
+                  inherit trusted;
+                };
+              };
+            };
         in
         {
-          nixosConfigurations = {
-            aether = nixpkgs.lib.nixosSystem {
-              pkgs = pkgsFor.x86_64-linux;
-              system = "x86_64-linux";
-              modules = [
-                ./hosts/aether
-              ];
-              specialArgs = {
-                inherit inputs outputs;
-                machine = {
-                  trusted = true;
-                };
-              };
-            };
-            lab01 = nixpkgs.lib.nixosSystem {
-              pkgs = pkgsFor.x86_64-linux;
-              system = "x86_64-linux";
-              modules = [
-                ./hosts/lab01
-              ];
-              specialArgs = {
-                inherit inputs outputs;
-                machine = {
-                  trusted = false;
-                };
-              };
-            };
-            watchtower = nixpkgs.lib.nixosSystem {
-              pkgs = pkgsFor.x86_64-linux;
-              system = "x86_64-linux";
-              modules = [
-                ./hosts/watchtower
-              ];
-              specialArgs = {
-                inherit inputs outputs;
-                machine = {
-                  trusted = false;
-                };
-              };
-            };
+          aether = nixosConfig {
+            modules = [ ./hosts/aether ];
+            trusted = true;
           };
-
-          deploy.nodes = {
-            watchtower = {
-              hostname = "watchtower";
-              sshUser = "ops";
-              profiles.system = {
-                user = "root";
-                path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.watchtower;
-              };
-            };
-            lab01 = {
-              hostname = "lab01";
-              sshUser = "ops";
-              profiles.system = {
-                user = "root";
-                path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.lab01;
-              };
-            };
+          lab01 = nixosConfig {
+            modules = [ ./hosts/lab01 ];
           };
-
-          homeConfigurations = {
-            "brian@macbookpro" = home-manager.lib.homeManagerConfiguration {
-              pkgs = pkgsFor.aarch64-darwin;
-              modules = [
-                ./home/brian/mbp.nix
-              ];
-              extraSpecialArgs = {
-                inherit inputs outputs;
-                machine = {
-                  trusted = true;
-                };
-              };
-            };
-            "brian@shiva" = home-manager.lib.homeManagerConfiguration {
-              pkgs = pkgsFor.x86_64-linux;
-              modules = [
-                ./home/brian/shiva.nix
-              ];
-              extraSpecialArgs = {
-                inherit inputs outputs;
-                machine = {
-                  trusted = true;
-                };
-              };
-            };
-            "brian@fuxi" = home-manager.lib.homeManagerConfiguration {
-              pkgs = pkgsFor.x86_64-linux;
-              modules = [
-                ./home/brian/fuxi.nix
-              ];
-              extraSpecialArgs = {
-                inherit inputs outputs;
-                machine = {
-                  trusted = true;
-                };
-              };
-            };
-            "brian@aether" = home-manager.lib.homeManagerConfiguration {
-              pkgs = pkgsFor.x86_64-linux;
-              modules = [
-                ./home/brian/aether.nix
-              ];
-              extraSpecialArgs = {
-                inherit inputs outputs;
-                machine = {
-                  trusted = true;
-                };
-              };
-            };
-            "brian" = home-manager.lib.homeManagerConfiguration {
-              pkgs = pkgsFor.x86_64-linux;
-              modules = [
-                ./home/brian/generic.nix
-              ];
-              extraSpecialArgs = {
-                inherit inputs outputs;
-                machine = {
-                  trusted = false;
-                };
-              };
-            };
+          watchtower = nixosConfig {
+            modules = [ ./hosts/watchtower ];
+          };
+          aliyun-base = nixosConfig {
+            modules = [ ./hosts/base/aliyun ];
           };
         };
-      perSystem =
-        {
-          config,
-          system,
-          pkgs,
-          ...
-        }:
-        {
-          _module.args.pkgs = pkgsFor.${system};
-          packages = {
-            aliyun-image =
-              (nixpkgs.lib.nixosSystem rec {
-                system = "x86_64-linux";
-                pkgs = pkgsFor.${system};
-                modules = [ ./hosts/base/aliyun ];
-                specialArgs = {
-                  inherit (self) inputs outputs;
-                };
-              }).config.system.build.qcow2;
-          };
-          treefmt.config = {
-            projectRootFile = "flake.nix";
-            programs = {
-              nixfmt.enable = true;
-              stylua.enable = true;
-              prettier.enable = true;
-              terraform = {
-                enable = true;
-                package = pkgs.opentofu;
+
+      deploy.nodes =
+        let
+          deployConfig =
+            {
+              hostname,
+              sshUser ? "ops",
+              system ? "x86_64-linux",
+              nixosConfiguration ? null,
+            }:
+            {
+              inherit sshUser hostname;
+              profiles.system = {
+                user = "root";
+                path = deploy-rs.lib.${system}.activate.nixos (
+                  if builtins.isNull nixosConfiguration then
+                    self.nixosConfigurations.${hostname}
+                  else
+                    nixosConfiguration
+                );
               };
             };
-            settings.formatter.stylua.options = [
-              "--indent-type=Spaces"
-              "--indent-width=2"
-            ];
+        in
+        {
+          watchtower = deployConfig {
+            hostname = "watchtower";
           };
-          devShells = import ./shell.nix pkgs;
+          lab01 = deployConfig {
+            hostname = "lab01";
+          };
         };
+
+      homeConfigurations =
+        let
+          hmConfig =
+            {
+              system ? "x86_64-linux",
+              modules,
+              trusted ? false,
+            }:
+            home-manager.lib.homeManagerConfiguration {
+              inherit modules;
+              pkgs = pkgsFor.${system};
+              extraSpecialArgs = {
+                inherit (self) inputs outputs;
+                machine = {
+                  inherit trusted;
+                };
+              };
+            };
+        in
+        {
+          "brian@macbookpro" = hmConfig {
+            system = "aarch64-darwin";
+            trusted = true;
+            modules = [ ./home/brian/mbp.nix ];
+          };
+          "brian@shiva" = hmConfig {
+            modules = [ ./home/brian/shiva.nix ];
+            trusted = true;
+          };
+          "brian@fuxi" = hmConfig {
+            modules = [ ./home/brian/fuxi.nix ];
+            trusted = true;
+          };
+          "brian@aether" = hmConfig {
+            modules = [ ./home/brian/aether.nix ];
+            trusted = true;
+          };
+        };
+
+      formatter = forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
+      checks = forAllSystems (system: {
+        formatting = treefmtEval.${system}.config.build.check self;
+      });
+      devShells = forAllSystems (system: import ./shell.nix pkgsFor.${system});
     };
 
   nixConfig = {
