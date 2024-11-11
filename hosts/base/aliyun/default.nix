@@ -12,6 +12,7 @@
     (modulesPath + "/profiles/headless.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
     inputs.home-manager.nixosModules.home-manager
+    ../.
   ];
 
   system.stateVersion = lib.mkDefault "24.11";
@@ -36,29 +37,6 @@
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     openssh.authorizedKeys.keys = (import ../../../home/brian/_user.nix).ssh;
-  };
-
-  nix = {
-    settings = {
-      use-xdg-base-directories = true;
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
-      auto-optimise-store = true;
-      substituters = [
-        "https://mirrors.cernet.edu.cn/nix-channels/store"
-        "https://mirror.sjtu.edu.cn/nix-channels/store"
-        "https://cache.nixos.org"
-      ];
-      trusted-users = [ "@wheel" ];
-    };
-    gc = {
-      automatic = true;
-      persistent = true;
-      dates = "weekly";
-      options = "--delete-older-than 7d";
-    };
   };
 
   security.sudo.extraRules = [

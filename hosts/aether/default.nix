@@ -11,6 +11,7 @@
     inputs.lanzaboote.nixosModules.lanzaboote
     ./disko.nix
     ./mihomo.nix
+    ../base
   ];
 
   boot = {
@@ -77,33 +78,6 @@
 
   system.stateVersion = "24.11";
 
-  nix = {
-    settings = {
-      use-xdg-base-directories = true;
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
-      auto-optimise-store = true;
-      substituters = [
-        "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
-        "https://mirror.sjtu.edu.cn/nix-channels/store"
-        "https://brian14708.cachix.org"
-        "https://cache.nixos.org"
-      ];
-      extra-trusted-public-keys = [
-        "brian14708.cachix.org-1:ZTO1dfqDryBeRpLJwn/czQj0HFC0TPuV2aK+81o2mSs="
-      ];
-      trusted-users = [ "@wheel" ];
-    };
-    gc = {
-      automatic = true;
-      persistent = true;
-      dates = "weekly";
-      options = "--delete-older-than 7d";
-    };
-  };
-
   programs.hyprland.enable = true;
   services.greetd = {
     enable = true;
@@ -118,7 +92,4 @@
   hardware.graphics = {
     enable = true;
   };
-
-  services.dbus.implementation = "broker";
-  services.speechd.enable = false;
 }
