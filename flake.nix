@@ -112,19 +112,30 @@
               hostname,
               sshUser ? "ops",
               system ? "x86_64-linux",
-              nixosConfiguration ? null,
+              home ? { },
             }:
             {
               inherit sshUser hostname;
-              profiles.system = {
-                user = "root";
-                path = deploy-rs.lib.${system}.activate.nixos (
-                  if builtins.isNull nixosConfiguration then
-                    self.nixosConfigurations.${hostname}
-                  else
-                    nixosConfiguration
-                );
-              };
+              profilesOrder = [ "system" ] ++ builtins.attrNames home;
+              profiles =
+                let
+                  activate = deploy-rs.lib.${system}.activate;
+                in
+                {
+                  system = {
+                    user = "root";
+                    path = activate.nixos self.nixosConfigurations.${hostname};
+                  };
+                }
+                // (nixpkgs.lib.mapAttrs (
+                  name:
+                  { }:
+                  {
+                    sshUser = name;
+                    user = name;
+                    path = activate.home-manager self.homeConfigurations."${name}@${hostname}";
+                  }
+                ) home);
             };
         in
         {
@@ -133,6 +144,12 @@
           };
           lab01 = deployConfig {
             hostname = "lab01";
+          };
+          fujin = deployConfig {
+            hostname = "fujin";
+            home = {
+              brian = { };
+            };
           };
         };
 

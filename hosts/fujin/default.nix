@@ -55,13 +55,29 @@
     brian = {
       uid = 1000;
       isNormalUser = true;
-      extraGroups = [
-        "wheel"
-      ];
+      extraGroups = [ "wheel" ];
       openssh.authorizedKeys.keys = (import ../../home/brian/_user.nix).ssh;
       hashedPasswordFile = config.sops.secrets."brian-password".path;
     };
+    ops = {
+      uid = 2000;
+      isNormalUser = true;
+      extraGroups = [ "wheel" ];
+      openssh.authorizedKeys.keys = (import ../../home/brian/_user.nix).ssh;
+      hashedPassword = "!";
+    };
   };
+  security.sudo.extraRules = [
+    {
+      users = [ "ops" ];
+      commands = [
+        {
+          command = "ALL";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
 
   hardware.enableRedistributableFirmware = true;
   services.hardware.bolt.enable = true;
