@@ -8,7 +8,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix = {
-      url = "github:Mic92/sops-nix";
+      url = "github:Mic92/sops-nix/59d6988329626132eaf107761643f55eb979eef1";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs";
     };
@@ -93,6 +93,9 @@
           fujin = nixosConfig {
             modules = [ ./hosts/fujin ];
             trusted = true;
+          };
+          fuxi = nixosConfig {
+            modules = [ ./hosts/fuxi ];
           };
           lab01 = nixosConfig {
             modules = [ ./hosts/lab01 ];
