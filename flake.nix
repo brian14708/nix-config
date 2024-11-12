@@ -7,6 +7,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     sops-nix = {
       url = "github:Mic92/sops-nix/59d6988329626132eaf107761643f55eb979eef1";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -40,6 +44,7 @@
       self,
       nixpkgs,
       home-manager,
+      nix-darwin,
       deploy-rs,
       ...
     }:
@@ -198,6 +203,11 @@
             trusted = true;
           };
         };
+      darwinConfigurations."macbookpro" = nix-darwin.lib.darwinSystem rec {
+        system = "aarch64-darwin";
+        pkgs = pkgsFor.${system};
+        modules = [ ./hosts/macbookpro ];
+      };
 
       formatter = forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
       checks = forAllSystems (system: {

@@ -47,7 +47,8 @@
     {
       package = lib.mkDefault pkgs.nixVersions.latest;
       settings = {
-        use-xdg-base-directories = !config.targets.genericLinux.enable;
+        use-xdg-base-directories =
+          if pkgs.stdenv.isDarwin then false else !config.targets.genericLinux.enable;
         experimental-features = [
           "nix-command"
           "flakes"
