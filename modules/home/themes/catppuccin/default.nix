@@ -299,4 +299,10 @@ in
     platformTheme.name = "kvantum";
     style.name = "kvantum";
   };
+
+  programs.lazygit = {
+    settings = {
+      gui.nerdFontsVersion = "3";
+    };
+  };
 }
