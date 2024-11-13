@@ -13,7 +13,6 @@
       exec-once = [
         "${pkgs.foot}/bin/foot --server"
         "${pkgs.waybar}/bin/waybar"
-        "${pkgs.swaybg}/bin/swaybg -i $(find ${config.xdg.userDirs.pictures}/wallpapers/ -type f | shuf -n 1)"
       ];
       "$mod" = "SUPER";
       bind = [

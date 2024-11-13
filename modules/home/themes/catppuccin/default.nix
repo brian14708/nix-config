@@ -10,6 +10,9 @@ let
   mkUpper =
     str:
     (lib.toUpper (builtins.substring 0 1 str)) + (builtins.substring 1 (builtins.stringLength str) str);
+  wallpaper =
+    (pkgs.callPackage "${inputs.nixpkgs}/pkgs/data/misc/nixos-artwork" { })
+    .wallpapers."catppuccin-${flavor}".passthru.gnomeFilePath;
 in
 {
   imports = [
@@ -66,9 +69,14 @@ in
   };
 
   wayland.windowManager.hyprland = {
-    settings.general = {
-      "col.active_border" = "$accent";
-      "col.inactive_border" = "$overlay0";
+    settings = {
+      exec-once = [
+        "${pkgs.swaybg}/bin/swaybg -i ${wallpaper}"
+      ];
+      general = {
+        "col.active_border" = "$accent";
+        "col.inactive_border" = "$overlay0";
+      };
     };
   };
   programs.waybar = {
