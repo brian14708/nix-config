@@ -1,15 +1,15 @@
 home:
-	nix run nixpkgs#nh -- home switch . -- --accept-flake-config
+	nh home switch .
 
 nixos:
-	nix run nixpkgs#nh -- os switch . -- --accept-flake-config
+	nh os switch .
 
 darwin:
-	nix run nix-darwin -- switch --flake .
+	darwin-rebuild switch --flake .
 
 lab:
-	cd infra/lab && [ -d .terraform ] || nix run nixpkgs#sops exec-env ./env.secret.yaml 'nix run nixpkgs#opentofu init'
-	cd infra/lab && SOPS_GPG_EXEC=/dev/null nix run nixpkgs#sops exec-env ./env.secret.yaml 'nix run nixpkgs#opentofu apply'
+	cd infra/lab && [ -d .terraform ] || sops exec-env ./env.secret.yaml 'tofu init'
+	cd infra/lab && sops exec-env ./env.secret.yaml 'tofu apply'
 
 aliyun-base:
 	nix build .#nixosConfigurations.aliyun-base.config.system.build.qcow2

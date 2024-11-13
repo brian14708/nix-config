@@ -59,6 +59,7 @@
           inherit system;
           overlays = [
             deploy-rs.overlay
+            inputs.nix-darwin.overlays.default
             (import ./overlays)
             (final: _prev: import ./pkgs { pkgs = final; })
           ];
@@ -213,7 +214,12 @@
       checks = forAllSystems (system: {
         formatting = treefmtEval.${system}.config.build.check self;
       });
-      devShells = forAllSystems (system: import ./shell.nix pkgsFor.${system});
+      devShells = forAllSystems (
+        system:
+        import ./shell.nix {
+          pkgs = pkgsFor.${system};
+        }
+      );
     };
 
   nixConfig = {
