@@ -195,7 +195,7 @@
             trusted = true;
           };
           "brian@aether" = hmConfig {
-            modules = [ ./home/brian/aether.nix ];
+            modules = [ ./home/brian/aether ];
             trusted = true;
           };
           "brian@fujin" = hmConfig {

@@ -5,13 +5,13 @@
 }:
 {
   imports = [
-    ./common
-    ../../modules/home/desktop/hyprland
-    ../../modules/home/desktop/fcitx5
-    ../../modules/home/desktop/media
-    ../../modules/home/development/vscode
-    ../../modules/home/development/emacs
-    ../../modules/home/themes/catppuccin
+    ../common
+    ../../../modules/home/desktop/hyprland
+    ../../../modules/home/desktop/fcitx5
+    ../../../modules/home/desktop/media
+    ../../../modules/home/development/vscode
+    ../../../modules/home/development/emacs
+    ../../../modules/home/themes/catppuccin
   ];
 
   home = {
@@ -74,20 +74,5 @@
     desktop = "${config.home.homeDirectory}/public";
     publicShare = "${config.home.homeDirectory}/public";
     templates = "${config.home.homeDirectory}/public";
-  };
-
-  dconf = {
-    enable = true;
-    settings = {
-      "org/gnome/desktop/interface" = {
-        color-scheme = "prefer-dark";
-      };
-    };
-  };
-
-  qt = {
-    enable = true;
-    platformTheme.name = "kvantum";
-    style.name = "kvantum";
   };
 }
