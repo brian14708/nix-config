@@ -6,13 +6,16 @@
   ...
 }:
 stdenv.mkDerivation {
-  name = "dnsmasq-china-list";
+  pname = "dnsmasq-china-list";
+  version = "master";
+
   src = fetchFromGitHub {
     owner = "felixonmars";
     repo = "dnsmasq-china-list";
-    rev = "e325882ce9265dce99338c4e416a14618e7dc3ba";
-    hash = "sha256-w+xSP/dbZsXjQAClBxXnFo+IFATw5AYtruGgdTADp6c=";
+    rev = "5fda15ff0c097fa159b71ba63a24492bf0694a35";
+    hash = "sha256-STga7f/Z1jFKHblJDMQQSgVgrr4132SvYAyLfHGEj8s=";
   };
+
   buildPhase = ''
     mkdir -p $out
     make SERVER=${server} ${format}

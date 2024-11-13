@@ -7,7 +7,6 @@
       accept-flake-config = true
       extra-experimental-features = nix-command flakes
     '';
-    SOPS_GPG_EXEC = "/dev/null";
     nativeBuildInputs =
       with pkgs;
       [
