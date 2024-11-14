@@ -30,6 +30,13 @@
 
   programs = {
     home-manager.enable = true;
+    ssh = {
+      enable = true;
+      compression = true;
+      extraConfig = ''
+        StrictHostKeyChecking accept-new
+      '';
+    };
   };
 
   sops = {

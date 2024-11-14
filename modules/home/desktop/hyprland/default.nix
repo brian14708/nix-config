@@ -6,6 +6,7 @@
 {
   home.sessionVariables.NIXOS_OZONE_WL = "1";
   services.mako.enable = true;
+  home.pointerCursor.size = 24;
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
