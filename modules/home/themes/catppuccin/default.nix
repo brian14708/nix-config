@@ -24,7 +24,7 @@ in
     enable = true;
     pointerCursor = {
       enable = true;
-      accent = "dark";
+      accent = if flavor == "latte" then "light" else "dark";
     };
   };
   home.packages = with pkgs; [
@@ -63,8 +63,17 @@ in
   };
   programs.chromium = {
     extensions = [
-      # Catppuccin Chrome Theme - Mocha
-      { id = "bkkmolkhemgaeaeggcmfbghljjjoofoh"; }
+      # Catppuccin Chrome Theme
+      {
+        id =
+          {
+            latte = "jhjnalhegpceacdhbplhnakmkdliaddd";
+            frappe = "olhelnoplefjdmncknfphenjclimckaf";
+            macchiato = "cmpdlhmnmjhihmcfnigoememnffkimlk";
+            mocha = "bkkmolkhemgaeaeggcmfbghljjjoofoh";
+          }
+          .${flavor};
+      }
     ];
   };
 
@@ -289,7 +298,7 @@ in
     enable = true;
     settings = {
       "org/gnome/desktop/interface" = {
-        color-scheme = "prefer-dark";
+        color-scheme = if flavor == "latte" then "prefer-light" else "prefer-dark";
       };
     };
   };
