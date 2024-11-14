@@ -75,6 +75,11 @@
       exclude-interface:
         - tailscale0
 
+    dns:
+      enable: true
+      default-nameserver:
+        - 127.0.0.1
+
     proxy-groups:
       - name: auto-fast
         type: url-test
