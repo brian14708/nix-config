@@ -78,27 +78,24 @@
             {
               system ? "x86_64-linux",
               modules,
-              trusted ? false,
             }:
             nixpkgs.lib.nixosSystem {
-              inherit system modules;
+              inherit system;
               pkgs = pkgsFor.${system};
+              modules = [
+                ./modules/nixos
+              ] ++ modules;
               specialArgs = {
                 inherit (self) inputs outputs;
-                machine = {
-                  inherit trusted;
-                };
               };
             };
         in
         {
           aether = nixosConfig {
             modules = [ ./hosts/aether ];
-            trusted = true;
           };
           fujin = nixosConfig {
             modules = [ ./hosts/fujin ];
-            trusted = true;
           };
           fuxi = nixosConfig {
             modules = [ ./hosts/fuxi ];
@@ -110,7 +107,7 @@
             modules = [ ./hosts/watchtower ];
           };
           aliyun-base = nixosConfig {
-            modules = [ ./hosts/base/aliyun ];
+            modules = [ ./hosts/profiles/aliyun ];
           };
         };
 
@@ -171,7 +168,7 @@
               trusted ? false,
             }:
             home-manager.lib.homeManagerConfiguration {
-              inherit modules;
+              modules = [ ./modules/home-manager ] ++ modules;
               pkgs = pkgsFor.${system};
               extraSpecialArgs = {
                 inherit (self) inputs outputs;
@@ -204,11 +201,28 @@
             trusted = true;
           };
         };
-      darwinConfigurations."macbookpro" = nix-darwin.lib.darwinSystem rec {
-        system = "aarch64-darwin";
-        pkgs = pkgsFor.${system};
-        modules = [ ./hosts/macbookpro ];
-      };
+      darwinConfigurations =
+        let
+          darwinConfig =
+            {
+              system ? "aarch64-darwin",
+              modules,
+            }:
+            nix-darwin.lib.darwinSystem {
+              inherit system;
+              pkgs = pkgsFor.${system};
+              modules = [ ./modules/nix-darwin ] ++ modules;
+              specialArgs = {
+                inherit (self) inputs outputs;
+              };
+            };
+
+        in
+        {
+          "macbookpro" = darwinConfig {
+            modules = [ ./hosts/macbookpro ];
+          };
+        };
 
       formatter = forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
       checks = forAllSystems (system: {

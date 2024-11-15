@@ -1,8 +1,8 @@
 {
+  config,
   pkgs,
   inputs,
   outputs,
-  machine,
   ...
 }:
 let
@@ -18,7 +18,7 @@ let
 in
 {
   imports = [
-    ../base/aliyun
+    ../profiles/aliyun
   ];
 
   system = {
@@ -29,12 +29,16 @@ in
     hostName = "watchtower";
   };
 
-  users.users.brian = {
-    uid = 1000;
-    isNormalUser = true;
-    extraGroups = [ "wheel" ];
-    openssh.authorizedKeys.keys = (import ../../home/brian/_user.nix).ssh;
-  };
+  users.users.brian =
+    let
+      identity = config.identity.brian;
+    in
+    {
+      uid = 1000;
+      isNormalUser = true;
+      extraGroups = [ "wheel" ];
+      openssh.authorizedKeys.keys = identity.ssh;
+    };
 
   services.tailscale.derper = {
     enable = true;
@@ -46,14 +50,19 @@ in
     useGlobalPkgs = true;
     useUserPackages = true;
     users.brian = {
-      imports = [ ../../home/brian/common ];
+      imports = [
+        ../../home/brian/profiles/base
+      ];
       home = {
         inherit stateVersion;
         username = "brian";
       };
     };
     extraSpecialArgs = {
-      inherit inputs outputs machine;
+      inherit inputs outputs;
+      machine = {
+        trusted = false;
+      };
     };
   };
 

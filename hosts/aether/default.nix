@@ -1,17 +1,13 @@
 {
   config,
   pkgs,
-  inputs,
   ...
 }:
 {
   imports = [
-    inputs.sops-nix.nixosModules.sops
-    inputs.disko.nixosModules.disko
-    inputs.lanzaboote.nixosModules.lanzaboote
     ./disko.nix
-    ./mihomo.nix
-    ../base
+    ../profiles/linux
+    ../features/network/mihomo.nix
   ];
 
   boot = {
@@ -53,16 +49,20 @@
     root = {
       hashedPassword = "!";
     };
-    brian = {
-      uid = 1000;
-      description = "Brian";
-      isNormalUser = true;
-      extraGroups = [
-        "wheel"
-      ];
-      openssh.authorizedKeys.keys = (import ../../home/brian/_user.nix).ssh;
-      hashedPasswordFile = config.sops.secrets."brian-password".path;
-    };
+    brian =
+      let
+        id = config.identity.brian;
+      in
+      {
+        uid = 1000;
+        description = id.name;
+        isNormalUser = true;
+        extraGroups = [
+          "wheel"
+        ];
+        openssh.authorizedKeys.keys = id.ssh;
+        hashedPasswordFile = config.sops.secrets."brian-password".path;
+      };
   };
 
   hardware.enableRedistributableFirmware = true;

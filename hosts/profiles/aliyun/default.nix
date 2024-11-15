@@ -1,8 +1,8 @@
 {
+  inputs,
   pkgs,
   lib,
   config,
-  inputs,
   modulesPath,
   ...
 }:
@@ -12,7 +12,7 @@
     (modulesPath + "/profiles/headless.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
     inputs.home-manager.nixosModules.home-manager
-    ../.
+    ../linux
   ];
 
   system.stateVersion = lib.mkDefault "24.11";
@@ -36,7 +36,7 @@
     uid = 2000;
     isNormalUser = true;
     extraGroups = [ "wheel" ];
-    openssh.authorizedKeys.keys = (import ../../../home/brian/_user.nix).ssh;
+    openssh.authorizedKeys.keys = config.identity.brian.ssh;
   };
 
   security.sudo.extraRules = [

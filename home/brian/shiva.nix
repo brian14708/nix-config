@@ -3,8 +3,7 @@
 }:
 {
   imports = [
-    ./common
-    ../../modules/home/development/emacs
+    ./profiles/base
   ];
   home = {
     username = "brian";

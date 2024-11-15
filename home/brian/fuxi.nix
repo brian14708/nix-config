@@ -1,17 +1,16 @@
 {
-  config,
   pkgs,
   ...
 }:
 {
   imports = [
-    ./common
-    ../../modules/home/desktop/hyprland
-    ../../modules/home/desktop/fcitx5
-    ../../modules/home/desktop/media
-    ../../modules/home/development/vscode
-    ../../modules/home/development/emacs
-    ../../modules/home/themes/catppuccin
+    ./profiles/base
+    ./features/desktop/hyprland
+    ./features/desktop/fcitx5
+    ./features/desktop/media
+    ./features/development/vscode
+    ./features/development/emacs
+    ./features/themes/catppuccin
   ];
 
   home = {

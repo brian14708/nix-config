@@ -20,8 +20,4 @@
       options = "--delete-older-than 7d";
     };
   };
-
-  services.dbus.implementation = "broker";
-  services.speechd.enable = false;
-  zramSwap.enable = true;
 }

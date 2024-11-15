@@ -1,11 +1,10 @@
 {
-  config,
   pkgs,
   ...
 }:
 {
   imports = [
-    ./common
+    ./profiles/base
   ];
 
   home = {

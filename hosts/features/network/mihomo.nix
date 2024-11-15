@@ -201,6 +201,5 @@
         speed-check-mode = "none";
         prefetch-domain = true;
       };
-
     };
 }

@@ -9,8 +9,9 @@
 {
   imports = [
     inputs.sops-nix.homeManagerModules.sops
-    ../../../modules/home/development/vim
-    ../../../modules/home/development/git
+    ../../features/development/vim
+    ../../features/development/git
+    ./identity.nix
   ];
 
   news.display = "silent";
