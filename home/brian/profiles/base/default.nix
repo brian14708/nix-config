@@ -23,7 +23,6 @@ in
     preferXdgDirectories = true;
   };
 
-  programs.bat.enable = true;
   programs.eza.enable = true;
   programs.git =
     let
@@ -36,10 +35,6 @@ in
         key = (builtins.head u.pgp).id;
       };
     };
-  programs.gpg.publicKeys = builtins.map (k: {
-    source = k.key;
-    trust = 5;
-  }) config.userinfo.pgp;
 
   programs = {
     home-manager.enable = true;
