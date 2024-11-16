@@ -3,7 +3,7 @@
   ...
 }:
 {
-  imports = [ ./profiles/base ];
+  imports = [ ../profiles/base ];
   home = {
     username = "brian";
     stateVersion = "24.11";
@@ -18,4 +18,13 @@
   programs.zsh.enable = true;
   programs.direnv.enable = true;
   programs.starship.enable = true;
+  programs.gpg.enable = true;
+
+  sops = {
+    defaultSopsFile = ./secrets.yaml;
+    secrets."ssh" = {
+      path = "/Users/brian/.ssh/id_ed25519";
+    };
+    secrets."nix-access-tokens" = { };
+  };
 }

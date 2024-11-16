@@ -177,7 +177,7 @@
         {
           "brian@macbookpro" = hmConfig {
             system = "aarch64-darwin";
-            modules = [ ./home/brian/mbp.nix ];
+            modules = [ ./home/brian/mbp ];
           };
           "brian@shiva" = hmConfig {
             modules = [ ./home/brian/shiva.nix ];
