@@ -5,6 +5,10 @@
   inputs,
   ...
 }:
+let
+  homeDirectory =
+    if pkgs.stdenv.isDarwin then "/Users/${config.home.username}" else "/home/${config.home.username}";
+in
 {
   imports = [
     inputs.sops-nix.homeManagerModules.sops
@@ -14,9 +18,10 @@
   ];
 
   news.display = "silent";
-  home.preferXdgDirectories = true;
-  home.homeDirectory =
-    if pkgs.stdenv.isDarwin then "/Users/${config.home.username}" else "/home/${config.home.username}";
+  home = {
+    inherit homeDirectory;
+    preferXdgDirectories = true;
+  };
 
   programs.bat.enable = true;
   programs.eza.enable = true;
@@ -56,15 +61,26 @@
   };
 
   sops = {
-    age.sshKeyPaths = [ "${config.home.homeDirectory}/.ssh/id_ed25519" ];
-    age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+    age.sshKeyPaths = [ "${homeDirectory}/.ssh/id_ed25519" ];
+    age.keyFile = "${homeDirectory}/.config/sops/age/keys.txt";
+  };
+
+  xdg.userDirs = {
+    documents = "${homeDirectory}/documents";
+    download = "${homeDirectory}/downloads";
+    music = "${homeDirectory}/music";
+    pictures = "${homeDirectory}/pictures";
+    videos = "${homeDirectory}/videos";
+    desktop = "${homeDirectory}/desktop";
+    publicShare = "${homeDirectory}/public";
+    templates = "${homeDirectory}/templates";
   };
 
   nix =
     {
-      package = lib.mkDefault pkgs.nixVersions.latest;
+      package = lib.mkDefault pkgs.nix;
       settings = {
-        use-xdg-base-directories = !config.targets.genericLinux.enable;
+        use-xdg-base-directories = true;
         experimental-features = [
           "nix-command"
           "flakes"
