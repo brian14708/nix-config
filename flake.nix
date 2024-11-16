@@ -165,40 +165,31 @@
             {
               system ? "x86_64-linux",
               modules,
-              trusted ? false,
             }:
             home-manager.lib.homeManagerConfiguration {
               modules = [ ./modules/home-manager ] ++ modules;
               pkgs = pkgsFor.${system};
               extraSpecialArgs = {
                 inherit (self) inputs outputs;
-                machine = {
-                  inherit trusted;
-                };
               };
             };
         in
         {
           "brian@macbookpro" = hmConfig {
             system = "aarch64-darwin";
-            trusted = true;
             modules = [ ./home/brian/mbp.nix ];
           };
           "brian@shiva" = hmConfig {
             modules = [ ./home/brian/shiva.nix ];
-            trusted = true;
           };
           "brian@fuxi" = hmConfig {
             modules = [ ./home/brian/fuxi.nix ];
-            trusted = true;
           };
           "brian@aether" = hmConfig {
             modules = [ ./home/brian/aether ];
-            trusted = true;
           };
           "brian@fujin" = hmConfig {
-            modules = [ ./home/brian/fujin.nix ];
-            trusted = true;
+            modules = [ ./home/brian/fujin ];
           };
         };
       darwinConfigurations =
@@ -240,11 +231,9 @@
     extra-substituters = [
       "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
       "https://mirror.sjtu.edu.cn/nix-channels/store"
-      "https://brian14708.cachix.org"
       "https://nix-community.cachix.org"
     ];
     extra-trusted-public-keys = [
-      "brian14708.cachix.org-1:ZTO1dfqDryBeRpLJwn/czQj0HFC0TPuV2aK+81o2mSs="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
   };

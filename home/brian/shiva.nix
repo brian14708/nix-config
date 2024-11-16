@@ -4,6 +4,7 @@
 {
   imports = [
     ./profiles/base
+    ./features/development/cli
   ];
   home = {
     username = "brian";

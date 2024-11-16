@@ -30,13 +30,14 @@
   };
 
   sops = {
-    defaultSopsFile = ./secret.yaml;
-    age.sshKeyPaths = [ "/etc/sops-nix/id_ed25519" ];
-    gnupg.sshKeyPaths = [ ];
-    secrets."brian-password" = {
+    defaultSopsFile = ./secrets.yaml;
+    secrets."brian/password" = {
       neededForUsers = true;
     };
-    secrets."mihomo-url" = { };
+    secrets."brian/sops" = {
+      owner = "brian";
+      path = "/home/brian/.config/sops/age/keys.txt";
+    };
   };
 
   networking = {
@@ -59,7 +60,7 @@
         isNormalUser = true;
         extraGroups = [ "wheel" ];
         openssh.authorizedKeys.keys = identity.ssh;
-        hashedPasswordFile = config.sops.secrets."brian-password".path;
+        hashedPasswordFile = config.sops.secrets."brian/password".path;
       };
     ops = {
       uid = 2000;

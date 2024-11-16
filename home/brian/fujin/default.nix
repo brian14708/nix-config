@@ -4,7 +4,7 @@
 }:
 {
   imports = [
-    ./profiles/base
+    ../profiles/base
   ];
 
   home = {
@@ -20,6 +20,14 @@
   services.gpg-agent = {
     enable = true;
     pinentryPackage = pkgs.pinentry-tty;
+  };
+
+  sops = {
+    defaultSopsFile = ./secrets.yaml;
+    secrets."ssh" = {
+      path = "/home/brian/.ssh/id_ed25519";
+    };
+    secrets."nix-access-tokens" = { };
   };
 
   programs.bash.enable = true;

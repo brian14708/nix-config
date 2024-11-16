@@ -6,41 +6,36 @@ keys:
     - &shiva age1zs59y6dj4tsd3wwq3zds8qlwgsjg4zwn3g5e0cvwfjx0ypd534qsmvtyhv
     - &fuxi age1g6grh79z90kk3pauwgqhlvawdmgwuhwds7rn0hd6k8e70tme958s2suxc0
     - &mbp age13v8s5p9zyvwle0reln03chxkxefwl6l4zn2ellmhcurxu0z6gdqqp7fanc
-    - &fujin age15vadqtlmr3dl3x3hl0v65tvdlfaas7chmvv72fy3jprp9qa89fusp46ta0
+    - &fujin age16ec47u39azzkgwt2m3mr2qe7vrn6zme32vh2f62zx8samlewe56s0ru8kv
 creation_rules:
   # per host
-  - path_regex: \/aether\/(.*\.)?secret\.yaml$
+  - path_regex: \/aether\/secrets(\.yaml$|\/)
     key_groups:
       - age:
           - *aether
         pgp: *users
-  - path_regex: \/shiva\/(.*\.)?secret\.yaml$
+  - path_regex: \/shiva\/secrets(\.yaml$|\/)
     key_groups:
       - age:
           - *shiva
         pgp: *users
-  - path_regex: \/fuxi\/(.*\.)?secret\.yaml$
+  - path_regex: \/fuxi\/secrets(\.yaml$|\/)
     key_groups:
       - age:
           - *fuxi
         pgp: *users
-  - path_regex: \/mbp\/(.*\.)?secret\.yaml$
+  - path_regex: \/mbp\/secrets(\.yaml$|\/)
     key_groups:
       - age:
           - *mbp
         pgp: *users
-  - path_regex: \/fujin\/(.*\.)?secret\.yaml$
+  - path_regex: \/fujin\/secrets(\.yaml$|\/)
     key_groups:
       - age:
           - *fujin
         pgp: *users
-  # common secret
-  - path_regex: ^(home|hosts)\/(.*\.)?secret\.yaml$
-    key_groups:
-      - age: *hosts
-        pgp: *users
   # infra
-  - path_regex: ^infra\/(.*\.)?secret\.yaml$
+  - path_regex: ^infra\/(.*\.)?secrets\.yaml$
     key_groups:
       - age: *hosts
         pgp: *users

@@ -1,5 +1,5 @@
 data "sops_file" "vars" {
-  source_file = "vars.secret.yaml"
+  source_file = "vars.secrets.yaml"
 }
 
 resource "alicloud_instance" "watchtower" {

@@ -3,7 +3,6 @@
   pkgs,
   lib,
   inputs,
-  machine,
   ...
 }:
 {
@@ -22,12 +21,18 @@
   programs.bat.enable = true;
   programs.eza.enable = true;
   programs.git = {
-    userName = "Brian Li";
-    userEmail = "me@brian14708.dev";
+    userName = config.identity.name;
+    userEmail = builtins.head config.identity.email;
     signing = {
-      key = "91C32271A5A151D38526881FD03DD6ED48DEE9CE";
+      key = builtins.head config.identity.pgp;
     };
   };
+  programs.gpg.publicKeys = [
+    {
+      source = ./pgp.asc;
+      trust = 5;
+    }
+  ];
 
   programs = {
     home-manager.enable = true;
@@ -49,14 +54,8 @@
   };
 
   sops = {
-    gnupg.home = "${config.xdg.configHome}/sops-nix/gnupg";
     age.sshKeyPaths = [ "${config.home.homeDirectory}/.ssh/id_ed25519" ];
-  };
-
-  sops.secrets = lib.optionalAttrs machine.trusted {
-    "nix.conf" = {
-      sopsFile = ./nix.secret.yaml;
-    };
+    age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
   };
 
   nix =
@@ -71,16 +70,11 @@
         substituters = [
           "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
           "https://mirror.sjtu.edu.cn/nix-channels/store"
-          "https://brian14708.cachix.org"
           "https://cache.nixos.org"
-        ];
-        extra-trusted-public-keys = [
-          "brian14708.cachix.org-1:ZTO1dfqDryBeRpLJwn/czQj0HFC0TPuV2aK+81o2mSs="
         ];
       };
     }
-    // lib.optionalAttrs machine.trusted {
-      extraOptions = "!include ${config.sops.secrets."nix.conf".path}\n";
-      checkConfig = false;
+    // lib.optionalAttrs (config.sops.secrets ? nix-access-tokens) {
+      extraOptions = "!include ${config.sops.secrets.nix-access-tokens.path}";
     };
 }

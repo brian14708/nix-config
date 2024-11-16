@@ -30,13 +30,11 @@
   };
 
   sops = {
-    defaultSopsFile = ./secret.yaml;
+    defaultSopsFile = ./secrets.yaml;
     age.sshKeyPaths = [ "/etc/sops-nix/id_ed25519" ];
-    gnupg.sshKeyPaths = [ ];
     secrets."brian-password" = {
       neededForUsers = true;
     };
-    secrets."mihomo-url" = { };
   };
 
   networking = {
