@@ -10,7 +10,7 @@
     inputs.sops-nix.homeManagerModules.sops
     ../../features/development/vim
     ../../features/development/git
-    ./identity.nix
+    ./userinfo.nix
   ];
 
   news.display = "silent";
@@ -20,19 +20,21 @@
 
   programs.bat.enable = true;
   programs.eza.enable = true;
-  programs.git = {
-    userName = config.identity.name;
-    userEmail = builtins.head config.identity.email;
-    signing = {
-      key = builtins.head config.identity.pgp;
-    };
-  };
-  programs.gpg.publicKeys = [
+  programs.git =
+    let
+      u = config.userinfo;
+    in
     {
-      source = ./pgp.asc;
-      trust = 5;
-    }
-  ];
+      userName = u.name;
+      userEmail = builtins.head u.email;
+      signing = {
+        key = (builtins.head u.pgp).id;
+      };
+    };
+  programs.gpg.publicKeys = builtins.map (k: {
+    source = k.key;
+    trust = 5;
+  }) config.userinfo.pgp;
 
   programs = {
     home-manager.enable = true;

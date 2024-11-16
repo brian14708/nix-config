@@ -5,7 +5,7 @@
 }:
 {
   imports = [
-    ./identity.nix
+    ./userinfos.nix
   ];
   config = lib.optionalAttrs (options ? home-manager) {
     home-manager.sharedModules = [

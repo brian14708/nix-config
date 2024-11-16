@@ -25,7 +25,7 @@ in
     uid = 1000;
     isNormalUser = true;
     extraGroups = [ "wheel" ];
-    openssh.authorizedKeys.keys = config.identity.brian.ssh;
+    openssh.authorizedKeys.keys = config.userinfos.brian.ssh;
   };
 
   home-manager = {

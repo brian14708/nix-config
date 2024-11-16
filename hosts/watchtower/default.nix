@@ -29,16 +29,12 @@ in
     hostName = "watchtower";
   };
 
-  users.users.brian =
-    let
-      identity = config.identity.brian;
-    in
-    {
-      uid = 1000;
-      isNormalUser = true;
-      extraGroups = [ "wheel" ];
-      openssh.authorizedKeys.keys = identity.ssh;
-    };
+  users.users.brian = {
+    uid = 1000;
+    isNormalUser = true;
+    extraGroups = [ "wheel" ];
+    openssh.authorizedKeys.keys = config.userinfos.brian.ssh;
+  };
 
   services.tailscale.derper = {
     enable = true;

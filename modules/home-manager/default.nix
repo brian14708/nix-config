@@ -1,4 +1,4 @@
 { ... }:
 {
-  imports = [ ./identity.nix ];
+  imports = [ ./userinfo.nix ];
 }

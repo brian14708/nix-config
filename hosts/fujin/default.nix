@@ -52,21 +52,21 @@
     };
     brian =
       let
-        identity = config.identity.brian;
+        u = config.userinfos.brian;
       in
       {
         uid = 1000;
-        description = identity.name;
+        description = u.name;
         isNormalUser = true;
         extraGroups = [ "wheel" ];
-        openssh.authorizedKeys.keys = identity.ssh;
+        openssh.authorizedKeys.keys = u.ssh;
         hashedPasswordFile = config.sops.secrets."brian/password".path;
       };
     ops = {
       uid = 2000;
       isNormalUser = true;
       extraGroups = [ "wheel" ];
-      openssh.authorizedKeys.keys = config.identity.brian.ssh;
+      openssh.authorizedKeys.keys = config.userinfos.brian.ssh;
       hashedPassword = "!";
     };
   };

@@ -1,7 +1,7 @@
 { lib, ... }:
 with lib;
 {
-  options.identity = mkOption {
+  options.userinfos = mkOption {
     type = types.attrsOf (
       types.submodule {
         options = {
@@ -15,7 +15,14 @@ with lib;
             type = types.listOf types.str;
           };
           pgp = mkOption {
-            type = types.listOf types.str;
+            type = types.listOf (
+              types.submodule {
+                options = {
+                  id = mkOption { type = types.str; };
+                  key = mkOption { type = types.path; };
+                };
+              }
+            );
           };
         };
       }

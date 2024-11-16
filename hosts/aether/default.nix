@@ -49,16 +49,16 @@
     };
     brian =
       let
-        id = config.identity.brian;
+        u = config.userinfos.brian;
       in
       {
         uid = 1000;
-        description = id.name;
+        description = u.name;
         isNormalUser = true;
         extraGroups = [
           "wheel"
         ];
-        openssh.authorizedKeys.keys = id.ssh;
+        openssh.authorizedKeys.keys = u.ssh;
         hashedPasswordFile = config.sops.secrets."brian-password".path;
       };
   };
