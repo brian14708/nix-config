@@ -31,9 +31,12 @@
 
   sops = {
     defaultSopsFile = ./secrets.yaml;
-    age.sshKeyPaths = [ "/etc/sops-nix/id_ed25519" ];
-    secrets."brian-password" = {
+    secrets."brian/password" = {
       neededForUsers = true;
+    };
+    secrets."brian/sops" = {
+      owner = "brian";
+      path = "/home/brian/.config/sops/age/keys.txt";
     };
   };
 
@@ -59,7 +62,7 @@
           "wheel"
         ];
         openssh.authorizedKeys.keys = u.ssh;
-        hashedPasswordFile = config.sops.secrets."brian-password".path;
+        hashedPasswordFile = config.sops.secrets."brian/password".path;
       };
   };
 

@@ -4,13 +4,13 @@
 }:
 {
   imports = [
-    ./profiles/base
-    ./features/desktop/hyprland
-    ./features/desktop/fcitx5
-    ./features/desktop/media
-    ./features/development/vscode
-    ./features/development/emacs
-    ./features/themes/catppuccin
+    ../profiles/base
+    ../features/desktop/hyprland
+    ../features/desktop/fcitx5
+    ../features/desktop/media
+    ../features/development/vscode
+    ../features/development/emacs
+    ../features/themes/catppuccin
   ];
 
   home = {
@@ -68,5 +68,13 @@
         "AQ_DRM_DEVICES,/dev/dri/card2"
       ];
     };
+  };
+
+  sops = {
+    defaultSopsFile = ./secrets.yaml;
+    secrets."ssh" = {
+      path = "/home/brian/.ssh/id_ed25519";
+    };
+    secrets."nix-access-tokens" = { };
   };
 }

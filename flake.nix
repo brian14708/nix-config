@@ -183,7 +183,7 @@
             modules = [ ./home/brian/shiva.nix ];
           };
           "brian@fuxi" = hmConfig {
-            modules = [ ./home/brian/fuxi.nix ];
+            modules = [ ./home/brian/fuxi ];
           };
           "brian@aether" = hmConfig {
             modules = [ ./home/brian/aether ];

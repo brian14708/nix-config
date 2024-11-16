@@ -4,7 +4,7 @@ keys:
   - &hosts
     - &aether age1axluheaw8sqntwujvp753xy45uq3a5wuc2qttv7m0p49jcdngaqshw0s93
     - &shiva age1zs59y6dj4tsd3wwq3zds8qlwgsjg4zwn3g5e0cvwfjx0ypd534qsmvtyhv
-    - &fuxi age1g6grh79z90kk3pauwgqhlvawdmgwuhwds7rn0hd6k8e70tme958s2suxc0
+    - &fuxi age1dea575ez78ey63jat22v7d2209r6x978yvmr4m5g95k4a507n53swdfyp3
     - &mbp age1ud43s7x0uva5m2jg37cd2jd3lalqejhl79jmyf94mhg7pm7kng8sx5s0fn
     - &fujin age16ec47u39azzkgwt2m3mr2qe7vrn6zme32vh2f62zx8samlewe56s0ru8kv
 creation_rules:
