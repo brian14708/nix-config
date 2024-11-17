@@ -29,11 +29,33 @@ resource "alicloud_security_group" "cn" {
   description = "lab"
 }
 
-resource "alicloud_security_group_rule" "cn_allow_ipv4" {
+resource "alicloud_security_group_rule" "cn_allow_udp_services" {
   type              = "ingress"
-  ip_protocol       = "all"
+  ip_protocol       = "udp"
   nic_type          = "intranet"
   policy            = "accept"
+  port_range        = "32768/65535"
+  security_group_id = alicloud_security_group.cn.id
+  cidr_ip           = "0.0.0.0/0"
+}
+
+resource "alicloud_security_group_rule" "cn_allow_tcp_services" {
+  type              = "ingress"
+  ip_protocol       = "tcp"
+  nic_type          = "intranet"
+  policy            = "accept"
+  port_range        = "32768/65535"
+  security_group_id = alicloud_security_group.cn.id
+  cidr_ip           = "0.0.0.0/0"
+}
+
+resource "alicloud_security_group_rule" "cn_allow_ssh" {
+  count             = 0
+  type              = "ingress"
+  ip_protocol       = "tcp"
+  nic_type          = "intranet"
+  policy            = "accept"
+  port_range        = "22/22"
   security_group_id = alicloud_security_group.cn.id
   cidr_ip           = "0.0.0.0/0"
 }

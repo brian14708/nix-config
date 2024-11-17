@@ -113,51 +113,56 @@
 
       deploy.nodes =
         let
+          inherit (nixpkgs.lib) mergeAttrsList optionalAttrs;
           deployConfig =
             {
               hostname,
+              enable ? true,
               sshUser ? "ops",
               system ? "x86_64-linux",
               home ? { },
             }:
-            {
-              inherit sshUser hostname;
-              profilesOrder = [ "system" ] ++ builtins.attrNames home;
-              profiles =
-                let
-                  activate = deploy-rs.lib.${system}.activate;
-                in
-                {
-                  system = {
-                    user = "root";
-                    path = activate.nixos self.nixosConfigurations.${hostname};
-                  };
-                }
-                // (nixpkgs.lib.mapAttrs (
-                  name:
-                  { }:
+            optionalAttrs enable {
+              ${hostname} = {
+                inherit sshUser hostname;
+                profilesOrder = [ "system" ] ++ builtins.attrNames home;
+                profiles =
+                  let
+                    activate = deploy-rs.lib.${system}.activate;
+                  in
                   {
-                    sshUser = name;
-                    user = name;
-                    path = activate.home-manager self.homeConfigurations."${name}@${hostname}";
+                    system = {
+                      user = "root";
+                      path = activate.nixos self.nixosConfigurations.${hostname};
+                    };
                   }
-                ) home);
+                  // (nixpkgs.lib.mapAttrs (
+                    name:
+                    { }:
+                    {
+                      sshUser = name;
+                      user = name;
+                      path = activate.home-manager self.homeConfigurations."${name}@${hostname}";
+                    }
+                  ) home);
+              };
             };
         in
-        {
-          watchtower = deployConfig {
-            hostname = "watchtower";
-          };
-          lab01 = deployConfig {
-            hostname = "lab01";
-          };
-          fujin = deployConfig {
-            hostname = "fujin";
-            home = {
-              brian = { };
-            };
-          };
-        };
+        mergeAttrsList (
+          map deployConfig [
+            { hostname = "watchtower"; }
+            {
+              hostname = "lab01";
+              enable = false;
+            }
+            {
+              hostname = "fujin";
+              home = {
+                brian = { };
+              };
+            }
+          ]
+        );
 
       homeConfigurations =
         let
