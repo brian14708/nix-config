@@ -21,7 +21,7 @@
     openssh.enable = true;
     tailscale = {
       enable = true;
-      authKeyFile = "/run/secrets/tailscale_key";
+      authKeyFile = "/var/secrets/tailscale_key";
     };
     cloud-init = {
       enable = true;

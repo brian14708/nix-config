@@ -1,4 +1,8 @@
 #cloud-config
 write_files:
-  - path: /run/secrets/tailscale_key
-    content: "${ts_auth}"
+%{ for n, data in secrets }
+  - path: /var/secrets/${n}
+    permissions: '0400'
+    content: |
+      ${indent(6, data)}
+%{ endfor }
