@@ -82,6 +82,7 @@
     }
   ];
 
+  hardware.cpu.amd.updateMicrocode = true;
   hardware.enableRedistributableFirmware = true;
   services.hardware.bolt.enable = true;
   hardware.nvidia.open = true;
