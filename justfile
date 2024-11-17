@@ -18,3 +18,6 @@ update:
     nix flake update
     nix-update --file ./pkgs/default.nix --version=branch=main rime-ice
     nix-update --file ./pkgs/default.nix --version=branch=master dnsmasq-china-list
+
+gc:
+    nh clean all
