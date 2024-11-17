@@ -12,10 +12,10 @@
       [
         nh
         nix
+        nix-update
         home-manager
         git
         sops
-        ssh-to-age
         deploy-rs.deploy-rs
         just
         opentofu

@@ -1,15 +1,20 @@
 home:
-	nh home switch .
+    nh home switch .
 
 nixos:
-	nh os switch .
+    nh os switch .
 
 darwin:
-	darwin-rebuild switch --flake .
+    darwin-rebuild switch --flake .
 
 lab:
-	cd infra/lab && [ -d .terraform ] || SOPS_GPG_EXEC=/dev/null sops exec-env ./env.secrets.yaml 'tofu init'
-	cd infra/lab && SOPS_GPG_EXEC=/dev/null sops exec-env ./env.secrets.yaml 'tofu apply'
+    cd infra/lab && [ -d .terraform ] || SOPS_GPG_EXEC=/dev/null sops exec-env ./env.secrets.yaml 'tofu init'
+    cd infra/lab && SOPS_GPG_EXEC=/dev/null sops exec-env ./env.secrets.yaml 'tofu apply'
 
 aliyun-base:
-	nix build .#nixosConfigurations.aliyun-base.config.system.build.qcow2
+    nix build .#nixosConfigurations.aliyun-base.config.system.build.qcow2
+
+update:
+    nix flake update
+    nix-update --file ./pkgs/default.nix --version=branch=main rime-ice
+    nix-update --file ./pkgs/default.nix --version=branch=master dnsmasq-china-list
