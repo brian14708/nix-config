@@ -49,11 +49,12 @@
       ...
     }:
     let
+      inherit (nixpkgs) lib;
       systems = [
         "x86_64-linux"
         "aarch64-darwin"
       ];
-      pkgsFor = nixpkgs.lib.genAttrs systems (
+      pkgsFor = lib.genAttrs systems (
         system:
         import nixpkgs {
           inherit system;
@@ -66,10 +67,22 @@
           config.allowUnfree = true;
         }
       );
-      forAllSystems = nixpkgs.lib.genAttrs systems;
+      forAllSystems = lib.genAttrs systems;
       treefmtEval = forAllSystems (
         system: inputs.treefmt-nix.lib.evalModule pkgsFor.${system} ./treefmt.nix
       );
+      mapConfig =
+        func: configs:
+        lib.mapAttrs (name: value: func value) (
+          lib.filterAttrs (
+            name:
+            {
+              enable ? true,
+              ...
+            }:
+            enable
+          ) configs
+        );
     in
     {
       nixosConfigurations =
@@ -79,7 +92,7 @@
               system ? "x86_64-linux",
               modules,
             }:
-            nixpkgs.lib.nixosSystem {
+            lib.nixosSystem {
               inherit system;
               pkgs = pkgsFor.${system};
               modules = [
@@ -90,79 +103,75 @@
               };
             };
         in
-        {
-          aether = nixosConfig {
+        mapConfig nixosConfig {
+          aether = {
             modules = [ ./hosts/aether ];
           };
-          fujin = nixosConfig {
+          fujin = {
             modules = [ ./hosts/fujin ];
           };
-          fuxi = nixosConfig {
+          fuxi = {
             modules = [ ./hosts/fuxi ];
           };
-          lab01 = nixosConfig {
+          lab01 = {
             modules = [ ./hosts/lab01 ];
           };
-          watchtower = nixosConfig {
+          watchtower = {
             modules = [ ./hosts/watchtower ];
           };
-          aliyun-base = nixosConfig {
+          aliyun-base = {
             modules = [ ./hosts/profiles/aliyun ];
           };
         };
 
       deploy.nodes =
         let
-          inherit (nixpkgs.lib) mergeAttrsList optionalAttrs;
           deployConfig =
             {
               hostname,
-              enable ? true,
               sshUser ? "ops",
               system ? "x86_64-linux",
               home ? { },
             }:
-            optionalAttrs enable {
-              ${hostname} = {
-                inherit sshUser hostname;
-                profilesOrder = [ "system" ] ++ builtins.attrNames home;
-                profiles =
-                  let
-                    activate = deploy-rs.lib.${system}.activate;
-                  in
+            {
+              inherit sshUser hostname;
+              profilesOrder = [ "system" ] ++ builtins.attrNames home;
+              profiles =
+                let
+                  activate = deploy-rs.lib.${system}.activate;
+                in
+                {
+                  system = {
+                    user = "root";
+                    path = activate.nixos self.nixosConfigurations.${hostname};
+                  };
+                }
+                // (lib.mapAttrs (
+                  name:
+                  { }:
                   {
-                    system = {
-                      user = "root";
-                      path = activate.nixos self.nixosConfigurations.${hostname};
-                    };
+                    sshUser = name;
+                    user = name;
+                    path = activate.home-manager self.homeConfigurations."${name}@${hostname}";
                   }
-                  // (nixpkgs.lib.mapAttrs (
-                    name:
-                    { }:
-                    {
-                      sshUser = name;
-                      user = name;
-                      path = activate.home-manager self.homeConfigurations."${name}@${hostname}";
-                    }
-                  ) home);
-              };
+                ) home);
             };
         in
-        mergeAttrsList (
-          map deployConfig [
-            { hostname = "watchtower"; }
-            {
-              hostname = "lab01";
-              enable = false;
-            }
-            {
-              hostname = "fujin";
-              home = {
-                brian = { };
-              };
-            }
-          ]
-        );
+        mapConfig deployConfig {
+          "watchtower" = {
+            hostname = "watchtower";
+          };
+          "lab01" = {
+            enable = false;
+            hostname = "lab01";
+          };
+          "fujin" = {
+            hostname = "fujin";
+            home = {
+              brian = { };
+            };
+          };
+        };
 
       homeConfigurations =
         let
@@ -179,21 +188,21 @@
               };
             };
         in
-        {
-          "brian@macbookpro" = hmConfig {
+        mapConfig hmConfig {
+          "brian@macbookpro" = {
             system = "aarch64-darwin";
             modules = [ ./home/brian/mbp ];
           };
-          "brian@shiva" = hmConfig {
+          "brian@shiva" = {
             modules = [ ./home/brian/shiva.nix ];
           };
-          "brian@fuxi" = hmConfig {
+          "brian@fuxi" = {
             modules = [ ./home/brian/fuxi ];
           };
-          "brian@aether" = hmConfig {
+          "brian@aether" = {
             modules = [ ./home/brian/aether ];
           };
-          "brian@fujin" = hmConfig {
+          "brian@fujin" = {
             modules = [ ./home/brian/fujin ];
           };
         };
@@ -214,8 +223,8 @@
             };
 
         in
-        {
-          "macbookpro" = darwinConfig {
+        mapConfig darwinConfig {
+          "macbookpro" = {
             modules = [ ./hosts/macbookpro ];
           };
         };
