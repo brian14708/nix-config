@@ -1,8 +1,6 @@
 {
   config,
   pkgs,
-  inputs,
-  outputs,
   ...
 }:
 let
@@ -30,37 +28,10 @@ in
     hostName = "watchtower";
   };
 
-  users.users.brian = {
-    uid = 1000;
-    isNormalUser = true;
-    extraGroups = [ "wheel" ];
-    openssh.authorizedKeys.keys = config.userinfos.brian.ssh;
-  };
-
   services.tailscale.derper = {
     enable = true;
     domain = "derp-901";
     stunPort = 58583;
-  };
-
-  home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    users.brian = {
-      imports = [
-        ../../home/brian/profiles/base
-      ];
-      home = {
-        inherit stateVersion;
-        username = "brian";
-      };
-    };
-    extraSpecialArgs = {
-      inherit inputs outputs;
-      machine = {
-        trusted = false;
-      };
-    };
   };
 
   environment.systemPackages = with pkgs; [
