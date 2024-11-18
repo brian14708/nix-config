@@ -12,17 +12,15 @@ let
       openssl req -x509 -newkey ec -pkeyopt ec_paramgen_curve:secp384r1 -days 3650 -nodes \
         -keyout $out/cert.key -out $out/cert.crt -subj "/CN=${cn}"
     '');
-
 in
 {
   imports = [
-    ../profiles/aliyun
+    ../profiles/aliyun.nix
   ];
 
   system = {
     inherit stateVersion;
   };
-  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   networking = {
     hostName = "watchtower";

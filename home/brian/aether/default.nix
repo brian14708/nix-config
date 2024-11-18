@@ -17,8 +17,7 @@
     username = "brian";
     stateVersion = "24.11";
     packages = with pkgs; [
-      cachix
-      android-studio
+      devenv
     ];
   };
   programs.gpg = {

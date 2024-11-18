@@ -10,6 +10,10 @@ let
   };
 in
 {
+  imports = [
+    ./base.nix
+  ];
+
   # Set variables for you to manually install homebrew packages.
   environment.variables = homebrew_mirror_env;
 

@@ -1,5 +1,4 @@
 {
-  inputs,
   pkgs,
   lib,
   config,
@@ -11,14 +10,16 @@
     (modulesPath + "/profiles/minimal.nix")
     (modulesPath + "/profiles/headless.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
-    inputs.home-manager.nixosModules.home-manager
-    ../linux
+    ./linux.nix
+    ../features/locale/cn.nix
   ];
 
   system.stateVersion = lib.mkDefault "24.11";
 
+  networking.firewall.trustedInterfaces = [
+    config.services.tailscale.interfaceName
+  ];
   services = {
-    openssh.enable = true;
     tailscale = {
       enable = true;
       authKeyFile = "/var/secrets/tailscale_key";
@@ -32,6 +33,7 @@
   };
   systemd.services.tailscaled-autoconnect.after = [ "cloud-final.service" ];
 
+  users.mutableUsers = false;
   users.users.ops = {
     uid = 2000;
     isNormalUser = true;

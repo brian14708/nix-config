@@ -10,7 +10,8 @@ let
 in
 {
   imports = [
-    ../profiles/aliyun
+    inputs.home-manager.nixosModules.home-manager
+    ../profiles/aliyun.nix
   ];
 
   system = {

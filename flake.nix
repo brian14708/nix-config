@@ -72,9 +72,9 @@
       );
       mapConfig =
         func: configs:
-        lib.mapAttrs (name: value: func value) (
+        lib.mapAttrs (_name: value: func value) (
           lib.filterAttrs (
-            name:
+            _name:
             {
               enable ? true,
               ...
@@ -119,7 +119,7 @@
             modules = [ ./hosts/watchtower ];
           };
           aliyun-base = {
-            modules = [ ./hosts/profiles/aliyun ];
+            modules = [ ./hosts/profiles/aliyun.nix ];
           };
         };
 
@@ -130,11 +130,9 @@
               hostname,
               sshUser ? "ops",
               system ? "x86_64-linux",
-              home ? { },
             }:
             {
               inherit sshUser hostname;
-              profilesOrder = [ "system" ] ++ builtins.attrNames home;
               profiles =
                 let
                   activate = deploy-rs.lib.${system}.activate;
@@ -144,16 +142,7 @@
                     user = "root";
                     path = activate.nixos self.nixosConfigurations.${hostname};
                   };
-                }
-                // (lib.mapAttrs (
-                  name:
-                  { }:
-                  {
-                    sshUser = name;
-                    user = name;
-                    path = activate.home-manager self.homeConfigurations."${name}@${hostname}";
-                  }
-                ) home);
+                };
             };
         in
         mapConfig deployConfig {
@@ -163,12 +152,6 @@
           "lab01" = {
             enable = false;
             hostname = "lab01";
-          };
-          "fujin" = {
-            hostname = "fujin";
-            home = {
-              brian = { };
-            };
           };
         };
 
