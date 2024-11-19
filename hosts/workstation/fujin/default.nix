@@ -1,13 +1,12 @@
 {
-  config,
   ...
 }:
 {
   imports = [
+    ../base-linux.nix
     ./disko.nix
-    ../profiles/workstation
-    ../features/locale/cn.nix
-    ../features/network/mihomo.nix
+    ../../features/locale/cn.nix
+    ../../features/network/mihomo.nix
   ];
 
   system.stateVersion = "24.11";

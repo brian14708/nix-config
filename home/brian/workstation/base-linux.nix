@@ -3,7 +3,7 @@
 }:
 {
   imports = [
-    ../base
+    ../profiles/base
   ];
   sops = {
     environment.SOPS_GPG_EXEC = "/dev/null";

@@ -11,8 +11,8 @@ lab:
     cd infra/lab && [ -d .terraform ] || SOPS_GPG_EXEC=/dev/null sops exec-env ./env.secrets.yaml 'tofu init'
     cd infra/lab && SOPS_GPG_EXEC=/dev/null sops exec-env ./env.secrets.yaml 'tofu apply'
 
-aliyun-base:
-    nix build .#nixosConfigurations.aliyun-base.config.system.build.qcow2
+image-lab-aliyun:
+    nix build .#nixosConfigurations.lab-aliyun.config.system.build.qcow2
 
 update:
     nix flake update

@@ -1,0 +1,6 @@
+{ ... }:
+{
+  imports = [
+    ../profiles/darwin.nix
+  ];
+}

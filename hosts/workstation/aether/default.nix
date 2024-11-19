@@ -1,14 +1,13 @@
 {
-  config,
   ...
 }:
 {
   imports = [
+    ../base-linux.nix
     ./disko.nix
-    ../profiles/workstation
-    ../features/locale/cn.nix
-    ../features/network/mihomo.nix
-    ../features/desktop/hyprland.nix
+    ../../features/locale/cn.nix
+    ../../features/network/mihomo.nix
+    ../../features/desktop/hyprland.nix
   ];
 
   sops = {
@@ -16,9 +15,10 @@
   };
 
   networking = {
-    hostName = "fuxi";
+    hostName = "aether";
   };
 
   hardware.cpu.amd.updateMicrocode = true;
+
   system.stateVersion = "24.11";
 }

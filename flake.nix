@@ -104,25 +104,25 @@
         in
         mapConfig nixosConfig {
           aether = {
-            modules = [ ./hosts/aether ];
+            modules = [ ./hosts/workstation/aether ];
           };
           fujin = {
-            modules = [ ./hosts/fujin ];
+            modules = [ ./hosts/workstation/fujin ];
           };
           fuxi = {
-            modules = [ ./hosts/fuxi ];
+            modules = [ ./hosts/workstation/fuxi ];
           };
           shiva = {
-            modules = [ ./hosts/shiva ];
+            modules = [ ./hosts/workstation/shiva ];
           };
           lab01 = {
-            modules = [ ./hosts/lab01 ];
+            modules = [ ./hosts/lab/lab01 ];
           };
           watchtower = {
-            modules = [ ./hosts/watchtower ];
+            modules = [ ./hosts/lab/watchtower ];
           };
-          aliyun-base = {
-            modules = [ ./hosts/profiles/aliyun.nix ];
+          lab-aliyun = {
+            modules = [ ./hosts/lab/base-aliyun.nix ];
           };
         };
 
@@ -176,19 +176,19 @@
         mapConfig hmConfig {
           "brian@macbookpro" = {
             system = "aarch64-darwin";
-            modules = [ ./home/brian/mbp ];
+            modules = [ ./home/brian/workstation/mbp ];
           };
           "brian@shiva" = {
-            modules = [ ./home/brian/shiva ];
+            modules = [ ./home/brian/workstation/shiva ];
           };
           "brian@fuxi" = {
-            modules = [ ./home/brian/fuxi ];
+            modules = [ ./home/brian/workstation/fuxi ];
           };
           "brian@aether" = {
-            modules = [ ./home/brian/aether ];
+            modules = [ ./home/brian/workstation/aether ];
           };
           "brian@fujin" = {
-            modules = [ ./home/brian/fujin ];
+            modules = [ ./home/brian/workstation/fujin ];
           };
         };
       darwinConfigurations =
@@ -210,7 +210,7 @@
         in
         mapConfig darwinConfig {
           "macbookpro" = {
-            modules = [ ./hosts/macbookpro ];
+            modules = [ ./hosts/workstation/macbookpro ];
           };
         };
 

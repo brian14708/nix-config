@@ -10,8 +10,7 @@ let
 in
 {
   imports = [
-    inputs.home-manager.nixosModules.home-manager
-    ../profiles/aliyun.nix
+    ../base-aliyun.nix
   ];
 
   system = {
@@ -34,7 +33,7 @@ in
     useUserPackages = true;
     users.brian = {
       imports = [
-        ../../home/brian/profiles/base
+        ../../../home/brian/profiles/base
       ];
       home = {
         inherit stateVersion;
@@ -43,9 +42,6 @@ in
     };
     extraSpecialArgs = {
       inherit inputs outputs;
-      machine = {
-        trusted = false;
-      };
     };
   };
 

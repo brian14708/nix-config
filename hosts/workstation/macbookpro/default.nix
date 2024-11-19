@@ -1,7 +1,7 @@
 { ... }:
 {
   imports = [
-    ../profiles/darwin.nix
+    ../base-darwin.nix
   ];
   system.stateVersion = 5;
   services.nix-daemon.enable = true;

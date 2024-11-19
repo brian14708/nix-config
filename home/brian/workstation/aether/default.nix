@@ -4,13 +4,13 @@
 }:
 {
   imports = [
-    ../profiles/workstation
-    ../features/desktop/hyprland
-    ../features/desktop/fcitx5
-    ../features/desktop/media
-    ../features/development/vscode
-    ../features/development/emacs
-    ../features/themes/catppuccin
+    ../base-linux.nix
+    ../../features/desktop/hyprland
+    ../../features/desktop/fcitx5
+    ../../features/desktop/media
+    ../../features/development/vscode
+    ../../features/development/emacs
+    ../../features/themes/catppuccin
   ];
 
   home = {

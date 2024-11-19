@@ -10,7 +10,7 @@
     (modulesPath + "/profiles/minimal.nix")
     (modulesPath + "/profiles/headless.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
-    ./linux.nix
+    ../profiles/linux.nix
     ../features/locale/cn.nix
   ];
 

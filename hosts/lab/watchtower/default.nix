@@ -15,7 +15,7 @@ let
 in
 {
   imports = [
-    ../profiles/aliyun.nix
+    ../base-aliyun.nix
   ];
 
   system = {

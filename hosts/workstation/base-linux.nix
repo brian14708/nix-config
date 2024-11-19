@@ -1,16 +1,10 @@
 {
-  inputs,
-  pkgs,
-  lib,
   config,
-  modulesPath,
   ...
 }:
 {
   imports = [
-    inputs.sops-nix.nixosModules.sops
-    inputs.disko.nixosModules.disko
-    ../linux.nix
+    ../profiles/linux.nix
   ];
   boot = {
     kernelParams = [ "mitigations=off" ];

@@ -1,14 +1,13 @@
 {
-  config,
   ...
 }:
 {
   imports = [
+    ../base-linux.nix
     ./disko.nix
-    ../profiles/workstation
-    ../features/locale/cn.nix
-    ../features/network/mihomo.nix
-    ../features/desktop/hyprland.nix
+    ../../features/locale/cn.nix
+    ../../features/network/mihomo.nix
+    ../../features/desktop/hyprland.nix
   ];
 
   sops = {

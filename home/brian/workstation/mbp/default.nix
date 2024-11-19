@@ -3,7 +3,7 @@
   ...
 }:
 {
-  imports = [ ../profiles/base ];
+  imports = [ ../../profiles/base ];
   home = {
     username = "brian";
     stateVersion = "24.11";

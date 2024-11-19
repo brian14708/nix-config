@@ -4,7 +4,7 @@
 }:
 {
   imports = [
-    ../profiles/workstation
+    ../base-linux.nix
   ];
 
   home = {
