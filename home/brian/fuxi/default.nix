@@ -4,7 +4,7 @@
 }:
 {
   imports = [
-    ../profiles/base
+    ../profiles/workstation
     ../features/desktop/hyprland
     ../features/desktop/fcitx5
     ../features/desktop/media
@@ -72,9 +72,5 @@
 
   sops = {
     defaultSopsFile = ./secrets.yaml;
-    secrets."ssh" = {
-      path = "/home/brian/.ssh/id_ed25519";
-    };
-    secrets."nix-access-tokens" = { };
   };
 }

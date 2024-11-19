@@ -16,10 +16,10 @@
   };
 
   networking = {
-    hostName = "fuxi";
+    hostName = "shiva";
   };
 
-  hardware.cpu.amd.updateMicrocode = true;
+  hardware.cpu.intel.updateMicrocode = true;
 
   system.stateVersion = "24.11";
 }

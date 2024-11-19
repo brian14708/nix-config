@@ -10,7 +10,7 @@
   imports = [
     inputs.sops-nix.nixosModules.sops
     inputs.disko.nixosModules.disko
-    ./linux.nix
+    ../linux.nix
   ];
   boot = {
     kernelParams = [ "mitigations=off" ];
@@ -19,6 +19,11 @@
   services.tailscale = {
     enable = true;
   };
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
+  services.blueman.enable = true;
   networking.networkmanager.enable = true;
   networking.firewall.trustedInterfaces = [
     config.services.tailscale.interfaceName
@@ -30,6 +35,10 @@
     gnupg.sshKeyPaths = [ ];
     secrets."brian/password" = {
       neededForUsers = true;
+      sopsFile = ./secrets.yaml;
+    };
+    secrets."mihomo-url" = {
+      sopsFile = ./secrets.yaml;
     };
     secrets."brian/sops" = {
       owner = "brian";

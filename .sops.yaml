@@ -1,41 +1,56 @@
 keys:
-  - &users
+  - &owners
     - &brian14708 91C32271A5A151D38526881FD03DD6ED48DEE9CE
   - &hosts
     - &aether age1axluheaw8sqntwujvp753xy45uq3a5wuc2qttv7m0p49jcdngaqshw0s93
-    - &shiva age1zs59y6dj4tsd3wwq3zds8qlwgsjg4zwn3g5e0cvwfjx0ypd534qsmvtyhv
+    - &shiva age1qh3rj9stul4sk3p2rl2cnyr0j0hrc7w85ae857s7rufl0acemflshavmpq
     - &fuxi age1dea575ez78ey63jat22v7d2209r6x978yvmr4m5g95k4a507n53swdfyp3
     - &mbp age1ud43s7x0uva5m2jg37cd2jd3lalqejhl79jmyf94mhg7pm7kng8sx5s0fn
     - &fujin age16ec47u39azzkgwt2m3mr2qe7vrn6zme32vh2f62zx8samlewe56s0ru8kv
 creation_rules:
   # per host
-  - path_regex: \/aether\/secrets(\.yaml$|\/)
+  - path_regex: \/aether\/secrets\.yaml$
     key_groups:
       - age:
           - *aether
-        pgp: *users
-  - path_regex: \/shiva\/secrets(\.yaml$|\/)
+        pgp: *owners
+  - path_regex: \/shiva\/secrets\.yaml$
     key_groups:
       - age:
           - *shiva
-        pgp: *users
-  - path_regex: \/fuxi\/secrets(\.yaml$|\/)
+        pgp: *owners
+  - path_regex: \/fuxi\/secrets\.yaml$
     key_groups:
       - age:
           - *fuxi
-        pgp: *users
-  - path_regex: \/mbp\/secrets(\.yaml$|\/)
+        pgp: *owners
+  - path_regex: \/mbp\/secrets\.yaml$
     key_groups:
       - age:
           - *mbp
-        pgp: *users
-  - path_regex: \/fujin\/secrets(\.yaml$|\/)
+        pgp: *owners
+  - path_regex: \/fujin\/secrets\.yaml$
     key_groups:
       - age:
           - *fujin
-        pgp: *users
+        pgp: *owners
+  # profile secrets
+  - path_regex: \/profiles\/workstation\/secrets\.yaml$
+    key_groups:
+      - age:
+          - *aether
+          - *shiva
+          - *fuxi
+          - *fujin
+          - *mbp
+        pgp: *owners
   # infra
   - path_regex: ^infra\/(.*\.)?secrets\.yaml$
     key_groups:
-      - age: *hosts
-        pgp: *users
+      - age:
+          - *aether
+          - *shiva
+          - *fuxi
+          - *fujin
+          - *mbp
+        pgp: *owners

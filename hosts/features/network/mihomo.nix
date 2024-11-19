@@ -11,7 +11,6 @@
     tunMode = true;
   };
 
-  sops.secrets."mihomo-url" = { };
   sops.templates."mihomo.yaml".content = ''
     proxy-providers:
       proxy:

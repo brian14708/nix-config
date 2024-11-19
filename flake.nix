@@ -112,6 +112,9 @@
           fuxi = {
             modules = [ ./hosts/fuxi ];
           };
+          shiva = {
+            modules = [ ./hosts/shiva ];
+          };
           lab01 = {
             modules = [ ./hosts/lab01 ];
           };
@@ -176,7 +179,7 @@
             modules = [ ./home/brian/mbp ];
           };
           "brian@shiva" = {
-            modules = [ ./home/brian/shiva.nix ];
+            modules = [ ./home/brian/shiva ];
           };
           "brian@fuxi" = {
             modules = [ ./home/brian/fuxi ];

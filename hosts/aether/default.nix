@@ -5,7 +5,7 @@
 {
   imports = [
     ./disko.nix
-    ../profiles/desktop.nix
+    ../profiles/workstation
     ../features/locale/cn.nix
     ../features/network/mihomo.nix
     ../features/desktop/hyprland.nix

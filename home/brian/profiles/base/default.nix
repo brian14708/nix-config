@@ -58,11 +58,6 @@ in
     };
   };
 
-  sops = {
-    age.sshKeyPaths = [ "${homeDirectory}/.ssh/id_ed25519" ];
-    age.keyFile = "${homeDirectory}/.config/sops/age/keys.txt";
-  };
-
   xdg.userDirs = {
     documents = "${homeDirectory}/documents";
     download = "${homeDirectory}/downloads";
