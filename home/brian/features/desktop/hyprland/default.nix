@@ -11,12 +11,13 @@
     xwayland.enable = true;
     settings = {
       exec-once = [
-        "${pkgs.foot}/bin/foot --server"
+        "foot --server"
         "${pkgs.waybar}/bin/waybar"
       ];
       "$mod" = "SUPER";
+      monitor = [ ", preferred, auto, 1" ];
       bind = [
-        "$mod, Return, exec, ${pkgs.foot}/bin/footclient -N || ${pkgs.foot}/bin/foot"
+        "$mod, Return, exec, footclient -N || foot"
         "$mod, Space, exec, ${pkgs.fuzzel}/bin/fuzzel"
         "$mod, Tab, layoutmsg, swapwithmaster"
         "$mod, f, fullscreen, 1"
@@ -82,6 +83,10 @@
         "$mod, j, layoutmsg, cyclenext"
         "$mod SHIFT, k, layoutmsg, swapprev"
         "$mod SHIFT, j, layoutmsg, swapnext"
+      ];
+      bindl = [
+        '',switch:off:Lid Switch,exec,hyprctl keyword monitor "eDP-1, preferred, auto, auto"''
+        '',switch:on:Lid Switch,exec,hyprctl keyword monitor "eDP-1, disable"''
       ];
       input = {
         kb_options = "ctrl:nocaps,altwin:swap_alt_win";
@@ -157,7 +162,7 @@
     enable = true;
     settings = {
       scrollback = {
-        multiplier = 8;
+        multiplier = 4;
       };
       text-bindings = {
         "\\x0a" = "Shift+Return Control+Return Shift+Control+Return";
