@@ -74,6 +74,12 @@
       strict-route: true
       exclude-interface:
         - tailscale0
+      route-exclude-address:
+        - 10.0.0.0/8
+        - 100.64.0.0/10
+        - 172.16.0.0/12
+        - 192.168.0.0/16
+        - fd7a:115c:a1e0::/48
 
     dns:
       enable: true
@@ -176,12 +182,20 @@
           "100.100.100.100 -group tailnet -exclude-default-group"
         ];
 
-        conf-file = [
-          "${chinalist}/accelerated-domains.china.smartdns.conf"
-          "${chinalist}/google.china.smartdns.conf"
-          "${chinalist}/apple.china.smartdns.conf"
-        ];
-
+        conf-file =
+          [
+            "${chinalist}/accelerated-domains.china.smartdns.conf"
+            "${chinalist}/google.china.smartdns.conf"
+            "${chinalist}/apple.china.smartdns.conf"
+          ]
+          ++ (
+            if config.sops.secrets ? smartdns then
+              [
+                "${config.sops.secrets."smartdns".path}"
+              ]
+            else
+              [ ]
+          );
         nameserver = [
           "/.ts.net/tailnet"
         ];

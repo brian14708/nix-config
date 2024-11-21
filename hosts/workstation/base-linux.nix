@@ -34,6 +34,9 @@
     secrets."mihomo-url" = {
       sopsFile = ./secrets.yaml;
     };
+    secrets."smartdns" = {
+      sopsFile = ./secrets.yaml;
+    };
     secrets."brian/sops" = {
       owner = "brian";
       path = "/home/brian/.config/sops/age/keys.txt";

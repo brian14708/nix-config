@@ -35,7 +35,7 @@ creation_rules:
           - *fujin
         pgp: *owners
   # profile secrets
-  - path_regex: \/profiles\/workstation\/secrets\.yaml$
+  - path_regex: \/workstation\/secrets\.yaml$
     key_groups:
       - age:
           - *aether
