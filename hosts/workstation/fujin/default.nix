@@ -1,4 +1,5 @@
 {
+  pkgs,
   ...
 }:
 {
@@ -25,7 +26,10 @@
 
   hardware.cpu.amd.updateMicrocode = true;
   services.hardware.bolt.enable = true;
-  hardware.nvidia.open = true;
+  hardware.nvidia = {
+    open = true;
+    package = pkgs.linuxPackages_latest.nvidiaPackages.beta;
+  };
   services.xserver.videoDrivers = [
     "nvidia"
   ];

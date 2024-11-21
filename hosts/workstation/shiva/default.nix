@@ -1,4 +1,5 @@
 {
+  pkgs,
   ...
 }:
 {
@@ -21,7 +22,10 @@
   hardware.cpu.intel.updateMicrocode = true;
 
   system.stateVersion = "24.11";
-  hardware.nvidia.open = true;
+  hardware.nvidia = {
+    open = true;
+    package = pkgs.linuxPackages_latest.nvidiaPackages.beta;
+  };
   services.xserver.videoDrivers = [
     "nvidia"
     "mesa"
