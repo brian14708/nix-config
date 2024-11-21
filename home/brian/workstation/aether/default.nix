@@ -18,6 +18,7 @@
     stateVersion = "24.11";
     packages = with pkgs; [
       devenv
+      rclone
     ];
   };
   programs.gpg = {

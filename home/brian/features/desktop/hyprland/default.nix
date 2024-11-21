@@ -15,7 +15,6 @@
         "${pkgs.waybar}/bin/waybar"
       ];
       "$mod" = "SUPER";
-      monitor = [ ", preferred, auto, 1" ];
       bind = [
         "$mod, Return, exec, footclient -N || foot"
         "$mod, Space, exec, ${pkgs.fuzzel}/bin/fuzzel"
