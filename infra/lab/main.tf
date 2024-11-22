@@ -70,7 +70,6 @@ resource "alicloud_ecs_network_interface_attachment" "watchtower" {
 }
 
 resource "alicloud_instance" "lab01" {
-  count                = 0
   instance_name        = "lab01"
   host_name            = "lab01"
   image_id             = alicloud_image_import.cn_nixos_20241117.id

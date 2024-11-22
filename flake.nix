@@ -72,7 +72,7 @@
       );
       mapConfig =
         func: configs:
-        lib.mapAttrs (_name: value: func value) (
+        lib.mapAttrs (_name: value: func (builtins.removeAttrs value [ "enable" ])) (
           lib.filterAttrs (
             _name:
             {
@@ -153,7 +153,7 @@
             hostname = "watchtower";
           };
           "lab01" = {
-            enable = false;
+            enable = true;
             hostname = "lab01";
           };
         };
