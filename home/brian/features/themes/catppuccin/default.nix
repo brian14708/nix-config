@@ -61,6 +61,39 @@ in
   gtk = {
     catppuccin.icon.enable = true;
   };
+  gtk.theme =
+    let
+      themeAccent =
+        if
+          (builtins.elem accent [
+            "purple"
+            "pink"
+            "red"
+            "orange"
+            "yellow"
+            "green"
+            "teal"
+            "grey"
+          ])
+        then
+          accent
+        else
+          "default";
+    in
+    {
+      name =
+        "Catppuccin-GTK"
+        + (if themeAccent == "default" then "" else "-${mkUpper themeAccent}")
+        + (if flavor == "latte" then "-Light" else "-Dark");
+      package = pkgs.magnetic-catppuccin-gtk.override {
+        accent = [ themeAccent ];
+        shade = if flavor == "latte" then "light" else "dark";
+        tweaks =
+          [ ]
+          ++ (if flavor == "frappe" then [ "frappe" ] else [ ])
+          ++ (if flavor == "macchiato" then [ "macchiato" ] else [ ]);
+      };
+    };
   programs.chromium = {
     extensions = [
       # Catppuccin Chrome Theme
