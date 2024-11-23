@@ -88,4 +88,10 @@ in
     // lib.optionalAttrs (config.sops.secrets ? nix-access-tokens) {
       extraOptions = "!include ${config.sops.secrets.nix-access-tokens.path}";
     };
+  xdg.configFile."go/env" = {
+    text = ''
+      GOPATH=${homeDirectory}/.local/go
+      GOPROXY=https://goproxy.cn,direct
+    '';
+  };
 }

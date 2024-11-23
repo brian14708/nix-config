@@ -17,4 +17,7 @@
       sopsFile = ./secrets.yaml;
     };
   };
+  programs.go = {
+    enable = true;
+  };
 }

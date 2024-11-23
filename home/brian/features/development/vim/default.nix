@@ -11,6 +11,7 @@
     extraPackages = with pkgs; [
       gcc
       gnumake
+      gopls
       nodejs
       ripgrep
       git
