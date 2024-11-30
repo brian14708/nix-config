@@ -29,12 +29,12 @@ in
   };
   home.packages = with pkgs; [
     # fonts
-    (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
     inter
     noto-fonts
     noto-fonts-cjk-sans
     noto-fonts-cjk-serif
     noto-fonts-color-emoji
+    nerd-fonts.caskaydia-mono
   ];
   fonts.fontconfig = {
     enable = true;
@@ -52,7 +52,7 @@ in
         "Noto Color Emoji"
       ];
       monospace = [
-        "CaskaydiaCove Nerd Font"
+        "CaskaydiaMono Nerd Font"
         "Noto Sans Mono"
         "Noto Sans Mono CJK SC"
       ];

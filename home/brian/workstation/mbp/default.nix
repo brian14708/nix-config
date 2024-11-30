@@ -12,7 +12,7 @@
       docker-client
       nil
       nixfmt-rfc-style
-      (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
+      nerd-fonts.caskaydia-mono
     ];
   };
   programs.zsh.enable = true;
