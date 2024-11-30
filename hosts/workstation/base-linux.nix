@@ -17,7 +17,6 @@
     enable = true;
     powerOnBoot = true;
   };
-  services.blueman.enable = true;
   networking.networkmanager.enable = true;
   networking.firewall.trustedInterfaces = [
     config.services.tailscale.interfaceName

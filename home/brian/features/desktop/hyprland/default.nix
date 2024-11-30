@@ -83,9 +83,8 @@
         "$mod SHIFT, k, layoutmsg, swapprev"
         "$mod SHIFT, j, layoutmsg, swapnext"
       ];
-      bindl = [
-        '',switch:off:Lid Switch,exec,hyprctl keyword monitor "eDP-1, preferred, auto, auto"''
-        '',switch:on:Lid Switch,exec,hyprctl keyword monitor "eDP-1, disable"''
+      monitor = [
+        "FALLBACK,1920x1080@60,auto,1"
       ];
       input = {
         kb_options = "ctrl:nocaps,altwin:swap_alt_win";
@@ -137,8 +136,7 @@
       general = {
         before_sleep_cmd = "loginctl lock-session";
         after_sleep_cmd = "hyprctl dispatch dpms on";
-        ignore_dbus_inhibit = false;
-        lock_cmd = "${pkgs.hyprlock}/bin/hyprlock";
+        lock_cmd = "pidof hyprlock || ${pkgs.hyprlock}/bin/hyprlock";
       };
 
       listener = [
