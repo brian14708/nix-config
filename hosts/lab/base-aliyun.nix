@@ -30,6 +30,9 @@
         datasource_list = [ "AliYun" ];
       };
     };
+    chrony = {
+      enable = true;
+    };
   };
   systemd.services.tailscaled-autoconnect.after = [ "cloud-final.service" ];
 

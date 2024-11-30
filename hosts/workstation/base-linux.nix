@@ -63,4 +63,7 @@
     lidSwitchExternalPower = "lock";
     lidSwitchDocked = "lock";
   };
+  services.chrony = {
+    enable = true;
+  };
 }
