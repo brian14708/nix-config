@@ -12,7 +12,7 @@
       vscodevim.vim
       github.copilot
       github.copilot-chat
-      bbenoist.nix
+      mkhl.direnv
     ];
 
     userSettings = {
