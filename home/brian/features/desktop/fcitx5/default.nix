@@ -19,6 +19,12 @@
       ];
     };
   };
+  systemd.user.services.fcitx5-daemon.Unit = {
+    After = [
+      "graphical-session-pre.target"
+    ];
+    ConditionEnvironment = "WAYLAND_DISPLAY";
+  };
 
   xdg.configFile."fcitx5/profile" = {
     force = true;
