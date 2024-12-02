@@ -29,7 +29,7 @@
     };
     catppuccin.url = "github:catppuccin/nix";
     catppuccin-vsc = {
-      url = "github:brian14708/catppuccin-vscode/nix";
+      url = "github:catppuccin/vscode";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     deploy-rs = {
