@@ -153,7 +153,7 @@
             hostname = "watchtower";
           };
           "lab01" = {
-            enable = true;
+            enable = false;
             hostname = "lab01";
           };
         };
