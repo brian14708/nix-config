@@ -18,6 +18,12 @@
     userSettings = {
       "window.menuBarVisibility" = "toggle";
       "editor.semanticHighlighting.enabled" = true;
+      "terminal.integrated.profiles.linux" = {
+        "bash" = {
+          "path" = "${pkgs.bashInteractive}/bin/bash";
+        };
+      };
+
       "workbench.startupEditor" = "newUntitledFile";
       "workbench.activityBar.location" = "top";
       "vim.handleKeys" = {

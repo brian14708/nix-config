@@ -1,4 +1,5 @@
 {
+  pkgs,
   ...
 }:
 {
@@ -19,5 +20,13 @@
   };
   programs.go = {
     enable = true;
+  };
+  programs.zellij = {
+    enable = true;
+    settings = {
+      default_shell = "${pkgs.bashInteractive}/bin/bash";
+      default_layout = "compact";
+      pane_frames = false;
+    };
   };
 }

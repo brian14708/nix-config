@@ -3,11 +3,8 @@
   ...
 }:
 {
-  programs.lazygit = {
+  programs.gitui = {
     enable = true;
-    settings = {
-      disableStartupPopups = true;
-    };
   };
   programs.git = {
     enable = true;
