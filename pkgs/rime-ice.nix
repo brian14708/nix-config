@@ -5,13 +5,13 @@
 }:
 stdenvNoCC.mkDerivation (_: {
   pname = "rime-ice";
-  version = "2024.11.29-unstable-2024-11-29";
+  version = "2024.11.29-unstable-2024-12-06";
 
   src = fetchFromGitHub {
     owner = "iDvel";
     repo = "rime-ice";
-    rev = "ed191350b20a0074d177c9431fcb985ba193ef2b";
-    hash = "sha256-+6Xci9S/5YY7ykYpv9SxtmNWWjOzqYatlGPTIY/FEqY=";
+    rev = "20e9bc9e187f7968166b4dcd4d7f4284b637213c";
+    hash = "sha256-+gTSjXisdglmTNvaMBDl4I8EY/A8ok5UiyvJatz1BMw=";
   };
 
   installPhase = ''
@@ -21,11 +21,8 @@ stdenvNoCC.mkDerivation (_: {
     cp -r opencc   "$out/share/rime-data/opencc"
     cp -r lua      "$out/share/rime-data/lua"
 
-    install -Dm644 *.{schema,dict}.yaml -t "$out/share/rime-data/"
-    install -Dm644 *.lua                -t "$out/share/rime-data/"
+    install -Dm644 *.yaml -t "$out/share/rime-data/"
     install -Dm644 custom_phrase.txt    -t "$out/share/rime-data/"
-    install -Dm644 symbols*.yaml        -t "$out/share/rime-data/"
-    install -Dm644 default.yaml         -t "$out/share/rime-data/"
   '';
 
   meta = {

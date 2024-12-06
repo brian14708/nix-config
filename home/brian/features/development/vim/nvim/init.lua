@@ -484,6 +484,7 @@ require("lazy").setup({
         gopls = {},
         pyright = {},
         rust_analyzer = {},
+        gleam = {},
         nil_ls = {},
         lua_ls = {
           -- cmd = {...},

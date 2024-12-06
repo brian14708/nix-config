@@ -12,9 +12,8 @@
 
   system.stateVersion = "24.11";
 
-  boot =
-    {
-    };
+  boot = {
+  };
 
   sops = {
     defaultSopsFile = ./secrets.yaml;
