@@ -22,9 +22,12 @@
 
   sops = {
     defaultSopsFile = ./secrets.yaml;
+    environment.SOPS_GPG_EXEC = "/dev/null";
+    age.sshKeyPaths = [ ];
+    age.keyFile = "/Users/brian/.config/sops/age/keys.txt";
+    gnupg.sshKeyPaths = [ ];
     secrets."ssh" = {
       path = "/Users/brian/.ssh/id_ed25519";
     };
-    secrets."nix-access-tokens" = { };
   };
 }
