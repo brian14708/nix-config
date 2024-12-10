@@ -22,11 +22,16 @@ in
   catppuccin = {
     inherit flavor accent;
     enable = true;
-    pointerCursor = {
-      enable = true;
-      accent = if flavor == "latte" then "light" else "dark";
-    };
   };
+  home.pointerCursor =
+    let
+      accent = if flavor == "latte" then "light" else "dark";
+    in
+    {
+      name = "catppuccin-${flavor}-${accent}-cursors";
+      package = pkgs.catppuccin-cursors.${flavor + mkUpper accent};
+    };
+
   home.packages = with pkgs; [
     # fonts
     inter
