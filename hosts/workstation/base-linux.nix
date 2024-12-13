@@ -68,5 +68,10 @@
   };
 
   powerManagement.enable = true;
-  services.tlp.enable = true;
+  services.tlp = {
+    enable = true;
+    settings = {
+      "DEVICES_TO_ENABLE_ON_STARTUP" = "bluetooth wifi";
+    };
+  };
 }
