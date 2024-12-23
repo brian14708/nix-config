@@ -10,6 +10,11 @@
     ../../features/desktop/hyprland.nix
   ];
 
+  virtualisation.docker = {
+    enable = true;
+    enableOnBoot = false;
+  };
+
   sops = {
     defaultSopsFile = ./secrets.yaml;
   };
