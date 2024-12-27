@@ -22,6 +22,8 @@ in
   catppuccin = {
     inherit flavor accent;
     enable = true;
+    gtk.icon.enable = true;
+    nvim.enable = false;
   };
   home.pointerCursor =
     let
@@ -62,9 +64,6 @@ in
         "Noto Sans Mono CJK SC"
       ];
     };
-  };
-  gtk = {
-    catppuccin.icon.enable = true;
   };
   gtk.theme =
     let
@@ -350,6 +349,12 @@ in
   programs.lazygit = {
     settings = {
       gui.nerdFontsVersion = "3";
+    };
+  };
+
+  i18n.inputMethod = {
+    fcitx5 = {
+      addons = [ pkgs.catppuccin-fcitx5 ];
     };
   };
 }

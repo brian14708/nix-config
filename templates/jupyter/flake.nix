@@ -30,9 +30,9 @@
               with pkgs;
               [
                 uv
-                python312
+                python3
               ]
-              ++ (with python312Packages; [
+              ++ (with python3Packages; [
                 venvShellHook
                 pip
                 jupyter

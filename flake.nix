@@ -27,7 +27,11 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    catppuccin.url = "github:catppuccin/nix";
+    catppuccin = {
+      url = "github:catppuccin/nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
     catppuccin-vsc = {
       url = "github:catppuccin/vscode";
       inputs.nixpkgs.follows = "nixpkgs";

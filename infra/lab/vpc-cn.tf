@@ -24,9 +24,9 @@ resource "alicloud_route_table_attachment" "cn" {
 }
 
 resource "alicloud_security_group" "cn" {
-  name        = "lab-security-group"
-  vpc_id      = alicloud_vpc.cn.id
-  description = "lab"
+  security_group_name = "lab-security-group"
+  vpc_id              = alicloud_vpc.cn.id
+  description         = "lab"
 }
 
 resource "alicloud_security_group_rule" "cn_allow_udp_services" {
