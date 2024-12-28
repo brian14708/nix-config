@@ -30,4 +30,8 @@
       path = "/Users/brian/.ssh/id_ed25519";
     };
   };
+  xdg.configFile."ghostty/config".text = ''
+    font-family = "CaskaydiaMono Nerd Font Mono"
+    theme = "Hybrid"
+  '';
 }

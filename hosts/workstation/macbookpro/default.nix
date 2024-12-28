@@ -16,7 +16,7 @@
   '';
   homebrew.casks = [
     "tailscale"
-    "iterm2"
+    "ghostty"
     "alfred"
     "surge"
     "1password"
