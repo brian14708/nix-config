@@ -24,7 +24,7 @@
   system.stateVersion = "24.11";
   hardware.nvidia = {
     open = true;
-    package = pkgs.linuxPackages_latest.nvidiaPackages.beta;
+    package = pkgs.linuxPackages_latest.nvidiaPackages.latest;
   };
   services.xserver.videoDrivers = [
     "nvidia"

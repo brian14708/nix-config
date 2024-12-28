@@ -1,11 +1,6 @@
 { }:
 {
-  rust = {
-    path = ./rust;
-    description = "Rust application";
-  };
-  jupyter = {
-    path = ./jupyter;
-    description = "Jupyter notebook";
-  };
+  rust.path = ./rust;
+  jupyter.path = ./jupyter;
+  jupyter-cuda.path = ./jupyter-cuda;
 }

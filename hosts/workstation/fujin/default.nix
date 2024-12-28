@@ -25,9 +25,12 @@
 
   hardware.cpu.amd.updateMicrocode = true;
   services.hardware.bolt.enable = true;
+  hardware.graphics = {
+    enable = true;
+  };
   hardware.nvidia = {
     open = true;
-    package = pkgs.linuxPackages_latest.nvidiaPackages.beta;
+    package = pkgs.linuxPackages_latest.nvidiaPackages.latest;
   };
   services.xserver.videoDrivers = [
     "nvidia"
