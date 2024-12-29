@@ -294,6 +294,7 @@ in
         inner_color = "$surface0";
         font_color = "$text";
         fade_on_empty = false;
+        font_family = "monospace";
         placeholder_text = ''<span foreground="##$textAlpha">󰌾</span>'';
         hide_input = false;
         check_color = "$accent";

@@ -6,6 +6,7 @@
   programs.gitui = {
     enable = true;
   };
+  home.packages = with pkgs; [ git-branchless ];
   programs.git = {
     enable = true;
     difftastic = {

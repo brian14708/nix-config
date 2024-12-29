@@ -30,9 +30,13 @@
   };
   hardware.nvidia = {
     open = true;
-    package = pkgs.linuxPackages_latest.nvidiaPackages.latest;
+    package = pkgs.linuxPackages_latest.nvidiaPackages.stable;
   };
   services.xserver.videoDrivers = [
     "nvidia"
   ];
+  virtualisation.docker = {
+    enable = true;
+    enableOnBoot = false;
+  };
 }

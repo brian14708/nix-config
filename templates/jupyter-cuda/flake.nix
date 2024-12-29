@@ -49,7 +49,7 @@
                 pip
                 jupyter
                 numpy
-                pytorch
+                torch
               ]);
           };
         };

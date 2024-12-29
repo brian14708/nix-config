@@ -62,14 +62,6 @@
     enable = true;
   };
 
-  wayland.windowManager.hyprland = {
-    settings = {
-      env = [
-        "AQ_DRM_DEVICES,/dev/dri/card2"
-      ];
-    };
-  };
-
   sops = {
     defaultSopsFile = ./secrets.yaml;
   };
