@@ -15,6 +15,7 @@ in
     ../../features/development/vim
     ../../features/development/git
     ./userinfo.nix
+    ../cn
   ];
 
   news.display = "silent";
@@ -78,20 +79,9 @@ in
           "nix-command"
           "flakes"
         ];
-        substituters = [
-          "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
-          "https://mirror.sjtu.edu.cn/nix-channels/store"
-          "https://cache.nixos.org"
-        ];
       };
     }
     // lib.optionalAttrs (config.sops.secrets ? nix-access-tokens) {
       extraOptions = "!include ${config.sops.secrets.nix-access-tokens.path}";
     };
-  xdg.configFile."go/env" = {
-    text = ''
-      GOPATH=${homeDirectory}/.local/go
-      GOPROXY=https://goproxy.cn,direct
-    '';
-  };
 }
