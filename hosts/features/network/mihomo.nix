@@ -87,6 +87,11 @@
         - 127.0.0.1
 
     proxy-groups:
+      - name: default
+        type: select
+        proxies:
+        - DIRECT
+        - auto-fast
       - name: auto-fast
         type: url-test
         use:
@@ -152,9 +157,10 @@
 
       - GEOSITE,category-ai-chat-!cn,ai
       - GEOSITE,CN,DIRECT
-      - GEOSITE,geolocation-!cn,auto-fast
+      - GEOSITE,gfw,auto-fast
+      - DOMAIN-SUFFIX,docker.io,auto-fast
       - GEOIP,CN,DIRECT
-      - MATCH,auto-fast
+      - MATCH,default
   '';
 
   networking.resolvconf.useLocalResolver = true;
