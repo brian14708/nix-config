@@ -31,6 +31,12 @@
         path: ./rule_provider/anti-ad.yaml
         url: "https://anti-ad.net/clash.yaml"
         interval: 86400
+      proxy:
+        type: http
+        behavior: domain
+        path: ./rule_provider/proxy.yaml
+        url: "https://testingcf.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/proxy.txt"
+        interval: 86400
 
     ipv6: true
     log-level: info
@@ -157,8 +163,7 @@
 
       - GEOSITE,category-ai-chat-!cn,ai
       - GEOSITE,CN,DIRECT
-      - GEOSITE,gfw,auto-fast
-      - DOMAIN-SUFFIX,docker.io,auto-fast
+      - RULE-SET,proxy,auto-fast
       - GEOIP,CN,DIRECT
       - MATCH,default
   '';
