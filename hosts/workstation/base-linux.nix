@@ -1,4 +1,5 @@
 {
+  pkgs,
   config,
   ...
 }:
@@ -77,4 +78,7 @@
       "DEVICES_TO_ENABLE_ON_STARTUP" = "bluetooth wifi";
     };
   };
+  environment.systemPackages = with pkgs; [
+    ghostty.terminfo
+  ];
 }
