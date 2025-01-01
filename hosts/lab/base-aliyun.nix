@@ -83,4 +83,8 @@
     format = "qcow2-compressed";
     partitionTableType = "hybrid";
   };
+
+  environment.systemPackages = with pkgs; [
+    ghostty.terminfo
+  ];
 }
