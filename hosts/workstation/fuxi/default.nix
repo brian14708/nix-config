@@ -29,6 +29,11 @@
     "mesa"
     "nvidia"
   ];
+  environment.sessionVariables = {
+    VK_DRIVER_FILES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
+    __EGL_VENDOR_LIBRARY_FILENAMES = "/run/opengl-driver/share/glvnd/egl_vendor.d/50_mesa.json";
+    __GLX_VENDOR_LIBRARY_NAME = "mesa";
+  };
   hardware.nvidia.prime = {
     offload = {
       enable = true;
