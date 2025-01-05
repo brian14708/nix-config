@@ -17,7 +17,7 @@
     username = "brian";
     stateVersion = "24.11";
     packages = with pkgs; [
-      cachix
+      obsidian
     ];
   };
   programs.gpg = {

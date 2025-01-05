@@ -20,6 +20,7 @@
     "alfred"
     "surge"
     "1password"
+    "obsidian"
   ];
   system.keyboard.enableKeyMapping = true;
   system.keyboard.remapCapsLockToControl = true;
