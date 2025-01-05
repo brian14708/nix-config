@@ -32,6 +32,6 @@
   };
   xdg.configFile."ghostty/config".text = ''
     font-family = "CaskaydiaMono Nerd Font Mono"
-    theme = "Hybrid"
+    theme = "catppuccin-mocha"
   '';
 }
