@@ -49,6 +49,11 @@
         "$mod, x, exec, loginctl lock-session"
 
         (
+          "$mod, P, exec, "
+          + "${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\" - |"
+          + "${pkgs.wl-clipboard}/bin/wl-copy -t image/png"
+        )
+        (
           ", Print, exec, "
           + "${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\" - |"
           + "${pkgs.wl-clipboard}/bin/wl-copy -t image/png"
