@@ -11,4 +11,5 @@
     enable = true;
     socketActivation.enable = true;
   };
+  xdg.configFile."emacs/init.el".source = ./init.el;
 }
