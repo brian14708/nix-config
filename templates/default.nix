@@ -12,4 +12,8 @@
     path = ./jupyter-cuda;
     description = "Jupyter with CUDA";
   };
+  zig = {
+    path = ./zig;
+    description = "Zig";
+  };
 }
