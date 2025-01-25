@@ -10,9 +10,8 @@
     ../../features/desktop/hyprland.nix
   ];
 
-  virtualisation.docker = {
+  virtualisation.podman = {
     enable = true;
-    enableOnBoot = false;
   };
 
   sops = {

@@ -55,7 +55,7 @@
         extraGroups = [
           "wheel"
           "video"
-        ] ++ (if config.virtualisation.docker.enable then [ "docker" ] else [ ]);
+        ];
         openssh.authorizedKeys.keys = user.ssh;
         hashedPasswordFile = config.sops.secrets."brian/password".path;
       };

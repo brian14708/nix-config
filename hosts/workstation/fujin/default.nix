@@ -35,8 +35,6 @@
   services.xserver.videoDrivers = [
     "nvidia"
   ];
-  virtualisation.docker = {
-    enable = true;
-    enableOnBoot = false;
-  };
+  virtualisation.podman.enable = true;
+  hardware.nvidia-container-toolkit.enable = true;
 }
