@@ -2,6 +2,9 @@
   pkgs,
   ...
 }:
+let
+  launcher = "uwsm app -- ";
+in
 {
   home.sessionVariables.NIXOS_OZONE_WL = "1";
   services.mako.enable = true;
@@ -9,15 +12,16 @@
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
+    systemd.enable = false;
     settings = {
       exec-once = [
-        "foot --server"
-        "${pkgs.waybar}/bin/waybar"
+        "${launcher} foot --server"
+        "${launcher} ${pkgs.waybar}/bin/waybar"
       ];
       "$mod" = "SUPER";
       bind = [
-        "$mod, Return, exec, footclient -N || foot"
-        "$mod, Space, exec, ${pkgs.fuzzel}/bin/fuzzel"
+        "$mod, Return, exec, footclient -N || ${launcher} foot"
+        "$mod, Space, exec, ${pkgs.fuzzel}/bin/fuzzel --launch-prefix=\"${launcher}\""
         "$mod, Tab, layoutmsg, swapwithmaster"
         "$mod, f, fullscreen, 1"
         "$mod, q, killactive"
@@ -141,13 +145,13 @@
       general = {
         before_sleep_cmd = "loginctl lock-session";
         after_sleep_cmd = "hyprctl dispatch dpms on";
-        lock_cmd = "pidof hyprlock || ${pkgs.hyprlock}/bin/hyprlock";
+        lock_cmd = "pidof hyprlock || ${launcher} ${pkgs.hyprlock}/bin/hyprlock";
       };
 
       listener = [
         {
           timeout = 120;
-          on-timeout = "${pkgs.hyprlock}/bin/hyprlock";
+          on-timeout = "${launcher} ${pkgs.hyprlock}/bin/hyprlock";
         }
         {
           timeout = 180;
