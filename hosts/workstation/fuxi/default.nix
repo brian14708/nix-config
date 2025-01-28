@@ -23,7 +23,7 @@
   hardware.cpu.amd.updateMicrocode = true;
   hardware.nvidia = {
     open = true;
-    package = pkgs.linuxPackages_latest.nvidiaPackages.stable;
+    package = pkgs.linuxPackages_latest.nvidiaPackages.latest;
   };
   services.xserver.videoDrivers = [
     "mesa"
