@@ -80,6 +80,8 @@
       strict-route: true
       exclude-interface:
         - tailscale0
+        - podman0
+        - docker0
       route-exclude-address:
         - 10.0.0.0/8
         - 100.64.0.0/10
