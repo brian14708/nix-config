@@ -27,6 +27,7 @@ in
     enable = !pkgs.stdenv.isDarwin;
   };
   programs.eza.enable = true;
+  programs.jq.enable = true;
   programs.git =
     let
       u = config.userinfo;
@@ -73,13 +74,22 @@ in
   nix =
     {
       package = lib.mkDefault pkgs.nix;
-      settings = {
-        use-xdg-base-directories = true;
-        experimental-features = [
-          "nix-command"
-          "flakes"
-        ];
-      };
+      settings =
+        {
+          use-xdg-base-directories = true;
+          experimental-features = [
+            "nix-command"
+            "flakes"
+          ];
+          trusted-public-keys = [
+            "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+            "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+            "brian14708.dev:k5awex3ydUORpRlm2AnogCuowVwSxIVi9TxCnY/3ZJQ"
+          ];
+        }
+        // lib.optionalAttrs (config.sops.secrets ? nix-secret-key) {
+          secret-key-files = config.sops.secrets.nix-secret-key.path;
+        };
     }
     // lib.optionalAttrs (config.sops.secrets ? nix-access-tokens) {
       extraOptions = "!include ${config.sops.secrets.nix-access-tokens.path}";

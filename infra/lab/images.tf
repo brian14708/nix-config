@@ -35,10 +35,7 @@ resource "alicloud_oss_bucket" "nix_cache" {
     id      = "lifecycle"
     enabled = true
     expiration {
-      days = 60
-    }
-    abort_multipart_upload {
-      days = 2
+      days = 14
     }
   }
 
@@ -57,7 +54,7 @@ resource "alicloud_oss_bucket_policy" "nix_cache" {
     "Version" : "1",
     "Statement" : [
       {
-        "Action" : ["oss:GetObject", "oss:PutObject", "oss:ListObjects"],
+        "Action" : ["oss:GetObject", "oss:PutObject", "oss:DeleteObject"],
         "Effect" : "Allow",
         "Principal" : [alicloud_ram_user.nix_cache.id],
         "Resource" : ["acs:oss:*:${alicloud_oss_bucket.nix_cache.owner}:${alicloud_oss_bucket.nix_cache.bucket}/*"]

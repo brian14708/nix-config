@@ -1,4 +1,7 @@
 { ... }:
 {
-  imports = [ ./userinfo.nix ];
+  imports = [
+    ./userinfo.nix
+    ./nix-store-gateway.nix
+  ];
 }

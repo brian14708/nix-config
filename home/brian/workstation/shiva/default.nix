@@ -1,5 +1,6 @@
 {
   pkgs,
+  config,
   ...
 }:
 {
@@ -79,5 +80,9 @@
         '',switch:on:Lid Switch,exec,hyprctl keyword monitor "eDP-1, disable"''
       ];
     };
+  };
+  services.nix-store-gateway = {
+    enable = true;
+    config = config.sops.secrets.nix-store-gateway.path;
   };
 }

@@ -1,5 +1,6 @@
 {
   pkgs,
+  config,
   ...
 }:
 {
@@ -32,5 +33,9 @@
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
+  };
+  services.nix-store-gateway = {
+    enable = true;
+    config = config.sops.secrets.nix-store-gateway.path;
   };
 }

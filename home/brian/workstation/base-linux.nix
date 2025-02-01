@@ -16,6 +16,12 @@
     secrets."nix-access-tokens" = {
       sopsFile = ./secrets.yaml;
     };
+    secrets."nix-secret-key" = {
+      sopsFile = ./secrets.yaml;
+    };
+    secrets."nix-store-gateway" = {
+      sopsFile = ./secrets.yaml;
+    };
   };
   programs.go = {
     enable = true;

@@ -1,5 +1,6 @@
 {
   pkgs,
+  config,
   ...
 }:
 {
@@ -64,5 +65,9 @@
 
   sops = {
     defaultSopsFile = ./secrets.yaml;
+  };
+  services.nix-store-gateway = {
+    enable = true;
+    config = config.sops.secrets.nix-store-gateway.path;
   };
 }
