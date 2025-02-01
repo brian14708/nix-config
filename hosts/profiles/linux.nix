@@ -10,6 +10,7 @@
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
   };
+  documentation.doc.enable = false;
   programs.nix-ld.enable = true;
   nix.settings = {
     trusted-users = [ "@wheel" ];

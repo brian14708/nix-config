@@ -18,6 +18,7 @@
     enable = true;
     powerOnBoot = true;
   };
+  systemd.coredump.enable = false;
   networking.networkmanager.enable = true;
   networking.firewall.trustedInterfaces = [
     config.services.tailscale.interfaceName
