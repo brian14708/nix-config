@@ -16,4 +16,8 @@
     path = ./zig;
     description = "Zig";
   };
+  devenv = {
+    path = ./devenv;
+    description = "Devenv";
+  };
 }
