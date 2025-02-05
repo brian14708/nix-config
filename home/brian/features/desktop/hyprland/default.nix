@@ -109,6 +109,10 @@ in
         border_size = 1;
         layout = "master";
       };
+      ecosystem = {
+        no_update_news = true;
+        no_donation_nag = true;
+      };
       animations = {
         animation = [
           "global, 1, 4, default"

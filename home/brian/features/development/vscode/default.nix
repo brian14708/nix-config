@@ -18,6 +18,7 @@
     userSettings = {
       "window.menuBarVisibility" = "toggle";
       "editor.semanticHighlighting.enabled" = true;
+      "editor.minimap.enabled" = false;
       "terminal.integrated.profiles.linux" = {
         "bash" = {
           "path" = "${pkgs.bashInteractive}/bin/bash";
