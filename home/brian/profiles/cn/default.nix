@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   ...
 }:
 let
@@ -8,7 +9,7 @@ in
 {
   home.file = {
     ".cargo/config.toml" = {
-      text = ''
+      text = lib.mkBefore ''
         [source.crates-io]
         replace-with = 'rsproxy-sparse'
         [source.rsproxy]
