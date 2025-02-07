@@ -40,8 +40,14 @@
           pname = "hello";
         in
         {
-          devShells.default = craneLib.devShell {
-          };
+          devShells.default =
+            (craneLib.devShell.override {
+              mkShell = pkgs.mkShell.override {
+                stdenv = pkgs.stdenvAdapters.useMoldLinker pkgs.stdenv;
+              };
+            })
+              {
+              };
 
           treefmt = {
             projectRootFile = "flake.nix";
