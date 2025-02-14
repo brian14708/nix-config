@@ -19,6 +19,10 @@ terraform {
       source  = "hashicorp/random"
       version = "~> 3"
     }
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 6"
+    }
   }
 
   encryption {
@@ -52,3 +56,5 @@ provider "alicloud" {
 }
 
 provider "sops" {}
+
+provider "google" {}
