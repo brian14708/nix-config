@@ -118,6 +118,9 @@
           shiva = {
             modules = [ ./hosts/workstation/shiva ];
           };
+          styx = {
+            modules = [ ./hosts/workstation/styx ];
+          };
           lab01 = {
             modules = [ ./hosts/lab/lab01 ];
           };
@@ -192,6 +195,9 @@
           };
           "brian@fujin" = {
             modules = [ ./home/brian/workstation/fujin ];
+          };
+          "brian@styx" = {
+            modules = [ ./home/brian/workstation/styx ];
           };
         };
       darwinConfigurations =

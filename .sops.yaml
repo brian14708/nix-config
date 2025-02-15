@@ -7,6 +7,7 @@ keys:
     - &fuxi age1dea575ez78ey63jat22v7d2209r6x978yvmr4m5g95k4a507n53swdfyp3
     - &mbp age1ud43s7x0uva5m2jg37cd2jd3lalqejhl79jmyf94mhg7pm7kng8sx5s0fn
     - &fujin age16ec47u39azzkgwt2m3mr2qe7vrn6zme32vh2f62zx8samlewe56s0ru8kv
+    - &styx age1pfd04uk8s4qjrmdz2tchs5d0m0fjll2eev78r2klj3j39tdlap3qkclleq
 creation_rules:
   # per host
   - path_regex: \/aether\/secrets\.yaml$
@@ -34,6 +35,11 @@ creation_rules:
       - age:
           - *fujin
         pgp: *owners
+  - path_regex: \/styx\/secrets\.yaml$
+    key_groups:
+      - age:
+          - *styx
+        pgp: *owners
   # profile secrets
   - path_regex: \/workstation\/secrets\.yaml$
     key_groups:
@@ -43,6 +49,7 @@ creation_rules:
           - *fuxi
           - *fujin
           - *mbp
+          - *styx
         pgp: *owners
   # infra
   - path_regex: ^infra\/(.*\.)?secrets\.yaml$
@@ -53,4 +60,5 @@ creation_rules:
           - *fuxi
           - *fujin
           - *mbp
+          - *styx
         pgp: *owners
