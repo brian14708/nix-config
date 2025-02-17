@@ -7,6 +7,9 @@
     enable = true;
   };
   home.packages = with pkgs; [ git-branchless ];
+  programs.jujutsu = {
+    enable = true;
+  };
   programs.git = {
     enable = true;
     difftastic = {

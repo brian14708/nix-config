@@ -57,6 +57,10 @@ vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldlevel = 20
 
+-- Set the tab size
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+
 vim.opt.shm:append("I")
 
 vim.keymap.set("", "<leader>y", '"+y', { noremap = true, desc = "Yank to clipboard" })
@@ -217,7 +221,7 @@ require("lazy").setup({
 
       -- Document existing key chains
       spec = {
-        { "<leader>c", group = "[C]ode", mode = { "n", "x" } },
+        { "<leader>c", group = "[C]ode",     mode = { "n", "x" } },
         { "<leader>d", group = "[D]ocument" },
         { "<leader>r", group = "[R]ename" },
         { "<leader>s", group = "[S]earch" },
@@ -250,7 +254,7 @@ require("lazy").setup({
       { "nvim-telescope/telescope-ui-select.nvim" },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
+      { "nvim-tree/nvim-web-devicons",            enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -488,6 +492,8 @@ require("lazy").setup({
         elixirls = {
           cmd = { "elixir-ls" },
         },
+        ts_ls = {},
+        svelte = {},
         nil_ls = {},
         lua_ls = {
           -- cmd = {...},

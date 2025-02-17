@@ -39,6 +39,18 @@ in
         key = (builtins.head u.pgp).id;
       };
     };
+  programs.jujutsu =
+    let
+      u = config.userinfo;
+    in
+    {
+      settings = {
+        user = {
+        name = u.name;
+        email = builtins.head u.email;
+      };
+      };
+    };
 
   programs = {
     home-manager.enable = true;
