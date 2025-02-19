@@ -48,7 +48,7 @@ resource "google_storage_bucket" "ops_state" {
 #
 #resource "google_cloud_run_domain_mapping" "example" {
 #  location = google_cloud_run_service.example.location
-#  name     = "example.brian14708.dev"
+#  name     = "example.014708.xyz"
 #
 #  metadata {
 #    namespace = google_cloud_run_service.example.project
