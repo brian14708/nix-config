@@ -79,7 +79,7 @@
                   cargoArtifacts = craneLib.buildDepsOnly commonArgs;
                 }
               );
-            docker = pkgs.dockerTools.buildImage {
+            oci = pkgs.dockerTools.buildImage {
               name = pname;
               tag = "latest";
               copyToRoot = [ self'.packages.default ];

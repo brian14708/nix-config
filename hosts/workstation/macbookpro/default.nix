@@ -4,7 +4,6 @@
     ../base-darwin.nix
   ];
   system.stateVersion = 5;
-  services.nix-daemon.enable = true;
   nix = {
     settings = {
       trusted-users = [ "brian" ];
