@@ -246,7 +246,7 @@ in
       };
     };
   };
-  programs.vscode = {
+  programs.vscode.profiles.default = {
     extensions = with pkgs.vscode-extensions; [
       (inputs.catppuccin-vsc.packages.${pkgs.system}.catppuccin-vsc.override {
         accent = accent;
