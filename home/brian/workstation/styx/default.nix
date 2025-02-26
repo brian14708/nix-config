@@ -72,7 +72,7 @@
         "AQ_DRM_DEVICES,/dev/dri/card1"
       ];
       monitor = [
-        "desc:AOC Q2790PQ PSKP5HA003512, preferred, auto, 1.6"
+        "desc:AOC Q2790PQ PSKP5HA003512, 2560x1440, auto, 1.6"
         "eDP-1, preferred, auto, 2"
       ];
       bindl = [

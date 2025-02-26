@@ -1,4 +1,5 @@
 {
+  pkgs,
   ...
 }:
 {
@@ -29,5 +30,12 @@
   programs.tmux = {
     enable = true;
     mouse = true;
+  };
+
+  home = {
+    sessionVariables = {
+      PAGER = "${pkgs.less}/bin/less -RXF";
+      _ZO_DOCTOR = "0";
+    };
   };
 }

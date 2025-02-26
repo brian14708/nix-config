@@ -9,6 +9,9 @@
   home.packages = with pkgs; [ git-branchless ];
   programs.jujutsu = {
     enable = true;
+    settings = {
+      ui.default-command = "log";
+    };
   };
   programs.git = {
     enable = true;
