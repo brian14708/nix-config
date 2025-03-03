@@ -18,6 +18,10 @@
   };
   devenv = {
     path = ./devenv;
-    description = "Devenv";
+    description = "devenv.sh";
+  };
+  tlaplus = {
+    path = ./tlaplus;
+    description = "TLA+";
   };
 }

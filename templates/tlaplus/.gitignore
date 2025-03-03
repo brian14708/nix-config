@@ -1,0 +1,8 @@
+/states
+*.bin
+*_TTrace_*.tla
+*.tex
+*.pdf
+*.dvi
+*.aux
+*.log
