@@ -32,6 +32,21 @@ index 9a6fc0224..ecb66b19b 100644
  	args = []string{"-o", tunname, "-j", "ACCEPT"}
  	if err := i.ipt4.Append("filter", "ts-forward", args...); err != nil {
  		return fmt.Errorf("adding %v in v4/filter/ts-forward: %w", args, err)
+diff --git a/util/linuxfw/iptables_runner_test.go b/util/linuxfw/iptables_runner_test.go
+index 56f13c78a..6ee63a281 100644
+--- a/util/linuxfw/iptables_runner_test.go
++++ b/util/linuxfw/iptables_runner_test.go
+@@ -126,8 +126,8 @@ func TestAddAndDeleteBase(t *testing.T) {
+ 	// Check that the rules were created.
+ 	tsRulesV4 := []fakeRule{ // table/chain/rule
+ 		{"filter", "ts-input", []string{"!", "-i", tunname, "-s", tsaddr.ChromeOSVMRange().String(), "-j", "RETURN"}},
+-		{"filter", "ts-input", []string{"!", "-i", tunname, "-s", tsaddr.CGNATRange().String(), "-j", "DROP"}},
+-		{"filter", "ts-forward", []string{"-o", tunname, "-s", tsaddr.CGNATRange().String(), "-j", "DROP"}},
++		//{"filter", "ts-input", []string{"!", "-i", tunname, "-s", tsaddr.CGNATRange().String(), "-j", "DROP"}},
++		//{"filter", "ts-forward", []string{"-o", tunname, "-s", tsaddr.CGNATRange().String(), "-j", "DROP"}},
+ 	}
+ 
+ 	tsRulesCommon := []fakeRule{ // table/chain/rule
 diff --git a/util/linuxfw/nftables_runner.go b/util/linuxfw/nftables_runner.go
 index 0f411521b..08e0b38bc 100644
 --- a/util/linuxfw/nftables_runner.go
@@ -49,4 +64,3 @@ index 0f411521b..08e0b38bc 100644
  	if err = addAcceptIncomingPacketRule(conn, n.nft4.Filter, inputChain, tunname); err != nil {
  		return fmt.Errorf("add accept incoming packet rule v4: %w", err)
  	}
-

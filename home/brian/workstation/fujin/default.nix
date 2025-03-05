@@ -11,9 +11,6 @@
   home = {
     username = "brian";
     stateVersion = "24.11";
-    packages = with pkgs; [
-      cachix
-    ];
   };
   programs.gpg = {
     enable = true;
