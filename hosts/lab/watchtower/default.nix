@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   ...
 }:
@@ -94,12 +93,13 @@ in
       exec ${pkgs.cloudflared}/bin/cloudflared tunnel --no-autoupdate run
     '';
     serviceConfig = {
-      User = config.services.cloudflared.user;
-      Group = config.services.cloudflared.group;
+      DynamicUser = true;
       LoadCredential = "TUNNEL_TOKEN:/var/secrets/cloudflare_tunnel";
       Restart = "on-failure";
       Type = "notify";
       RestartSec = "5s";
+      RuntimeDirectory = "cloudflared-tunnel";
+      RuntimeDirectoryMode = "0400";
     };
   };
 }
