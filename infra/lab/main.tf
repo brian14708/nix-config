@@ -37,7 +37,7 @@ resource "cloudflare_record" "lab" {
 resource "alicloud_instance" "watchtower" {
   instance_name   = "watchtower"
   host_name       = "watchtower"
-  image_id        = alicloud_image_import.cn_nixos_20241117.id
+  image_id        = alicloud_image_import.cn_nixos_20250316.id
   instance_type   = "ecs.t6-c2m1.large"
   renewal_status  = "AutoRenewal"
   security_groups = [alicloud_security_group.cn.id]
@@ -48,6 +48,9 @@ resource "alicloud_instance" "watchtower" {
       cloudflare_tunnel = cloudflare_zero_trust_tunnel_cloudflared.lab.tunnel_token
     }
   }))
+  lifecycle {
+    ignore_changes = [image_id, user_data]
+  }
 }
 
 resource "alicloud_eip_address" "watchtower" {
@@ -73,7 +76,7 @@ resource "alicloud_instance" "lab01" {
   count                = 0
   instance_name        = "lab01"
   host_name            = "lab01"
-  image_id             = alicloud_image_import.cn_nixos_20241117.id
+  image_id             = alicloud_image_import.cn_nixos_20250316.id
   instance_charge_type = "PostPaid"
   spot_strategy        = "SpotAsPriceGo"
   spot_duration        = 0
@@ -89,4 +92,7 @@ resource "alicloud_instance" "lab01" {
   system_disk_size           = "20"
   internet_charge_type       = "PayByTraffic"
   internet_max_bandwidth_out = 10
+  lifecycle {
+    ignore_changes = [image_id, user_data]
+  }
 }

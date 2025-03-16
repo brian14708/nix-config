@@ -8,12 +8,12 @@ resource "alicloud_oss_bucket_acl" "lab_os" {
   acl    = "private"
 }
 
-resource "alicloud_image_import" "cn_nixos_20241117" {
+resource "alicloud_image_import" "cn_nixos_20250316" {
   provider   = alicloud.cn
-  image_name = "nixos-20241117"
+  image_name = "nixos-20250316"
   disk_device_mapping {
     oss_bucket = alicloud_oss_bucket.lab_os.bucket
-    oss_object = "nixos-20241117.qcow2"
+    oss_object = "nixos_20250316.qcow2"
   }
 }
 
