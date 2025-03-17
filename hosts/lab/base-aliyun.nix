@@ -85,6 +85,7 @@
   };
 
   environment.systemPackages = with pkgs; [
+    rsync
     ghostty.terminfo
   ];
 }
