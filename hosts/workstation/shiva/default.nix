@@ -23,7 +23,11 @@
   system.stateVersion = "24.11";
   hardware.graphics = {
     enable = true;
-    extraPackages = with pkgs; [ intel-media-driver ];
+    extraPackages = with pkgs; [
+      vpl-gpu-rt
+      intel-compute-runtime
+      intel-media-driver
+    ];
   };
   hardware.nvidia = {
     open = true;
@@ -37,4 +41,9 @@
     enable = true;
   };
   hardware.nvidia-container-toolkit.enable = true;
+  services.sunshine = {
+    enable = true;
+    autoStart = true;
+    capSysAdmin = true;
+  };
 }
