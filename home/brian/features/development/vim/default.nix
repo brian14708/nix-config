@@ -12,6 +12,8 @@
       gcc
       gnumake
       gopls
+      gotools
+      gofumpt
       nodejs
       ripgrep
       git

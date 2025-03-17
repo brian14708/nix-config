@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   ...
 }:
 {
@@ -45,5 +46,9 @@
     enable = true;
     autoStart = true;
     capSysAdmin = true;
+  };
+
+  virtualisation.containerd = {
+    enable = true;
   };
 }

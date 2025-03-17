@@ -18,7 +18,7 @@
         interval: 3600
         health-check:
           enable: true
-          url: https://www.gstatic.com/generate_204
+          url: http://www.gstatic.com/generate_204
           interval: 300
         path: ./proxy_provider/proxy.yaml
         url: "${config.sops.placeholder.mihomo-url}"
@@ -104,7 +104,7 @@
         type: url-test
         use:
         - proxy
-        tolerance: 2
+        tolerance: 50
       - name: ai
         type: url-test
         proxies:
@@ -112,9 +112,6 @@
         - singapore
         - japan
         - usa
-        use:
-        - proxy
-        filter: "S1|S2"
 
       # region
       - name: hongkong
