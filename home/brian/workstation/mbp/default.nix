@@ -12,7 +12,7 @@
       docker-client
       nil
       nixfmt-rfc-style
-      nerd-fonts.caskaydia-mono
+      maple-mono-SC-NF
     ];
   };
   programs.zsh.enable = true;
@@ -31,7 +31,7 @@
     };
   };
   xdg.configFile."ghostty/config".text = ''
-    font-family = "CaskaydiaMono Nerd Font Mono"
+    font-family = "Maple Mono SC NF"
     theme = "catppuccin-mocha"
   '';
 }

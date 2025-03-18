@@ -13,6 +13,7 @@ let
   wallpaper =
     (pkgs.callPackage "${inputs.nixpkgs}/pkgs/data/misc/nixos-artwork" { })
     .wallpapers."catppuccin-${flavor}".passthru.gnomeFilePath;
+  codeFont = "Maple Mono SC NF";
 in
 {
   imports = [
@@ -42,6 +43,7 @@ in
     noto-fonts-cjk-serif
     noto-fonts-color-emoji
     nerd-fonts.caskaydia-mono
+    maple-mono-SC-NF
   ];
   fonts.fontconfig = {
     enable = true;
@@ -239,7 +241,7 @@ in
     enable = true;
     settings = {
       main = {
-        font = "monospace:size=10";
+        font = "${codeFont}:size=10";
       };
       colors = {
         alpha = 0.9;
@@ -257,7 +259,7 @@ in
       "workbench.colorTheme" = "Catppuccin ${mkUpper flavor}";
       "catppuccin.accentColor" = accent;
       "workbench.iconTheme" = "catppuccin-${flavor}";
-      "editor.fontFamily" = "monospace";
+      "editor.fontFamily" = codeFont;
       "editor.fontLigatures" = true;
       "editor.fontSize" = 13;
     };
