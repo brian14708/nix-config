@@ -3,6 +3,11 @@
   ...
 }:
 {
+  home = {
+    packages = with pkgs; [
+      lazyjj
+    ];
+  };
   programs.gitui = {
     enable = true;
   };
