@@ -11,7 +11,7 @@
       with pkgs;
       [
         nh
-        nix
+        nixVersions.latest
         nix-update
         home-manager
         git
