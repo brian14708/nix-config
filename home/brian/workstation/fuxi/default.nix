@@ -40,7 +40,7 @@
       "--enable-accelerated-video-decode"
       "--password-store=basic"
       "--disable-sync-preferences"
-      "--enable-features=WebUIDarkMode,VaapiVideoDecodeLinuxGL,VaapiVideoEncoder"
+      "--enable-features=WebUIDarkMode,AcceleratedVideoEncoder,AcceleratedVideoDecodeLinuxGL,AcceleratedVideoDecodeLinuxZeroCopyGL,VaapiIgnoreDriverChecks,PlatformHEVCDecoderSupport,UseMultiPlaneFormatForHardwareVideo"
       "--disable-features=UseChromeOSDirectVideoDecoder"
     ];
     extensions = [
