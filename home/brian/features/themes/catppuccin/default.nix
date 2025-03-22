@@ -25,6 +25,7 @@ in
     enable = true;
     gtk.icon.enable = true;
     nvim.enable = false;
+    vscode.enable = false;
   };
   home.pointerCursor =
     let
@@ -249,16 +250,7 @@ in
     };
   };
   programs.vscode.profiles.default = {
-    extensions = with pkgs.vscode-extensions; [
-      (inputs.catppuccin-vsc.packages.${pkgs.system}.catppuccin-vsc.override {
-        accent = accent;
-      })
-      catppuccin.catppuccin-vsc-icons
-    ];
     userSettings = {
-      "workbench.colorTheme" = "Catppuccin ${mkUpper flavor}";
-      "catppuccin.accentColor" = accent;
-      "workbench.iconTheme" = "catppuccin-${flavor}";
       "editor.fontFamily" = codeFont;
       "editor.fontLigatures" = true;
       "editor.fontSize" = 13;
