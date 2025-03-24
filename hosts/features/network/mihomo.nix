@@ -108,7 +108,6 @@
       - name: ai
         type: url-test
         proxies:
-        - taiwan
         - singapore
         - japan
         - usa
@@ -119,11 +118,6 @@
         use:
         - proxy
         filter: "(?i)港|hk|hongkong|hong kong"
-      - name: taiwan
-        type: url-test
-        use:
-        - proxy
-        filter: "(?i)台|tw|taiwan"
       - name: japan
         type: url-test
         use:
