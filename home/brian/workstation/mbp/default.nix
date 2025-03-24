@@ -12,7 +12,7 @@
       docker-client
       nil
       nixfmt-rfc-style
-      maple-mono-SC-NF
+      maple-mono.NF-CN
     ];
   };
   programs.zsh.enable = true;
@@ -31,7 +31,7 @@
     };
   };
   xdg.configFile."ghostty/config".text = ''
-    font-family = "Maple Mono SC NF"
+    font-family = "Maple Mono NF CN"
     theme = "catppuccin-mocha"
   '';
 }

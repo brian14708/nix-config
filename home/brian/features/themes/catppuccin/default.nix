@@ -13,7 +13,7 @@ let
   wallpaper =
     (pkgs.callPackage "${inputs.nixpkgs}/pkgs/data/misc/nixos-artwork" { })
     .wallpapers."catppuccin-${flavor}".passthru.gnomeFilePath;
-  codeFont = "Maple Mono SC NF";
+  codeFont = "Maple Mono NF CN";
 in
 {
   imports = [
@@ -44,7 +44,7 @@ in
     noto-fonts-cjk-serif
     noto-fonts-color-emoji
     nerd-fonts.caskaydia-mono
-    maple-mono-SC-NF
+    maple-mono.NF-CN
   ];
   fonts.fontconfig = {
     enable = true;
