@@ -200,8 +200,8 @@
             else
               [ ]
           );
-        nameserver = [
-          "/.ts.net/tailnet"
+        domain-rules = [
+          "/.ts.net/ -nameserver tailnet"
         ];
 
         server-https = [

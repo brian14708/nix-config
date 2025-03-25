@@ -7,6 +7,7 @@
     ../base-linux.nix
     ./disko.nix
     ../../features/locale/cn.nix
+    ../../features/network/tailscale-subnet.nix
     ../../features/network/mihomo.nix
   ];
 

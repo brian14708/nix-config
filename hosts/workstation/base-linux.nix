@@ -14,6 +14,7 @@
   services.tailscale = {
     enable = true;
   };
+
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
@@ -35,6 +36,10 @@
     };
     secrets."mihomo-url" = {
       sopsFile = ./secrets.yaml;
+    };
+    secrets."coredns" = {
+      sopsFile = ./secrets.yaml;
+      mode = "0444";
     };
     secrets."smartdns" = {
       sopsFile = ./secrets.yaml;
