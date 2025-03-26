@@ -20,6 +20,12 @@
     hostName = "fuxi";
   };
 
+  boot.kernelPatches = [
+    {
+      patch = ./HID-hid-asus-Disable-OOBE-mode-on-the-ProArt-PX13.patch;
+    }
+  ];
+
   system.stateVersion = "24.11";
   hardware.cpu.amd.updateMicrocode = true;
   hardware.nvidia = {
