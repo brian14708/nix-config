@@ -22,3 +22,11 @@ update:
 
 gc:
     nh clean all
+
+cache:
+    nix copy --to http://[::1]:4444 \
+        .#devShells.x86_64-linux.default \
+        .#nixosConfigurations.fuxi.config.system.build.toplevel \
+        .#nixosConfigurations.shiva.config.system.build.toplevel \
+        .#homeConfigurations.brian@fuxi.activationPackage \
+        .#homeConfigurations.brian@shiva.activationPackage
