@@ -19,6 +19,7 @@
       git
       wget
       fd
+      unzip
 
       nil
       nixfmt-rfc-style

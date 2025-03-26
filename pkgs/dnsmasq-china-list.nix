@@ -12,8 +12,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "felixonmars";
     repo = "dnsmasq-china-list";
-    rev = "5a9f90c0e9e379eb8a620e7fcfcfed3cbe290bf8";
-    hash = "sha256-bfNAkH6Z1buo4sayAUbjb8eVe71BVQ+HTD8zUiu16F4=";
+    rev = "a189cf4e6319ebaf619d5b5e416e2dd49b62b6c8";
+    hash = "sha256-+5uxmnbvp300v5zAle9+A2mFHYu5TfLWHDXh+DuIbjA=";
   };
 
   buildPhase = ''
