@@ -22,6 +22,12 @@
 
   boot.kernelPatches = [
     {
+      patch = pkgs.fetchurl {
+        url = "https://lore.kernel.org/linux-wireless/20250305000851.493671-1-sean.wang@kernel.org/t.mbox.gz";
+        hash = "sha256-3hXrLJ0BwMscrzxpzomsqCqzKx/V4msaAw65HtoSaPE=";
+      };
+    }
+    {
       patch = ./HID-hid-asus-Disable-OOBE-mode-on-the-ProArt-PX13.patch;
     }
   ];
@@ -55,4 +61,5 @@
     blacklist nvidia-drm
     options nvidia_drm modeset=1 fbdev=1
   '';
+  networking.networkmanager.wifi.backend = "iwd";
 }
