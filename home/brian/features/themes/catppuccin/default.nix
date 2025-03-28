@@ -128,6 +128,47 @@ in
       };
     };
   };
+  catppuccin.hyprlock.useDefaultConfig = false;
+  programs.hyprlock.settings = {
+    background = {
+      color = "$base";
+    };
+    input-field = [
+      {
+        monitor = "";
+        size = "250, 60";
+        outline_thickness = 4;
+        dots_size = 0.2;
+        dots_spacing = 0.2;
+        dots_center = true;
+        outer_color = "$accent";
+        inner_color = "$surface0";
+        font_color = "$text";
+        fade_on_empty = false;
+        font_family = "monospace";
+        placeholder_text = ''<span foreground="##$textAlpha">󰌾</span>'';
+        hide_input = false;
+        check_color = "$accent";
+        fail_color = "$red";
+        fail_text = "<i>$FAIL <b>($ATTEMPTS)</b></i>";
+        capslock_color = "$yellow";
+        position = "0, -120";
+        halign = "center";
+        valign = "center";
+      }
+    ];
+    label = [
+      {
+        monitor = "";
+        text = "$TIME";
+        font_size = 120;
+        color = "$text";
+        position = "0, 80";
+        valign = "center";
+        halign = "center";
+      }
+    ];
+  };
   programs.waybar = {
     settings = {
       mainBar = {
