@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation {
   pname = "dnsmasq-china-list";
-  version = "0-unstable-2025-03-25";
+  version = "0-unstable-2025-03-29";
 
   src = fetchFromGitHub {
     owner = "felixonmars";
     repo = "dnsmasq-china-list";
-    rev = "a189cf4e6319ebaf619d5b5e416e2dd49b62b6c8";
-    hash = "sha256-+5uxmnbvp300v5zAle9+A2mFHYu5TfLWHDXh+DuIbjA=";
+    rev = "275507778c8c794d178c5287bb6bbfdd4572fbf3";
+    hash = "sha256-o143uZpETTk9nS6WU8jtq3pi7rJJRoVLuOvAmw0sxYY=";
   };
 
   buildPhase = ''
