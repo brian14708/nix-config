@@ -187,4 +187,8 @@ in
   xdg.userDirs = {
     enable = true;
   };
+
+  gtk = {
+    enable = true;
+  };
 }

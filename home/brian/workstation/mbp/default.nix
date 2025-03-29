@@ -3,7 +3,10 @@
   ...
 }:
 {
-  imports = [ ../../profiles/base ];
+  imports = [
+    ../../profiles/base
+    ../../features/development/cli
+  ];
   home = {
     username = "brian";
     stateVersion = "24.11";
@@ -16,9 +19,6 @@
     ];
   };
   programs.zsh.enable = true;
-  programs.direnv.enable = true;
-  programs.starship.enable = true;
-  programs.gpg.enable = true;
 
   sops = {
     defaultSopsFile = ./secrets.yaml;

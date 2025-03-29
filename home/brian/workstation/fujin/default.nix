@@ -6,6 +6,7 @@
 {
   imports = [
     ../base-linux.nix
+    ../../features/development/cli
   ];
 
   home = {
@@ -24,13 +25,6 @@
     defaultSopsFile = ./secrets.yaml;
   };
 
-  programs.bash.enable = true;
-  programs.starship.enable = true;
-  programs.zoxide.enable = true;
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
-  };
   services.nix-store-gateway = {
     enable = true;
     config = config.sops.secrets.nix-store-gateway.path;

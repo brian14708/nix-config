@@ -27,9 +27,7 @@
         hash = "sha256-3hXrLJ0BwMscrzxpzomsqCqzKx/V4msaAw65HtoSaPE=";
       };
     }
-    {
-      patch = ./HID-hid-asus-Disable-OOBE-mode-on-the-ProArt-PX13.patch;
-    }
+    { patch = ./kernel/HID-hid-asus-Disable-OOBE-mode-on-the-ProArt-PX13.patch; }
   ];
 
   system.stateVersion = "24.11";

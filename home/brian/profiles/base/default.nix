@@ -26,8 +26,6 @@ in
   services.ssh-agent = {
     enable = !pkgs.stdenv.isDarwin;
   };
-  programs.eza.enable = true;
-  programs.jq.enable = true;
   programs.git =
     let
       u = config.userinfo;

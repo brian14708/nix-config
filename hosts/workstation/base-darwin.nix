@@ -1,4 +1,3 @@
-{ ... }:
 {
   imports = [
     ../profiles/darwin.nix
