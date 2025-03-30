@@ -140,7 +140,7 @@
               inherit sshUser hostname;
               profiles =
                 let
-                  activate = deploy-rs.lib.${system}.activate;
+                  inherit (deploy-rs.lib.${system}) activate;
                 in
                 {
                   system = {

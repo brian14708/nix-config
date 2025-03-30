@@ -44,7 +44,7 @@ in
     {
       settings = {
         user = {
-          name = u.name;
+          inherit (u) name;
           email = builtins.head u.email;
         };
       };

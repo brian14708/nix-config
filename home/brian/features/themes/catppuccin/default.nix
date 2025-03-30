@@ -96,8 +96,7 @@ in
         accent = [ themeAccent ];
         shade = if flavor == "latte" then "light" else "dark";
         tweaks =
-          [ ]
-          ++ (if flavor == "frappe" then [ "frappe" ] else [ ])
+          (if flavor == "frappe" then [ "frappe" ] else [ ])
           ++ (if flavor == "macchiato" then [ "macchiato" ] else [ ]);
       };
     };

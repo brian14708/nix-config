@@ -25,26 +25,17 @@
         "aarch64-linux"
         "aarch64-darwin"
       ];
-      perSystem =
-        {
-          config,
-          self',
-          inputs',
-          pkgs,
-          system,
-          ...
-        }:
-        {
-          devenv.shells.default = {
-            imports = [
-            ];
+      perSystem = _: {
+        devenv.shells.default = {
+          imports = [
+          ];
 
-            packages = [ ];
-          };
-
-          treefmt.programs = {
-            nixfmt.enable = true;
-          };
+          packages = [ ];
         };
+
+        treefmt.programs = {
+          nixfmt.enable = true;
+        };
+      };
     };
 }

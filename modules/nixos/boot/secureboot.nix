@@ -12,7 +12,7 @@ with lib;
   options = {
     boot.secureboot.enable = mkEnableOption "Enable secureboot";
   };
-  config = mkIf (config.boot.secureboot.enable) {
+  config = mkIf config.boot.secureboot.enable {
     boot = {
       initrd.systemd.enable = true;
       loader = {
