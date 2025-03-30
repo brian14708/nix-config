@@ -297,6 +297,15 @@ in
       "editor.fontSize" = 13;
     };
   };
+  programs.zed-editor = {
+    userSettings = {
+      buffer_font_family = "${codeFont}";
+      buffer_font_size = 13;
+    };
+    extraPackages = [
+
+    ];
+  };
   xdg.configFile."nvim/override/lua/theme.lua" = {
     text = ''
       return {
