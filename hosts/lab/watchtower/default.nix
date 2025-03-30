@@ -77,29 +77,30 @@ in
     ];
   };
 
-  services.cloudflared.enable = true;
-  systemd.services.cloudflared-tunnel = {
-    after = [
-      "network.target"
-      "network-online.target"
-    ];
-    wants = [
-      "network.target"
-      "network-online.target"
-    ];
-    wantedBy = [ "multi-user.target" ];
-    script = ''
-      export TUNNEL_TOKEN=$(${pkgs.systemd}/bin/systemd-creds cat TUNNEL_TOKEN)
-      exec ${pkgs.cloudflared}/bin/cloudflared tunnel --no-autoupdate run
-    '';
-    serviceConfig = {
-      DynamicUser = true;
-      LoadCredential = "TUNNEL_TOKEN:/var/secrets/cloudflare_tunnel";
-      Restart = "on-failure";
-      Type = "notify";
-      RestartSec = "5s";
-      RuntimeDirectory = "cloudflared-tunnel";
-      RuntimeDirectoryMode = "0400";
-    };
-  };
+  # broken https://github.com/NixOS/nixpkgs/commit/418ac80e0424a758a0da64f9c9a1792664344a5f
+  # services.cloudflared.enable = true;
+  #systemd.services.cloudflared-tunnel = {
+  #  after = [
+  #    "network.target"
+  #    "network-online.target"
+  #  ];
+  #  wants = [
+  #    "network.target"
+  #    "network-online.target"
+  #  ];
+  #  wantedBy = [ "multi-user.target" ];
+  #  script = ''
+  #    export TUNNEL_TOKEN=$(${pkgs.systemd}/bin/systemd-creds cat TUNNEL_TOKEN)
+  #    exec ${pkgs.cloudflared}/bin/cloudflared tunnel --no-autoupdate run
+  #  '';
+  #  serviceConfig = {
+  #    DynamicUser = true;
+  #    LoadCredential = "TUNNEL_TOKEN:/var/secrets/cloudflare_tunnel";
+  #    Restart = "on-failure";
+  #    Type = "notify";
+  #    RestartSec = "5s";
+  #    RuntimeDirectory = "cloudflared-tunnel";
+  #    RuntimeDirectoryMode = "0400";
+  #  };
+  #};
 }

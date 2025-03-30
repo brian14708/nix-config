@@ -1,7 +1,5 @@
 _final: prev: {
-  tailscale = prev.tailscale.overrideAttrs (
-    _: prev': {
-      patches = prev'.patches ++ [ ./tailscale.patch ];
-    }
-  );
+  tailscale = prev.tailscale.overrideAttrs (_: {
+    patches = [ ./tailscale.patch ];
+  });
 }
