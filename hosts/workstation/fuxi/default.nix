@@ -29,6 +29,7 @@
     }
     { patch = ./kernel/HID-hid-asus-Disable-OOBE-mode-on-the-ProArt-PX13.patch; }
   ];
+  boot.kernelParams = [ "amdgpu.ppfeaturemask=0xfff73fff" ];
 
   system.stateVersion = "24.11";
   hardware.cpu.amd.updateMicrocode = true;
