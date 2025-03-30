@@ -10,9 +10,10 @@ let
   mkUpper =
     str:
     (lib.toUpper (builtins.substring 0 1 str)) + (builtins.substring 1 (builtins.stringLength str) str);
-  wallpaper =
-    (pkgs.callPackage "${inputs.nixpkgs}/pkgs/data/misc/nixos-artwork" { })
-    .wallpapers."catppuccin-${flavor}".passthru.gnomeFilePath;
+  wallpaper = pkgs.fetchurl {
+    url = "https://raw.githubusercontent.com/D3Ext/aesthetic-wallpapers/main/images/astronaut.jpg";
+    hash = "sha256-32KrCjEoLigs8nPFE6M8lLwUbjOdg2LwMAQtX3mYmSo=";
+  };
   codeFont = "Maple Mono NF CN";
 in
 {
@@ -224,8 +225,8 @@ in
       }
 
       #waybar {
-        background: @base;
-        color: @text;
+        background: transparent;
+        color: @overlay2;
       }
 
       #workspaces button {
@@ -239,7 +240,7 @@ in
       }
 
       #workspaces button.active {
-        color: @text;
+        color: @overlay2;
       }
 
       #workspaces button.urgent {

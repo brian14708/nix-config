@@ -24,6 +24,7 @@ in
         "$mod, Space, exec, ${pkgs.fuzzel}/bin/fuzzel --launch-prefix=\"${launcher}\""
         "$mod, Tab, layoutmsg, swapwithmaster"
         "$mod, f, fullscreen, 1"
+        "$mod SHIFT, f, fullscreen, 0"
         "$mod, q, killactive"
         "$mod CONTROL, q, exit"
 
