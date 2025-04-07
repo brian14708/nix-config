@@ -486,7 +486,7 @@ require("lazy").setup({
         -- ts_ls = {},
         --
         gopls = {},
-        pyright = {},
+        basedpyright = {},
         rust_analyzer = {},
         zls = {},
         elixirls = {

@@ -24,6 +24,7 @@
       nil
       nixfmt-rfc-style
       lua-language-server
+      basedpyright
     ];
   };
 
