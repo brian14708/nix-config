@@ -23,4 +23,8 @@ _: {
     path = ./tlaplus;
     description = "TLA+";
   };
+  esp-idf = {
+    path = ./esp-idf;
+    description = "ESP";
+  };
 }
