@@ -60,5 +60,7 @@
     blacklist nvidia-drm
     options nvidia_drm modeset=1 fbdev=1
   '';
-  networking.networkmanager.wifi.backend = "iwd";
+  users.users.brian = {
+    extraGroups = [ "dialout" ];
+  };
 }
