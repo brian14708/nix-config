@@ -21,15 +21,8 @@
   };
 
   boot.kernelPatches = [
-    {
-      patch = pkgs.fetchurl {
-        url = "https://lore.kernel.org/linux-wireless/20250305000851.493671-1-sean.wang@kernel.org/t.mbox.gz";
-        hash = "sha256-3hXrLJ0BwMscrzxpzomsqCqzKx/V4msaAw65HtoSaPE=";
-      };
-    }
     { patch = ./kernel/HID-hid-asus-Disable-OOBE-mode-on-the-ProArt-PX13.patch; }
   ];
-  boot.kernelParams = [ "amdgpu.ppfeaturemask=0xfff73fff" ];
 
   system.stateVersion = "24.11";
   hardware.cpu.amd.updateMicrocode = true;
