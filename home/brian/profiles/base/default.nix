@@ -14,6 +14,7 @@ in
     inputs.sops-nix.homeManagerModules.sops
     ../../features/development/vim
     ../../features/development/git
+    ../../features/utilities/qalculate
     ./userinfo.nix
     ../cn
   ];

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<QALCULATE version="5.5.2">
+  <category>
+    <title>Large Numbers</title>
+    <variable>
+      <names>r:wan,a-c:w</names>
+      <value>10000</value>
+    </variable>
+    <variable>
+      <names>r:yi</names>
+      <value>100000000</value>
+    </variable>
+  </category>
+</QALCULATE>

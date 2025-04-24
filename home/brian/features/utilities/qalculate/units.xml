@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<QALCULATE version="5.5.2">
+  <category>
+    <title>AI</title>
+    <unit type="base">
+      <system>SI</system>
+      <title>Token</title>
+      <names>r:Token,a-c:Tok</names>
+    </unit>
+  </category>
+  <category>
+    <title>Computing</title>
+    <unit type="base">
+      <system>SI</system>
+      <title>Floating Operation</title>
+      <names>r:FLOP</names>
+    </unit>
+  </category>
+</QALCULATE>
