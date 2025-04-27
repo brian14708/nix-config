@@ -27,6 +27,7 @@ in
     gtk.icon.enable = true;
     nvim.enable = false;
     vscode.enable = false;
+    mako.enable = false; # https://github.com/catppuccin/nix/pull/553
   };
   home.pointerCursor =
     let
