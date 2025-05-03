@@ -117,11 +117,10 @@ in
     ];
   };
 
+  my.desktop.wallpaper = wallpaper;
+
   wayland.windowManager.hyprland = {
     settings = {
-      exec-once = [
-        "${pkgs.swaybg}/bin/swaybg -i ${wallpaper}"
-      ];
       general = {
         "col.active_border" = "$accent";
         "col.inactive_border" = "$overlay0";
@@ -174,7 +173,10 @@ in
       mainBar = {
         layer = "top";
         spacing = 0;
-        modules-left = [ "hyprland/workspaces" ];
+        modules-left = [
+          "hyprland/workspaces"
+          "niri/workspaces"
+        ];
         modules-center = [ ];
         modules-right = [
           "pulseaudio"
@@ -192,7 +194,7 @@ in
           tooltip = false;
           format = "VOL {volume}%";
           format-muted = "MUTE";
-          on-click = "${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle";
+          on-click = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
         };
         tray = {
           icon-size = 14;
@@ -369,6 +371,36 @@ in
     fcitx5 = {
       addons = [ pkgs.catppuccin-fcitx5 ];
     };
+  };
+
+  wayland.windowManager.niri = {
+    settings = {
+      layout = {
+        focus-ring = {
+          active-color = "#8aadf4";
+        };
+        tab-indicator = {
+          active-color = "#8aadf4";
+          inactive-color = "#313244";
+        };
+      };
+    };
+    windowRules = [
+      {
+        match._props = {
+          is-floating = true;
+        };
+        border = {
+          on = [ ];
+          width = 2;
+          active-color = "#8aadf4";
+          inactive-color = "#313244";
+        };
+        focus-ring = {
+          off = [ ];
+        };
+      }
+    ];
   };
 
   programs.neovide = {

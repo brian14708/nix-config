@@ -7,6 +7,7 @@
   imports = [
     ../base-linux.nix
     ../../features/desktop/hyprland
+    ../../features/desktop/niri
     ../../features/desktop/fcitx5
     ../../features/desktop/media
     ../../features/desktop/chromium
@@ -36,5 +37,12 @@
   services.nix-store-gateway = {
     enable = true;
     config = config.sops.secrets.nix-store-gateway.path;
+  };
+  wayland.windowManager.niri = {
+    settings = {
+      "output \"eDP-1\"" = {
+        scale = 2.0;
+      };
+    };
   };
 }

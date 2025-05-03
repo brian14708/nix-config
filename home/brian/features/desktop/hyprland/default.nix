@@ -1,4 +1,6 @@
 {
+  lib,
+  config,
   pkgs,
   ...
 }:
@@ -6,19 +8,29 @@ let
   launcher = "uwsm app -- ";
 in
 {
-  home.sessionVariables.NIXOS_OZONE_WL = "1";
   services.mako.enable = true;
   home.pointerCursor.size = 24;
+  my.desktop = {
+    enable = true;
+    startupCommands = [
+      "foot --server"
+      "${pkgs.waybar}/bin/waybar"
+    ];
+  };
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
-    systemd.enable = false;
+    systemd = {
+      enable = false;
+      variables = [ "NIXOS_OZONE_WL" ];
+    };
     settings = {
       exec-once = [
-        "${launcher} foot --server"
-        "${launcher} ${pkgs.waybar}/bin/waybar"
-      ];
+      ] ++ (lib.lists.map (cmd: "${launcher} ${cmd}") config.my.desktop.startupCommands);
       "$mod" = "SUPER";
+      env = [
+        "NIXOS_OZONE_WL,1"
+      ];
       bind = [
         "$mod, Return, exec, footclient -N || ${launcher} foot"
         "$mod, Space, exec, ${pkgs.fuzzel}/bin/fuzzel --launch-prefix=\"${launcher}\""
@@ -63,18 +75,10 @@ in
           + "${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\" - |"
           + "${pkgs.wl-clipboard}/bin/wl-copy -t image/png"
         )
-        ", XF86AudioMute, exec, ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle"
-        ", XF86AudioMicMute, exec, ${pkgs.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle"
-        (
-          ", XF86AudioLowerVolume, exec, "
-          + "${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ 0 && "
-          + "${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -5%"
-        )
-        (
-          ", XF86AudioRaiseVolume, exec, "
-          + "${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ 0 && "
-          + "${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +5%"
-        )
+        ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+        ", XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+        ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"
+        ", XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+"
         ", XF86AudioPlay, exec, ${pkgs.playerctl}/bin/playerctl play-pause"
         ", XF86AudioStop, exec, ${pkgs.playerctl}/bin/playerctl stop"
         ", XF86AudioNext, exec, ${pkgs.playerctl}/bin/playerctl next"
@@ -144,28 +148,49 @@ in
   programs.waybar = {
     enable = true;
   };
-  services.hypridle = {
-    enable = true;
-    settings = {
-      general = {
-        before_sleep_cmd = "loginctl lock-session";
-        after_sleep_cmd = "hyprctl dispatch dpms on";
-        lock_cmd = "pidof hyprlock || ${launcher} ${pkgs.hyprlock}/bin/hyprlock";
-      };
+  services.hypridle =
+    let
+      timeoutCommand = builtins.toString (
+        pkgs.writeScript "timeout-command" ''
+          #!${pkgs.dash}/bin/dash
+          case "$XDG_CURRENT_DESKTOP" in
+          niri) niri msg action power-off-monitors ;;
+          Hyprland) hyprctl dispatch dpms off ;;
+          esac
+        ''
+      );
+      resumeCommand = builtins.toString (
+        pkgs.writeScript "resume-command" ''
+          #!${pkgs.dash}/bin/dash
+          case "$XDG_CURRENT_DESKTOP" in
+          niri) niri msg action power-on-monitors ;;
+          Hyprland) hyprctl dispatch dpms on ;;
+          esac
+        ''
+      );
+    in
+    {
+      enable = true;
+      settings = {
+        general = {
+          before_sleep_cmd = "loginctl lock-session";
+          after_sleep_cmd = resumeCommand;
+          lock_cmd = "pidof hyprlock || ${pkgs.hyprlock}/bin/hyprlock";
+        };
 
-      listener = [
-        {
-          timeout = 120;
-          on-timeout = "${launcher} ${pkgs.hyprlock}/bin/hyprlock";
-        }
-        {
-          timeout = 180;
-          on-timeout = "hyprctl dispatch dpms off";
-          on-resume = "hyprctl dispatch dpms on";
-        }
-      ];
+        listener = [
+          {
+            timeout = 120;
+            on-timeout = "${pkgs.hyprlock}/bin/hyprlock";
+          }
+          {
+            timeout = 180;
+            on-timeout = timeoutCommand;
+            on-resume = resumeCommand;
+          }
+        ];
+      };
     };
-  };
   programs.fuzzel = {
     enable = true;
   };
