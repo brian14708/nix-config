@@ -3,6 +3,11 @@
   ...
 }:
 {
+  programs.neovide = {
+    enable = true;
+    settings = {
+    };
+  };
   programs.neovim = {
     enable = true;
     viAlias = true;

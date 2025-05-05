@@ -34,4 +34,15 @@
     font-family = "Maple Mono NF CN"
     theme = "catppuccin-mocha"
   '';
+  programs.neovide = {
+    settings = {
+      fork = true;
+      font = {
+        normal = [ "Maple Mono NF CN" ];
+        size = 12;
+      };
+      theme = "dark";
+      frame = "transparent";
+    };
+  };
 }
