@@ -308,13 +308,21 @@ in
   };
   xdg.configFile."nvim/override/lua/theme.lua" = {
     text = ''
+      vim.g.neovide_opacity = 0.8
+      vim.g.neovide_normal_opacity = 0.8
+      vim.g.neovide_padding_top = 4
+      vim.g.neovide_padding_bottom = 4
+      vim.g.neovide_padding_right = 4
+      vim.g.neovide_padding_left = 4
+
       return {
         "catppuccin/nvim",
         name = "catppuccin",
         priority = 1000,
         opts = {
           flavor = "${flavor}",
-          transparent_background = true,
+          term_colors = true,
+          transparent_background = not vim.g.neovide,
         },
         init = function()
           vim.cmd.colorscheme("catppuccin")
@@ -360,6 +368,17 @@ in
   i18n.inputMethod = {
     fcitx5 = {
       addons = [ pkgs.catppuccin-fcitx5 ];
+    };
+  };
+
+  programs.neovide = {
+    settings = {
+      fork = true;
+      font = {
+        normal = [ codeFont ];
+        size = 10;
+      };
+      theme = "dark";
     };
   };
 }
