@@ -21,7 +21,10 @@
   };
   systemd.coredump.enable = false;
   boot.kernel.sysctl."kernel.core_pattern" = "|/run/current-system/sw/bin/false";
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+    wifi.backend = "iwd";
+  };
   networking.firewall.trustedInterfaces = [
     config.services.tailscale.interfaceName
   ];
