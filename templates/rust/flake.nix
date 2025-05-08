@@ -3,10 +3,9 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
     crane.url = "github:ipetkov/crane";
-    fenix = {
-      url = "github:nix-community/fenix";
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.rust-analyzer-src.follows = "";
     };
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
@@ -15,7 +14,13 @@
   };
 
   outputs =
-    inputs@{ flake-parts, crane, ... }:
+    inputs@{
+      flake-parts,
+      crane,
+      nixpkgs,
+      rust-overlay,
+      ...
+    }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
         inputs.treefmt-nix.flakeModule
@@ -30,14 +35,19 @@
         {
           self',
           inputs',
+          system,
           pkgs,
           ...
         }:
         let
-          craneLib = (crane.mkLib pkgs).overrideToolchain inputs'.fenix.packages.stable.toolchain;
+          craneLib = (crane.mkLib pkgs).overrideToolchain (p: p.rust-bin.stable.latest.default);
           pname = "hello";
         in
         {
+          _module.args.pkgs = import inputs.nixpkgs {
+            inherit system;
+            overlays = [ rust-overlay.overlays.default ];
+          };
           devShells.default =
             (craneLib.devShell.override {
               mkShell = pkgs.mkShell.override {
@@ -59,6 +69,7 @@
             default = {
               type = "app";
               program = "${self'.packages.default}/bin/${pname}";
+              meta.description = "A simple rust program";
             };
           };
 
