@@ -16,20 +16,12 @@
     extraPackages = with pkgs; [
       gcc
       gnumake
-      gopls
-      gotools
-      gofumpt
       nodejs
       ripgrep
       git
       wget
       fd
       unzip
-
-      nil
-      nixfmt-rfc-style
-      lua-language-server
-      basedpyright
     ];
   };
 
