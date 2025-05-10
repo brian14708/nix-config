@@ -19,6 +19,10 @@
         deploy-rs.deploy-rs
         just
         opentofu
+
+        nil
+        nixfmt-rfc-style
+        lua-language-server
       ]
       ++ (if pkgs.stdenv.isDarwin then [ darwin-rebuild ] else [ ]);
   };
