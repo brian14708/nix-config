@@ -40,6 +40,9 @@
     secrets."mihomo-url" = {
       sopsFile = ./secrets.yaml;
     };
+    secrets."dae-url" = {
+      sopsFile = ./secrets.yaml;
+    };
     secrets."coredns" = {
       sopsFile = ./secrets.yaml;
       mode = "0444";

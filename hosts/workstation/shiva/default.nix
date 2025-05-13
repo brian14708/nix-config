@@ -7,7 +7,7 @@
     ../base-linux.nix
     ./disko.nix
     ../../features/locale/cn.nix
-    ../../features/network/mihomo.nix
+    ../../features/network/dae.nix
     ../../features/desktop/hyprland.nix
   ];
 
