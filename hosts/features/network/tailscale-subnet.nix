@@ -9,10 +9,10 @@
       "--accept-routes"
     ];
   };
-  services.coredns = {
+  services.unbound = {
     enable = true;
-    config = ''
-      import ${config.sops.secrets."coredns".path}
-    '';
+    settings = {
+      include = config.sops.secrets."unbound".path;
+    };
   };
 }

@@ -43,7 +43,7 @@
     secrets."dae-url" = {
       sopsFile = ./secrets.yaml;
     };
-    secrets."coredns" = {
+    secrets."unbound" = {
       sopsFile = ./secrets.yaml;
       mode = "0444";
     };
