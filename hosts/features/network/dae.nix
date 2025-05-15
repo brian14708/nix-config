@@ -63,7 +63,7 @@
         pname(NetworkManager) -> direct
         dscp(4) -> direct
         dip(224.0.0.0/3, 'ff00::/8') -> direct
-        dip(geoip:private) -> direct
+        dip(geoip:private) -> must_direct
 
         domain(geosite:category-ads) -> block
         domain(geosite:cn) -> direct
