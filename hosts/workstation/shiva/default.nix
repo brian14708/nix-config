@@ -52,4 +52,11 @@
       "--advertise-routes=fd7a:115c:a1e0:b1a:0:1:a00:0/104,fd7a:115c:a1e0:b1a:0:1:6440:0/106"
     ];
   };
+  systemd.services.tailscaled.path = [ pkgs.iputils ];
+  networking.supplicant = {
+    DBUS = {
+      userControlled.enable = true;
+    };
+  };
+
 }
