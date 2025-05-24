@@ -43,6 +43,9 @@
       "output \"eDP-1\"" = {
         scale = 2.0;
       };
+      "output \"Dell Inc. DELL D2720DS 8QHGNS2\"" = {
+        scale = 1.5;
+      };
     };
   };
 }
