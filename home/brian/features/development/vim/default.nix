@@ -22,6 +22,12 @@
       wget
       fd
       unzip
+
+      nil
+      gopls
+      gofumpt
+      gotools
+      rust-analyzer
     ];
   };
 
