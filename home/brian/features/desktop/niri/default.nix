@@ -159,6 +159,32 @@
         "Alt+Print".screenshot-window = [ ];
 
         "Mod+Ctrl+Q".quit = [ ];
+
+        # Wheel scroll bindings
+        "Mod+WheelScrollUp" = {
+          focus-workspace-up = [ ];
+          _props.cooldown-ms = 150;
+        };
+        "Mod+WheelScrollDown" = {
+          focus-workspace-down = [ ];
+          _props.cooldown-ms = 150;
+        };
+        "Mod+Ctrl+WheelScrollUp" = {
+          move-column-to-workspace-up = [ ];
+          _props.cooldown-ms = 150;
+        };
+        "Mod+Ctrl+WheelScrollDown" = {
+          move-column-to-workspace-down = [ ];
+          _props.cooldown-ms = 150;
+        };
+        "Mod+WheelScrollRight".focus-column-right = [ ];
+        "Mod+WheelScrollLeft".focus-column-left = [ ];
+        "Mod+Ctrl+WheelScrollRight".move-column-right = [ ];
+        "Mod+Ctrl+WheelScrollLeft".move-column-left = [ ];
+        "Mod+Shift+WheelScrollDown".focus-column-right = [ ];
+        "Mod+Shift+WheelScrollUp".focus-column-left = [ ];
+        "Mod+Ctrl+Shift+WheelScrollDown".move-column-right = [ ];
+        "Mod+Ctrl+Shift+WheelScrollUp".move-column-left = [ ];
       };
       hotkey-overlay = {
         skip-at-startup = [ ];
