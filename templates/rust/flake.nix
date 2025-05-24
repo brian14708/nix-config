@@ -40,7 +40,8 @@
           ...
         }:
         let
-          craneLib = (crane.mkLib pkgs).overrideToolchain (p: p.rust-bin.stable.latest.default);
+          rustToolchain = (p: p.rust-bin.stable.latest.default);
+          craneLib = (crane.mkLib pkgs).overrideToolchain rustToolchain;
           pname = "hello";
         in
         {
@@ -51,7 +52,11 @@
           devShells.default =
             (craneLib.devShell.override {
               mkShell = pkgs.mkShell.override {
-                stdenv = pkgs.stdenvAdapters.useMoldLinker pkgs.stdenv;
+                stdenv =
+                  if pkgs.stdenv.hostPlatform.isDarwin then
+                    pkgs.clangStdenv
+                  else
+                    pkgs.stdenvAdapters.useMoldLinker pkgs.clangStdenv;
               };
             })
               {
@@ -61,7 +66,10 @@
             projectRootFile = "flake.nix";
             programs = {
               nixfmt.enable = true;
-              rustfmt.enable = true;
+              rustfmt = {
+                enable = true;
+                package = rustToolchain pkgs;
+              };
             };
           };
 
@@ -80,6 +88,7 @@
                   inherit pname;
                   src = craneLib.cleanCargoSource ./.;
                   strictDeps = true;
+                  stdenv = p: p.clangStdenv;
                 };
               in
               craneLib.buildPackage (
