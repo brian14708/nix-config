@@ -22,6 +22,9 @@
       wget
       fd
       unzip
+
+      gopls
+      rust-analyzer
     ];
   };
 
