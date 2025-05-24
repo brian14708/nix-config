@@ -40,7 +40,8 @@
           ...
         }:
         let
-          craneLib = (crane.mkLib pkgs).overrideToolchain (p: p.rust-bin.stable.latest.default);
+          rustToolchain = (p: p.rust-bin.stable.latest.default);
+          craneLib = (crane.mkLib pkgs).overrideToolchain rustToolchain;
           pname = "hello";
         in
         {
@@ -61,7 +62,10 @@
             projectRootFile = "flake.nix";
             programs = {
               nixfmt.enable = true;
-              rustfmt.enable = true;
+              rustfmt = {
+                enable = true;
+                package = rustToolchain pkgs;
+              };
             };
           };
 
