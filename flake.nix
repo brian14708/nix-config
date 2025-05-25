@@ -64,7 +64,7 @@
         import nixpkgs {
           inherit system;
           overlays = [
-            deploy-rs.overlay
+            deploy-rs.overlays.default
             inputs.nix-darwin.overlays.default
             (import ./overlays)
             (final: _prev: import ./pkgs { pkgs = final; })
