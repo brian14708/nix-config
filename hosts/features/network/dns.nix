@@ -45,6 +45,8 @@
           );
         domain-rules = [
           "/.ts.net/ -nameserver tailnet"
+          "/.local/ -address 127.0.0.1"
+          "/.local/ -address ::1"
         ];
 
         server-https = [

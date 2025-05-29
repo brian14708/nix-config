@@ -26,4 +26,14 @@
     ];
     configPackages = [ pkgs.niri ];
   };
+
+  environment.etc = {
+    "chromium/policies/managed/extra.json" = {
+      text = builtins.toJSON {
+        DnsOverHttpsMode = "off";
+        SafeBrowsingProtectionLevel = 0;
+        TranslateEnabled = false;
+      };
+    };
+  };
 }
