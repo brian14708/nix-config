@@ -5,7 +5,7 @@ nixos:
     nh os switch .
 
 darwin:
-    darwin-rebuild switch --flake .
+    nh darwin switch .
 
 lab:
     cd infra/lab && [ -d .terraform ] || SOPS_GPG_EXEC=/dev/null sops exec-env ./env.secrets.yaml 'tofu init'

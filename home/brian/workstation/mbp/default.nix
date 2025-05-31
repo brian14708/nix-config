@@ -45,4 +45,5 @@
       frame = "transparent";
     };
   };
+  targets.darwin.defaults.NSGlobalDomain.ApplePressAndHoldEnabled = false;
 }

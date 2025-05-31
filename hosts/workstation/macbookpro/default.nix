@@ -8,7 +8,10 @@
       trusted-users = [ "brian" ];
     };
   };
-  homebrew.enable = true;
+  homebrew = {
+    enable = true;
+    user = "brian";
+  };
   programs.zsh.shellInit = ''
     eval "$(/opt/homebrew/bin/brew shellenv)"
   '';
@@ -22,5 +25,4 @@
   ];
   system.keyboard.enableKeyMapping = true;
   system.keyboard.remapCapsLockToControl = true;
-  system.defaults.NSGlobalDomain.ApplePressAndHoldEnabled = false;
 }
