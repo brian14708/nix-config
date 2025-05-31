@@ -37,7 +37,7 @@ resource "cloudflare_record" "lab" {
 resource "alicloud_instance" "watchtower" {
   instance_name   = "watchtower"
   host_name       = "watchtower"
-  image_id        = alicloud_image_import.cn_nixos_20250316.id
+  image_id        = alicloud_image_import.cn_nixos_20250531.id
   instance_type   = "ecs.t6-c2m1.large"
   renewal_status  = "AutoRenewal"
   security_groups = [alicloud_security_group.cn.id]
@@ -76,7 +76,7 @@ resource "alicloud_instance" "lab01" {
   count                = 1
   instance_name        = "lab01"
   host_name            = "lab01"
-  image_id             = alicloud_image_import.cn_nixos_20250316.id
+  image_id             = alicloud_image_import.cn_nixos_20250531.id
   instance_charge_type = "PostPaid"
   spot_strategy        = "SpotAsPriceGo"
   spot_duration        = 0
