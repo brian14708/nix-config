@@ -19,10 +19,13 @@
   networking = {
     hostName = "fuxi";
   };
-
-  boot.kernelPatches = [
-    { patch = ./kernel/HID-hid-asus-Disable-OOBE-mode-on-the-ProArt-PX13.patch; }
-  ];
+  boot = {
+    kernelParams = [ "resume_offset=533760" ];
+    resumeDevice = "/dev/mapper/root";
+    kernelPatches = [
+      { patch = ./kernel/HID-hid-asus-Disable-OOBE-mode-on-the-ProArt-PX13.patch; }
+    ];
+  };
 
   system.stateVersion = "24.11";
   hardware.cpu.amd.updateMicrocode = true;
