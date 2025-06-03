@@ -57,6 +57,7 @@
       inherit (nixpkgs) lib;
       systems = [
         "x86_64-linux"
+        "aarch64-linux"
         "aarch64-darwin"
       ];
       pkgsFor = lib.genAttrs systems (
@@ -121,6 +122,13 @@
           };
           styx = {
             modules = [ ./hosts/workstation/styx ];
+          };
+          devvm = {
+            modules = [ ./hosts/vm/macvm ];
+          };
+          macvm = {
+            modules = [ ./hosts/vm/macvm ];
+            system = "aarch64-linux";
           };
           lab01 = {
             modules = [ ./hosts/lab/lab01 ];

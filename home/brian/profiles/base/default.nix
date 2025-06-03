@@ -23,6 +23,9 @@ in
   home = {
     inherit homeDirectory;
     preferXdgDirectories = true;
+    sessionVariables = {
+      PAGER = "${pkgs.less}/bin/less -RXF";
+    };
   };
   services.ssh-agent = {
     enable = !pkgs.stdenv.isDarwin;
