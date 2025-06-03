@@ -46,4 +46,9 @@
     };
   };
   targets.darwin.defaults.NSGlobalDomain.ApplePressAndHoldEnabled = false;
+  programs.jujutsu = {
+    settings = {
+      ui.pager = ":builtin";
+    };
+  };
 }

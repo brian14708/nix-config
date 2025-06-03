@@ -57,6 +57,7 @@
       inherit (nixpkgs) lib;
       systems = [
         "x86_64-linux"
+        "aarch64-linux"
         "aarch64-darwin"
       ];
       forAllSystems = lib.genAttrs systems;
@@ -121,6 +122,10 @@
           };
           styx = {
             modules = [ ./hosts/workstation/styx ];
+          };
+          macbookpro-vm = {
+            modules = [ ./hosts/workstation/mbp/vm ];
+            system = "aarch64-linux";
           };
           lab01 = {
             modules = [ ./hosts/lab/lab01 ];
@@ -202,7 +207,7 @@
         in
         mapConfig darwinConfig {
           "macbookpro" = {
-            modules = [ ./hosts/workstation/macbookpro ];
+            modules = [ ./hosts/workstation/mbp ];
           };
         };
 
