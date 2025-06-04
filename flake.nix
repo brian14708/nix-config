@@ -100,9 +100,7 @@
             lib.nixosSystem {
               inherit system;
               pkgs = pkgsFor.${system};
-              modules = [
-                ./modules/nixos
-              ] ++ modules;
+              modules = [ ./modules/nixos ] ++ modules;
               specialArgs = {
                 inherit (self) inputs outputs;
               };
@@ -183,26 +181,8 @@
             };
         in
         mapConfig hmConfig {
-          "brian@macbookpro" = {
-            system = "aarch64-darwin";
-            modules = [ ./home/brian/workstation/mbp ];
-          };
-          "brian@shiva" = {
-            modules = [ ./home/brian/workstation/shiva ];
-          };
-          "brian@fuxi" = {
-            modules = [ ./home/brian/workstation/fuxi ];
-          };
-          "brian@aether" = {
-            modules = [ ./home/brian/workstation/aether ];
-          };
-          "brian@fujin" = {
-            modules = [ ./home/brian/workstation/fujin ];
-          };
-          "brian@styx" = {
-            modules = [ ./home/brian/workstation/styx ];
-          };
         };
+
       darwinConfigurations =
         let
           darwinConfig =

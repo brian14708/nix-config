@@ -59,4 +59,14 @@
   users.users.brian = {
     extraGroups = [ "dialout" ];
   };
+
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users.brian = {
+      imports = [
+        ../../../home/brian/workstation/fuxi
+      ];
+    };
+  };
 }

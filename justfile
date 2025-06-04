@@ -1,11 +1,12 @@
-home:
-    nh home switch .
-
-nixos:
-    nh os switch .
-
-darwin:
-    nh darwin switch .
+nix:
+    #!/usr/bin/env sh
+    if [ "$(uname)" = "Darwin" ]; then
+        nh darwin switch .
+    elif [ -e /etc/NIXOS ] || grep -q nixos /etc/os-release 2>/dev/null; then
+        nh os switch .
+    else
+        nh home switch .
+    fi
 
 lab:
     cd infra/lab && [ -d .terraform ] || SOPS_GPG_EXEC=/dev/null sops exec-env ./env.secrets.yaml 'tofu init'
@@ -27,6 +28,4 @@ cache:
     nix copy --to http://[::1]:4444 \
         .#devShells.x86_64-linux.default \
         .#nixosConfigurations.fuxi.config.system.build.toplevel \
-        .#nixosConfigurations.shiva.config.system.build.toplevel \
-        .#homeConfigurations.brian@fuxi.activationPackage \
-        .#homeConfigurations.brian@shiva.activationPackage
+        .#nixosConfigurations.shiva.config.system.build.toplevel

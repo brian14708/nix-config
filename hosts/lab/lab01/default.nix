@@ -1,8 +1,6 @@
 {
   config,
   pkgs,
-  inputs,
-  outputs,
   ...
 }:
 let
@@ -39,9 +37,6 @@ in
         inherit stateVersion;
         username = "brian";
       };
-    };
-    extraSpecialArgs = {
-      inherit inputs outputs;
     };
   };
 

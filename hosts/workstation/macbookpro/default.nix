@@ -25,4 +25,14 @@
   ];
   system.keyboard.enableKeyMapping = true;
   system.keyboard.remapCapsLockToControl = true;
+  users.users.brian.home = "/Users/brian";
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users.brian = {
+      imports = [
+        ../../../home/brian/workstation/mbp
+      ];
+    };
+  };
 }

@@ -1,7 +1,6 @@
 {
   inputs,
-  options,
-  lib,
+  outputs,
   ...
 }:
 {
@@ -13,9 +12,14 @@
     ./userinfos.nix
     ./boot/secureboot.nix
   ];
-  config = lib.optionalAttrs (options ? home-manager) {
-    home-manager.sharedModules = [
-      ../home-manager
-    ];
+  config = {
+    home-manager = {
+      sharedModules = [
+        ../home-manager
+      ];
+      extraSpecialArgs = {
+        inherit inputs outputs;
+      };
+    };
   };
 }

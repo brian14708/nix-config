@@ -25,4 +25,13 @@
   hardware.cpu.amd.updateMicrocode = true;
 
   system.stateVersion = "24.11";
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users.brian = {
+      imports = [
+        ../../../home/brian/workstation/aether
+      ];
+    };
+  };
 }

@@ -38,4 +38,14 @@
   ];
   virtualisation.podman.enable = true;
   hardware.nvidia-container-toolkit.enable = true;
+
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users.brian = {
+      imports = [
+        ../../../home/brian/workstation/fujin
+      ];
+    };
+  };
 }

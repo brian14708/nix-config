@@ -34,7 +34,6 @@
       perSystem =
         {
           self',
-          inputs',
           system,
           pkgs,
           ...
