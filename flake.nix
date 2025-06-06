@@ -59,7 +59,8 @@
         "x86_64-linux"
         "aarch64-darwin"
       ];
-      pkgsFor = lib.genAttrs systems (
+      forAllSystems = lib.genAttrs systems;
+      pkgsFor = forAllSystems (
         system:
         import nixpkgs {
           inherit system;
@@ -72,7 +73,6 @@
           config.allowUnfree = true;
         }
       );
-      forAllSystems = lib.genAttrs systems;
       treefmtEval = forAllSystems (
         system: inputs.treefmt-nix.lib.evalModule pkgsFor.${system} ./treefmt.nix
       );
