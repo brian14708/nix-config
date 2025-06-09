@@ -31,9 +31,13 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    catppuccin = {
-      url = "github:catppuccin/nix";
-      inputs.nixpkgs.follows = "nixpkgs";
+    stylix = {
+      url = "github:nix-community/stylix";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        home-manager.follows = "home-manager";
+        flake-compat.follows = "flake-compat";
+      };
     };
     deploy-rs = {
       url = "github:serokell/deploy-rs";
@@ -100,8 +104,14 @@
             }:
             lib.nixosSystem {
               inherit system;
+              modules = [
+                inputs.sops-nix.nixosModules.sops
+                inputs.disko.nixosModules.disko
+                inputs.home-manager.nixosModules.home-manager
+                inputs.stylix.nixosModules.stylix
+                ./modules/nixos
+              ] ++ modules;
               pkgs = pkgsFor.${system};
-              modules = [ ./modules/nixos ] ++ modules;
               specialArgs = {
                 inherit (self) inputs outputs;
               };
@@ -178,10 +188,14 @@
               modules,
             }:
             home-manager.lib.homeManagerConfiguration {
-              modules = [ ./modules/home-manager ] ++ modules;
+              modules = [
+                inputs.stylix.homeModules.stylix
+                ./modules/home-manager
+              ] ++ modules;
               pkgs = pkgsFor.${system};
               extraSpecialArgs = {
                 inherit (self) inputs outputs;
+                hmStandalone = true;
               };
             };
         in
@@ -197,8 +211,11 @@
             }:
             nix-darwin.lib.darwinSystem {
               inherit system;
+              modules = [
+                inputs.stylix.darwinModules.stylix
+                ./modules/nix-darwin
+              ] ++ modules;
               pkgs = pkgsFor.${system};
-              modules = [ ./modules/nix-darwin ] ++ modules;
               specialArgs = {
                 inherit (self) inputs outputs;
               };

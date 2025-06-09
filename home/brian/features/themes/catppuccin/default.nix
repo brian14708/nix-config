@@ -1,44 +1,43 @@
 {
   pkgs,
-  inputs,
+  config,
   lib,
   ...
 }:
 let
-  flavor = "mocha";
-  accent = "blue";
-  mkUpper =
-    str:
-    (lib.toUpper (builtins.substring 0 1 str)) + (builtins.substring 1 (builtins.stringLength str) str);
   wallpaper = pkgs.fetchurl {
     url = "https://raw.githubusercontent.com/D3Ext/aesthetic-wallpapers/main/images/astronaut.jpg";
     hash = "sha256-32KrCjEoLigs8nPFE6M8lLwUbjOdg2LwMAQtX3mYmSo=";
   };
+  flavor = "mocha";
   codeFont = "Maple Mono NF CN";
+  accent = "blue";
+  mkUpper =
+    str:
+    (lib.toUpper (builtins.substring 0 1 str)) + (builtins.substring 1 (builtins.stringLength str) str);
 in
 {
-  imports = [
-    inputs.catppuccin.homeModules.catppuccin
-  ];
-
-  catppuccin = {
-    inherit flavor accent;
+  stylix = {
     enable = true;
-    gtk.icon.enable = true;
-    nvim.enable = false;
-    vscode.enable = false;
-  };
-  home.pointerCursor =
-    let
-      accent = if flavor == "latte" then "light" else "dark";
-    in
-    {
-      name = "catppuccin-${flavor}-${accent}-cursors";
-      package = pkgs.catppuccin-cursors.${flavor + mkUpper accent};
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-${flavor}.yaml";
+    fonts = {
+      serif = {
+        name = "serif";
+      };
+      sansSerif = {
+        name = "sans-serif";
+      };
+      monospace = {
+        name = "monospace";
+      };
+      emoji = {
+        name = "emoji";
+      };
+      sizes.terminal = 10;
     };
-
+    opacity.terminal = 0.9;
+  };
   home.packages = with pkgs; [
-    # fonts
     inter
     noto-fonts
     noto-fonts-cjk-sans
@@ -59,9 +58,7 @@ in
         "Noto Serif"
         "Noto Serif CJK SC"
       ];
-      emoji = [
-        "Noto Color Emoji"
-      ];
+      emoji = [ "Noto Color Emoji" ];
       monospace = [
         "CaskaydiaMono Nerd Font"
         "Noto Sans Mono"
@@ -69,37 +66,16 @@ in
       ];
     };
   };
-  gtk.theme =
+
+  my.desktop.wallpaper = wallpaper;
+  stylix.cursor =
     let
-      themeAccent =
-        if
-          (builtins.elem accent [
-            "purple"
-            "pink"
-            "red"
-            "orange"
-            "yellow"
-            "green"
-            "teal"
-            "grey"
-          ])
-        then
-          accent
-        else
-          "default";
+      accent = if flavor == "latte" then "light" else "dark";
     in
     {
-      name =
-        "Catppuccin-GTK"
-        + (if themeAccent == "default" then "" else "-${mkUpper themeAccent}")
-        + (if flavor == "latte" then "-Light" else "-Dark");
-      package = pkgs.magnetic-catppuccin-gtk.override {
-        accent = [ themeAccent ];
-        shade = if flavor == "latte" then "light" else "dark";
-        tweaks =
-          (if flavor == "frappe" then [ "frappe" ] else [ ])
-          ++ (if flavor == "macchiato" then [ "macchiato" ] else [ ]);
-      };
+      name = "catppuccin-${flavor}-${accent}-cursors";
+      package = pkgs.catppuccin-cursors.${flavor + mkUpper accent};
+      size = 24;
     };
   programs.chromium = {
     extensions = [
@@ -116,58 +92,59 @@ in
       }
     ];
   };
+  xdg.configFile."nvim/override/lua/theme.lua" = {
+    text = ''
+      vim.g.neovide_opacity = 0.8
+      vim.g.neovide_normal_opacity = 0.8
+      vim.g.neovide_padding_top = 4
+      vim.g.neovide_padding_bottom = 4
+      vim.g.neovide_padding_right = 4
+      vim.g.neovide_padding_left = 4
 
-  my.desktop.wallpaper = wallpaper;
-
-  wayland.windowManager.hyprland = {
+      return {
+        "catppuccin/nvim",
+        name = "catppuccin",
+        priority = 1000,
+        opts = {
+          flavor = "${flavor}",
+          term_colors = true,
+          transparent_background = not vim.g.neovide,
+        },
+        init = function()
+          vim.cmd.colorscheme("catppuccin")
+        end,
+      };
+    '';
+  };
+  programs.foot = {
     settings = {
-      general = {
-        "col.active_border" = "$accent";
-        "col.inactive_border" = "$overlay0";
+      main = {
+        font = lib.mkForce "${codeFont}:size=${toString config.stylix.fonts.sizes.terminal}";
       };
     };
   };
-  catppuccin.hyprlock.useDefaultConfig = false;
-  programs.hyprlock.settings = {
-    background = {
-      color = "$base";
+  programs.vscode.profiles.default = {
+    userSettings = {
+      "editor.fontFamily" = lib.mkForce codeFont;
+      "editor.fontLigatures" = true;
     };
-    input-field = [
-      {
-        monitor = "";
-        size = "250, 60";
-        outline_thickness = 4;
-        dots_size = 0.2;
-        dots_spacing = 0.2;
-        dots_center = true;
-        outer_color = "$accent";
-        inner_color = "$surface0";
-        font_color = "$text";
-        fade_on_empty = false;
-        font_family = "monospace";
-        placeholder_text = ''<span foreground="##$textAlpha">󰌾</span>'';
-        hide_input = false;
-        check_color = "$accent";
-        fail_color = "$red";
-        fail_text = "<i>$FAIL <b>($ATTEMPTS)</b></i>";
-        capslock_color = "$yellow";
-        position = "0, -120";
-        halign = "center";
-        valign = "center";
-      }
-    ];
-    label = [
-      {
-        monitor = "";
-        text = "$TIME";
-        font_size = 120;
-        color = "$text";
-        position = "0, 80";
-        valign = "center";
-        halign = "center";
-      }
-    ];
   };
+  programs.zed-editor = {
+    userSettings = {
+      buffer_font_family = "${codeFont}";
+    };
+  };
+  programs.neovide = {
+    settings = {
+      fork = true;
+      font = {
+        normal = [ codeFont ];
+        size = 10;
+      };
+      theme = "dark";
+    };
+  };
+  stylix.targets.waybar.enable = false;
   programs.waybar = {
     settings = {
       mainBar = {
@@ -228,12 +205,12 @@ in
 
       #waybar {
         background: transparent;
-        color: @overlay2;
+        color: #9399b2;
       }
 
       #workspaces button {
         padding: 0 5px;
-        color: @surface2;
+        color: #585b70;
         border: none;
         border-radius: 0;
         background: transparent;
@@ -242,15 +219,15 @@ in
       }
 
       #workspaces button.active {
-        color: @overlay2;
+        color: #9399b2;
       }
 
       #workspaces button.urgent {
-        color: @red;
+        color: #f38ba8;
       }
 
       #workspaces button:hover {
-        color: @sapphire;
+        color: #74c7ec;
       }
 
       #clock,
@@ -281,136 +258,11 @@ in
       };
     };
   };
-  programs.foot = {
-    enable = true;
-    settings = {
-      main = {
-        font = "${codeFont}:size=10";
-      };
-      colors = {
-        alpha = 0.9;
-      };
-    };
-  };
-  programs.vscode.profiles.default = {
-    userSettings = {
-      "editor.fontFamily" = codeFont;
-      "editor.fontLigatures" = true;
-      "editor.fontSize" = 13;
-    };
-  };
-  programs.zed-editor = {
-    userSettings = {
-      buffer_font_family = "${codeFont}";
-      buffer_font_size = 13;
-    };
-    extraPackages = [
-
-    ];
-  };
-  xdg.configFile."nvim/override/lua/theme.lua" = {
-    text = ''
-      vim.g.neovide_opacity = 0.8
-      vim.g.neovide_normal_opacity = 0.8
-      vim.g.neovide_padding_top = 4
-      vim.g.neovide_padding_bottom = 4
-      vim.g.neovide_padding_right = 4
-      vim.g.neovide_padding_left = 4
-
-      return {
-        "catppuccin/nvim",
-        name = "catppuccin",
-        priority = 1000,
-        opts = {
-          flavor = "${flavor}",
-          term_colors = true,
-          transparent_background = not vim.g.neovide,
-        },
-        init = function()
-          vim.cmd.colorscheme("catppuccin")
-        end,
-      };
-    '';
-  };
-  programs.emacs = {
-    extraPackages =
-      epkgs: with epkgs; [
-        catppuccin-theme
-      ];
-    extraConfig = lib.mkAfter ''
-      (setq catppuccin-flavor '${flavor})
-      (load-theme 'catppuccin :no-confirm)
-    '';
-  };
-  programs.eza = {
-    icons = "auto";
-  };
-
-  dconf = {
-    enable = true;
-    settings = {
-      "org/gnome/desktop/interface" = {
-        color-scheme = if flavor == "latte" then "prefer-light" else "prefer-dark";
-      };
-    };
-  };
-
-  qt = {
-    enable = true;
-    platformTheme.name = "kvantum";
-    style.name = "kvantum";
-  };
-
-  programs.lazygit = {
-    settings = {
-      gui.nerdFontsVersion = "3";
-    };
-  };
-
+  stylix.targets.fcitx5.enable = false;
   i18n.inputMethod = {
     fcitx5 = {
       addons = [ pkgs.catppuccin-fcitx5 ];
-    };
-  };
-
-  wayland.windowManager.niri = {
-    settings = {
-      layout = {
-        focus-ring = {
-          active-color = "#8aadf4";
-        };
-        tab-indicator = {
-          active-color = "#8aadf4";
-          inactive-color = "#313244";
-        };
-      };
-    };
-    windowRules = [
-      {
-        match._props = {
-          is-floating = true;
-        };
-        border = {
-          on = [ ];
-          width = 2;
-          active-color = "#8aadf4";
-          inactive-color = "#313244";
-        };
-        focus-ring = {
-          off = [ ];
-        };
-      }
-    ];
-  };
-
-  programs.neovide = {
-    settings = {
-      fork = true;
-      font = {
-        normal = [ codeFont ];
-        size = 10;
-      };
-      theme = "dark";
+      settings.addons.classicui.globalSection.Theme = "catppuccin-${flavor}-${accent}";
     };
   };
 }
