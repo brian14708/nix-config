@@ -49,7 +49,7 @@
       };
     };
   };
-  xdg.configFile."fcitx5/config" = {
+  home.file.".config/fcitx5/config" = {
     text = lib.generators.toINI { } {
       "Hotkey" = {
         EnumerateWithTriggerKeys = "True";
