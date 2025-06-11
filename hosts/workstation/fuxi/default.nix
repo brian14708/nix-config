@@ -69,4 +69,5 @@
       ];
     };
   };
+  stylix.enable = true;
 }

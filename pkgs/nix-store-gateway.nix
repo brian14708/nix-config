@@ -1,13 +1,12 @@
 { rustPlatform, fetchFromGitHub }:
 rustPlatform.buildRustPackage {
   pname = "nix-store-gateway";
-  version = "0-unstable-2025-03-13";
+  version = "0-unstable-2025-07-29";
   src = fetchFromGitHub {
     owner = "brian14708";
     repo = "nix-store-gateway";
-    rev = "59b034030b5ddb7aa9dca91d418e467bfdfe2d59";
-    hash = "sha256-dU32KX2FZ9MMDfdMtgpHjluZ8jvcIbKe2Nsnt3dQRNI=";
+    rev = "00ac8733b0194704da5507b40cf7a330b85f1c34";
+    hash = "sha256-etaeyeHAkF1dxs8saqgTRDy4XWkQigan5fHkxWfpbhU=";
   };
-  cargoHash = "sha256-2P8rmRG70onQmW1insx2WnQ3eq1F+53WcV1dwYZuqnw=";
-  useFetchCargoVendor = true;
+  cargoHash = "sha256-Pfo+n3UY9RiEjgFsqx6QkiAopNTv1xMql23OZJUCv+E=";
 }

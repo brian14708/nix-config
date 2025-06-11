@@ -15,10 +15,9 @@
         nix-update
         home-manager
         sops
-        deploy-rs.deploy-rs
         just
         opentofu
       ]
-      ++ (if pkgs.stdenv.isDarwin then [ darwin-rebuild ] else [ ]);
+      ++ (if pkgs.stdenv.isDarwin then [ darwin-rebuild ] else [ deploy-rs.deploy-rs ]);
   };
 }

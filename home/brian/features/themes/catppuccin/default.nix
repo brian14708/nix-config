@@ -45,6 +45,7 @@ in
     noto-fonts-color-emoji
     nerd-fonts.caskaydia-mono
     maple-mono.NF-CN
+    adwaita-icon-theme
   ];
   fonts.fontconfig = {
     enable = true;
@@ -131,14 +132,14 @@ in
   };
   programs.zed-editor = {
     userSettings = {
-      buffer_font_family = "${codeFont}";
+      buffer_font_family = lib.mkForce "${codeFont}";
     };
   };
   programs.neovide = {
     settings = {
       fork = true;
       font = {
-        normal = [ codeFont ];
+        normal = lib.mkForce [ codeFont ];
         size = 10;
       };
       theme = "dark";
