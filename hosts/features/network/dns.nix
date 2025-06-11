@@ -17,7 +17,8 @@
       settings = {
         bind = [
           "127.0.0.1:53"
-        ] ++ (if config.networking.enableIPv6 then [ "[::1]:53" ] else [ ]);
+        ]
+        ++ (if config.networking.enableIPv6 then [ "[::1]:53" ] else [ ]);
 
         cache-size = 4096;
         server = [
@@ -29,20 +30,19 @@
           "100.100.100.100 -group tailnet -exclude-default-group"
         ];
 
-        conf-file =
-          [
-            "${chinalist}/accelerated-domains.china.smartdns.conf"
-            "${chinalist}/google.china.smartdns.conf"
-            "${chinalist}/apple.china.smartdns.conf"
-          ]
-          ++ (
-            if config.sops.secrets ? smartdns then
-              [
-                "${config.sops.secrets."smartdns".path}"
-              ]
-            else
-              [ ]
-          );
+        conf-file = [
+          "${chinalist}/accelerated-domains.china.smartdns.conf"
+          "${chinalist}/google.china.smartdns.conf"
+          "${chinalist}/apple.china.smartdns.conf"
+        ]
+        ++ (
+          if config.sops.secrets ? smartdns then
+            [
+              "${config.sops.secrets."smartdns".path}"
+            ]
+          else
+            [ ]
+        );
         domain-rules = [
           "/.ts.net/ -nameserver tailnet"
           "/.local/ -address 127.0.0.1"

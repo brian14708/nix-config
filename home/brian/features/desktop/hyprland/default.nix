@@ -18,7 +18,8 @@ in
     };
     settings = {
       exec-once = [
-      ] ++ (lib.lists.map (cmd: "${launcher} ${cmd}") config.my.desktop.startupCommands);
+      ]
+      ++ (lib.lists.map (cmd: "${launcher} ${cmd}") config.my.desktop.startupCommands);
       "$mod" = "SUPER";
       env = [
         "NIXOS_OZONE_WL,1"
