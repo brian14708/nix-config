@@ -106,7 +106,8 @@
             };
           };
           checks = {
-          } // (pkgs.lib.mapAttrs' (n: pkgs.lib.nameValuePair "package-${n}") self'.packages);
+          }
+          // (pkgs.lib.mapAttrs' (n: pkgs.lib.nameValuePair "package-${n}") self'.packages);
         };
       flake = {
       };

@@ -34,4 +34,5 @@
       ];
     };
   };
+  stylix.enable = true;
 }

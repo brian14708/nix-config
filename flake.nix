@@ -33,11 +33,7 @@
     };
     stylix = {
       url = "github:nix-community/stylix";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        home-manager.follows = "home-manager";
-        flake-compat.follows = "flake-compat";
-      };
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     deploy-rs = {
       url = "github:serokell/deploy-rs";
@@ -110,7 +106,8 @@
                 inputs.home-manager.nixosModules.home-manager
                 inputs.stylix.nixosModules.stylix
                 ./modules/nixos
-              ] ++ modules;
+              ]
+              ++ modules;
               pkgs = pkgsFor.${system};
               specialArgs = {
                 inherit (self) inputs outputs;
@@ -191,7 +188,8 @@
               modules = [
                 inputs.stylix.homeModules.stylix
                 ./modules/home-manager
-              ] ++ modules;
+              ]
+              ++ modules;
               pkgs = pkgsFor.${system};
               extraSpecialArgs = {
                 inherit (self) inputs outputs;
@@ -214,7 +212,8 @@
               modules = [
                 inputs.stylix.darwinModules.stylix
                 ./modules/nix-darwin
-              ] ++ modules;
+              ]
+              ++ modules;
               pkgs = pkgsFor.${system};
               specialArgs = {
                 inherit (self) inputs outputs;

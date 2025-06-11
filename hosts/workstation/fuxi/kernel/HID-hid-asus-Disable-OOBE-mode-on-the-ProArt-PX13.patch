@@ -1,7 +1,7 @@
-From 123893ba0240aaecfe9d9340932b24e00deb6dcf Mon Sep 17 00:00:00 2001
+From fc09c7317d432842449d13b08d88390f3c71d4b4 Mon Sep 17 00:00:00 2001
 From: Brian Li <me@brian14708.dev>
-Date: Wed, 26 Mar 2025 11:21:47 +0800
-Subject: [PATCH] HID: hid-asus: Disable OOBE mode on the ProArt PX13
+Date: Sat, 28 Jun 2025 10:50:32 +0800
+Subject: [PATCH] [PATCH] HID: hid-asus: Disable OOBE mode on the ProArt PX13
 
 ---
  drivers/hid/hid-asus.c                     | 6 ++++++
@@ -9,24 +9,24 @@ Subject: [PATCH] HID: hid-asus: Disable OOBE mode on the ProArt PX13
  2 files changed, 11 insertions(+)
 
 diff --git a/drivers/hid/hid-asus.c b/drivers/hid/hid-asus.c
-index 46e3e42f9..deb9f265c 100644
+index 599c836507ff..f1ce14da1e2b 100644
 --- a/drivers/hid/hid-asus.c
 +++ b/drivers/hid/hid-asus.c
-@@ -560,6 +560,12 @@ static int asus_kbd_register_leds(struct hid_device *hdev)
- 			if (ret < 0)
+@@ -656,6 +656,12 @@ static int asus_kbd_register_leds(struct hid_device *hdev)
  				return ret;
  		}
-+
+ 
 +		if (dmi_match(DMI_PRODUCT_FAMILY, "ProArt PX13")) {
 +			ret = asus_kbd_disable_oobe(hdev);
 +			if (ret < 0)
 +				return ret;
 +		}
- 	} else {
- 		/* Initialize keyboard */
- 		ret = asus_kbd_init(hdev, FEATURE_KBD_REPORT_ID);
++
+ 		if (drvdata->quirks & QUIRK_ROG_ALLY_XPAD) {
+ 			intf = to_usb_interface(hdev->dev.parent);
+ 			udev = interface_to_usbdev(intf);
 diff --git a/include/linux/platform_data/x86/asus-wmi.h b/include/linux/platform_data/x86/asus-wmi.h
-index 783e2a336..fc4ba8016 100644
+index 783e2a336861..fc4ba801675e 100644
 --- a/include/linux/platform_data/x86/asus-wmi.h
 +++ b/include/linux/platform_data/x86/asus-wmi.h
 @@ -189,6 +189,11 @@ static const struct dmi_system_id asus_use_hid_led_dmi_ids[] = {
@@ -42,5 +42,5 @@ index 783e2a336..fc4ba8016 100644
  		.matches = {
  			DMI_MATCH(DMI_BOARD_NAME, "GA403U"),
 -- 
-2.48.1
+2.49.0
 

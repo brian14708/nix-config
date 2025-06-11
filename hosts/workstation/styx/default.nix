@@ -46,4 +46,5 @@
       ];
     };
   };
+  stylix.enable = true;
 }

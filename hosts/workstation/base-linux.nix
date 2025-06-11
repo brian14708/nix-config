@@ -76,10 +76,10 @@
   };
 
   hardware.enableRedistributableFirmware = true;
-  services.logind = {
-    lidSwitch = "suspend-then-hibernate";
-    lidSwitchExternalPower = "lock";
-    lidSwitchDocked = "lock";
+  services.logind.settings.Login = {
+    HandleLidSwitch = "suspend-then-hibernate";
+    HandleLidSwitchExternalPower = "lock";
+    HandleLidSwitchDocked = "lock";
   };
   services.chrony = {
     enable = true;

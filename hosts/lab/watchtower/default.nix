@@ -45,7 +45,6 @@ in
     recommendedTlsSettings = true;
     recommendedBrotliSettings = true;
     recommendedGzipSettings = true;
-    recommendedZstdSettings = true;
     recommendedProxySettings = true;
     virtualHosts = {
       "derp-901" =

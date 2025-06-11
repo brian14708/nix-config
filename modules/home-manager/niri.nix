@@ -128,6 +128,46 @@ in
       '';
     };
 
+    systemd = {
+      enable = lib.mkEnableOption null // {
+        default = true;
+        description = ''
+          Whether to enable {file}`hyprland-session.target` on
+          hyprland startup. This links to `graphical-session.target`.
+          Some important environment variables will be imported to systemd
+          and D-Bus user environment before reaching the target, including
+          - `DISPLAY`
+          - `WAYLAND_DISPLAY`
+          - `XDG_CURRENT_DESKTOP`
+        '';
+      };
+
+      variables = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = [
+          "DISPLAY"
+          "WAYLAND_DISPLAY"
+          "XDG_CURRENT_DESKTOP"
+        ];
+        example = [ "--all" ];
+        description = ''
+          Environment variables to be imported in the systemd & D-Bus user
+          environment.
+        '';
+      };
+
+      extraCommands = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = [
+        ];
+        description = "Extra commands to be run after D-Bus activation.";
+      };
+
+      enableXdgAutostart = lib.mkEnableOption ''
+        autostart of applications using
+        {manpage}`systemd-xdg-autostart-generator(8)`'';
+    };
+
     extraConfig = lib.mkOption {
       type = lib.types.lines;
       default = "";

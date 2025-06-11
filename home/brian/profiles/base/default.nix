@@ -61,8 +61,11 @@ in
     home-manager.enable = true;
     ssh = {
       enable = true;
-      compression = true;
-      addKeysToAgent = "yes";
+      enableDefaultConfig = false;
+      matchBlocks."*" = {
+        compression = true;
+        addKeysToAgent = "yes";
+      };
       extraConfig = ''
         StrictHostKeyChecking accept-new
         Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-gcm@openssh.com,aes128-ctr

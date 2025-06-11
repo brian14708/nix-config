@@ -8,9 +8,6 @@
       jjui
     ];
   };
-  programs.gitui = {
-    enable = true;
-  };
   programs.jujutsu = {
     enable = true;
     settings = {
