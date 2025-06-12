@@ -31,7 +31,7 @@
         check_tolerance: 50ms
 
         dial_mode: domain+
-        allow_insecure: true
+        allow_insecure: false
         sniffing_timeout: 100ms
         tls_implementation: tls
         utls_imitate: chrome_auto
@@ -54,7 +54,7 @@
 
     group {
         default {
-            filter: name(regex: "(?i)(新|sg|singapore美|us|unitedstates|united states|japan|jp|japan)")
+            filter: name(regex: "(?i)(自动|新|sg|singapore|美|us|unitedstates|united states|japan|jp|japan|日|印|加)")
             policy: min_moving_avg
         }
     }
