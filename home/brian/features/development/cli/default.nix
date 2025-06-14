@@ -1,5 +1,6 @@
 {
   programs = {
+    yazi.enable = true;
     eza.enable = true;
     jq.enable = true;
     bash.enable = true;

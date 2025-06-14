@@ -28,6 +28,7 @@
       gofumpt
       gotools
       rust-analyzer
+      typescript-language-server
     ];
   };
 

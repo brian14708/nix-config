@@ -49,7 +49,8 @@
       "/.envrc"
       "/.env"
       ".clangd/"
-      ".aider.*"
+      ".claude"
+      "/.todo"
     ];
     extraConfig = {
       pull.rebase = true;
