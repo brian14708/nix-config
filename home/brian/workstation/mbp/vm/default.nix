@@ -44,4 +44,14 @@
       ''
     ))
   ];
+  wayland.windowManager.niri = {
+    settings = {
+      "output \"Virtual-1\"" = {
+        scale = 2;
+      };
+      input.mouse = {
+        natural-scroll = [ ];
+      };
+    };
+  };
 }

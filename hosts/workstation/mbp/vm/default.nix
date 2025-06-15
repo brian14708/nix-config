@@ -1,23 +1,33 @@
 {
   config,
   pkgs,
+  lib,
+  modulesPath,
   ...
 }:
 {
   imports = [
+    (modulesPath + "/profiles/qemu-guest.nix")
     ./disko.nix
     ../../../profiles/linux.nix
     ../../../features/locale/cn.nix
     ../../../features/desktop/hyprland.nix
+    ../../../features/desktop/niri.nix
+    ../../../features/network/mihomo.nix
     ../../../features/network/tailscale-subnet.nix
     ../../../features/network/dns.nix
   ];
 
   boot = {
     kernelParams = [ "mitigations=off" ];
-    loader.systemd-boot.enable = true;
+    loader.systemd-boot = {
+      enable = true;
+      configurationLimit = 5;
+      editor = false;
+    };
     loader.efi.canTouchEfiVariables = true;
   };
+
   services.tailscale = {
     enable = true;
   };
@@ -88,6 +98,12 @@
       mode = "0444";
     };
     secrets."smartdns" = {
+      sopsFile = ../../secrets.yaml;
+    };
+    secrets."mihomo-url" = {
+      sopsFile = ../../secrets.yaml;
+    };
+    secrets."dae-url" = {
       sopsFile = ../../secrets.yaml;
     };
     secrets."brian/sops" = {

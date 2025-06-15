@@ -11,6 +11,7 @@
     kernelParams = [ "mitigations=off" ];
     secureboot.enable = true;
   };
+  zramSwap.enable = true;
   services.tailscale = {
     enable = true;
   };
