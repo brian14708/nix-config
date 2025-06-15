@@ -22,7 +22,6 @@
     speechd.enable = false;
     openssh.enable = true;
   };
-  zramSwap.enable = true;
 
   users.users = {
     root = {

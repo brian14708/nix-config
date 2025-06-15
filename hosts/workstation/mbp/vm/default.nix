@@ -1,10 +1,13 @@
 {
   config,
   pkgs,
+  lib,
+  modulesPath,
   ...
 }:
 {
   imports = [
+    (modulesPath + "/profiles/qemu-guest.nix")
     ./disko.nix
     ../../../profiles/linux.nix
     ../../../features/locale/cn.nix
@@ -18,6 +21,25 @@
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
   };
+  boot.kernelPatches = [
+    {
+      name = "virtio-config";
+      patch = null;
+      extraStructuredConfig = {
+        VIRTIO = lib.kernel.yes;
+        VIRTIO_PCI = lib.kernel.module;
+        VIRTIO_BALLOON = lib.kernel.module;
+        VIRTIO_BLK = lib.kernel.module;
+        VIRTIO_CONSOLE = lib.kernel.module;
+        VIRTIO_NET = lib.kernel.module;
+        DRM_VIRTIO_GPU = lib.kernel.module;
+        NET_9P = lib.kernel.module;
+        NET_9P_VIRTIO = lib.kernel.module;
+        VIRTIO_FS = lib.kernel.module;
+      };
+    }
+  ];
+
   services.tailscale = {
     enable = true;
   };
