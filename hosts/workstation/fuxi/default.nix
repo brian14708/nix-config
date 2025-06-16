@@ -9,7 +9,7 @@
     ../../features/locale/cn.nix
     ../../features/network/dae.nix
     ../../features/network/tailscale-subnet.nix
-    ../../features/desktop/hyprland.nix
+    ../../features/desktop/niri.nix
   ];
 
   sops = {

@@ -6,12 +6,11 @@
 {
   imports = [
     ../base-linux.nix
-    ../../features/desktop/hyprland
+    ../../features/desktop/niri
     ../../features/desktop/fcitx5
     ../../features/desktop/media
     ../../features/desktop/chromium
     ../../features/development/vscode
-    ../../features/development/emacs
     ../../features/development/cli
     ../../features/themes/catppuccin
   ];

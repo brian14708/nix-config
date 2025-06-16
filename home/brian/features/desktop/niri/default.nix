@@ -5,6 +5,7 @@
   ...
 }:
 {
+  imports = [ ../wayland ];
   wayland.windowManager.niri = {
     enable = true;
     spawnAtStartup = [ ] ++ (map (cmd: lib.splitString " " cmd) config.my.desktop.startupCommands);

@@ -11,7 +11,6 @@
     ./disko.nix
     ../../../profiles/linux.nix
     ../../../features/locale/cn.nix
-    ../../../features/desktop/hyprland.nix
     ../../../features/desktop/niri.nix
     ../../../features/network/mihomo.nix
     ../../../features/network/tailscale-subnet.nix
