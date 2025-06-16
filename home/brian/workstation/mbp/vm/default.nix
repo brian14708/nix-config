@@ -1,14 +1,12 @@
 {
   lib,
   pkgs,
-  config,
   ...
 }:
 {
   imports = [
     ../../../profiles/base
     ../../../features/desktop/niri
-    ../../../features/desktop/hyprland
     ../../../features/desktop/fcitx5
     ../../../features/desktop/media
     ../../../features/desktop/chromium

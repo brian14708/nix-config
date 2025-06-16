@@ -8,7 +8,7 @@
     ./disko.nix
     ../../features/locale/cn.nix
     ../../features/network/mihomo.nix
-    ../../features/desktop/hyprland.nix
+    ../../features/desktop/niri.nix
   ];
 
   sops = {

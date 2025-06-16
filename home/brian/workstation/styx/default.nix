@@ -6,7 +6,7 @@
 {
   imports = [
     ../base-linux.nix
-    ../../features/desktop/hyprland
+    ../../features/desktop/niri
     ../../features/desktop/fcitx5
     ../../features/desktop/media
     ../../features/desktop/chromium
