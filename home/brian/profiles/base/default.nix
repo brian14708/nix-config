@@ -26,6 +26,9 @@ in
     sessionVariables = {
       PAGER = "${pkgs.less}/bin/less -RXF";
     };
+    sessionPath = [
+      "${homeDirectory}/.local/bin"
+    ];
   };
   services.ssh-agent = {
     enable = !pkgs.stdenv.isDarwin;
@@ -71,6 +74,7 @@ in
         HostbasedAcceptedAlgorithms sk-ssh-ed25519-cert-v01@openssh.com,ssh-ed25519-cert-v01@openssh.com,sk-ssh-ed25519@openssh.com,ssh-ed25519,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-512,rsa-sha2-256-cert-v01@openssh.com,rsa-sha2-256
         PubkeyAcceptedAlgorithms sk-ssh-ed25519-cert-v01@openssh.com,ssh-ed25519-cert-v01@openssh.com,sk-ssh-ed25519@openssh.com,ssh-ed25519,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-512,rsa-sha2-256-cert-v01@openssh.com,rsa-sha2-256
       '';
+      includes = [ "~/.ssh/config_*" ];
     };
   };
 

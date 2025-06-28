@@ -30,6 +30,9 @@ in
     domain = "derp-901";
     stunPort = 58583;
   };
+  services.tailscale.extraSetFlags = [
+    "--accept-dns=false"
+  ];
 
   environment.systemPackages = with pkgs; [
     tmux

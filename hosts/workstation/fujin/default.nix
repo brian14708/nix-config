@@ -13,7 +13,11 @@
 
   system.stateVersion = "24.11";
 
-  boot = {
+  services.tailscale = {
+    useRoutingFeatures = "both";
+    extraSetFlags = [
+      "--advertise-exit-node"
+    ];
   };
 
   sops = {

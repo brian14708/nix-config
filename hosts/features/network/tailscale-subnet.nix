@@ -1,10 +1,11 @@
 {
   config,
+  lib,
   ...
 }:
 {
   services.tailscale = {
-    useRoutingFeatures = "client";
+    useRoutingFeatures = lib.mkDefault "client";
     extraSetFlags = [
       "--accept-routes"
     ];

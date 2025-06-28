@@ -81,7 +81,6 @@
       auto-detect-interface: true
       strict-route: true
       exclude-interface:
-        - tailscale0
         - podman0
         - docker0
       route-exclude-address:
