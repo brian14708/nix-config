@@ -1,7 +1,11 @@
 {
   pkgs,
+  config,
   ...
 }:
+let
+  pname = config.programs.vscode.package.pname;
+in
 {
   programs.vscode = {
     enable = true;
@@ -10,12 +14,21 @@
       enableUpdateCheck = false;
       enableExtensionUpdateCheck = false;
 
-      extensions = with pkgs.vscode-extensions; [
-        vscodevim.vim
-        github.copilot
-        github.copilot-chat
-        mkhl.direnv
-      ];
+      extensions =
+        with pkgs.vscode-extensions;
+        [
+          vscodevim.vim
+          mkhl.direnv
+        ]
+        ++ (
+          if pname == "cursor" then
+            [ ]
+          else
+            [
+              github.copilot
+              github.copilot-chat
+            ]
+        );
 
       userSettings = {
         "window.menuBarVisibility" = "toggle";

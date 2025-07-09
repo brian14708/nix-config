@@ -155,6 +155,7 @@
 
         "Mod+W".toggle-column-tabbed-display = [ ];
 
+        "Mod+P".screenshot = [ ];
         "Print".screenshot = [ ];
         "Ctrl+Print".screenshot-screen = [ ];
         "Alt+Print".screenshot-window = [ ];

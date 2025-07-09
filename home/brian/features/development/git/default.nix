@@ -50,7 +50,7 @@
       "/.env"
       ".clangd/"
       ".claude"
-      "/.todo"
+      "CLAUDE.local.md"
     ];
     extraConfig = {
       pull.rebase = true;
