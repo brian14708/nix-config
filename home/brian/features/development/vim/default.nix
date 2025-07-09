@@ -27,6 +27,7 @@
       gopls
       gofumpt
       gotools
+      basedpyright
       rust-analyzer
       typescript-language-server
     ];
