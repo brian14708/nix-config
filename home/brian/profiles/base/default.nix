@@ -66,7 +66,7 @@ in
       extraConfig = ''
         StrictHostKeyChecking accept-new
         Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-gcm@openssh.com,aes128-ctr
-        KexAlgorithms sntrup761x25519-sha512@openssh.com,curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group-exchange-sha256
+        KexAlgorithms mlkem768x25519-sha256,sntrup761x25519-sha512@openssh.com,curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group-exchange-sha256
         MACs hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,umac-128-etm@openssh.com
         RequiredRSASize 2048
         HostKeyAlgorithms sk-ssh-ed25519-cert-v01@openssh.com,ssh-ed25519-cert-v01@openssh.com,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com,sk-ssh-ed25519@openssh.com,ssh-ed25519,rsa-sha2-512,rsa-sha2-256
@@ -89,27 +89,25 @@ in
     templates = "${homeDirectory}/templates";
   };
 
-  nix =
-    {
-      package = lib.mkDefault pkgs.nixVersions.latest;
-      settings =
-        {
-          use-xdg-base-directories = true;
-          experimental-features = [
-            "nix-command"
-            "flakes"
-          ];
-          trusted-public-keys = [
-            "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-            "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-            "brian14708.dev:k5awex3ydUORpRlm2AnogCuowVwSxIVi9TxCnY/3ZJQ"
-          ];
-        }
-        // lib.optionalAttrs (config.sops.secrets ? nix-secret-key) {
-          secret-key-files = config.sops.secrets.nix-secret-key.path;
-        };
+  nix = {
+    package = lib.mkDefault pkgs.nixVersions.latest;
+    settings = {
+      use-xdg-base-directories = true;
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+      trusted-public-keys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        "brian14708.dev:k5awex3ydUORpRlm2AnogCuowVwSxIVi9TxCnY/3ZJQ"
+      ];
     }
-    // lib.optionalAttrs (config.sops.secrets ? nix-access-tokens) {
-      extraOptions = "!include ${config.sops.secrets.nix-access-tokens.path}";
+    // lib.optionalAttrs (config.sops.secrets ? nix-secret-key) {
+      secret-key-files = config.sops.secrets.nix-secret-key.path;
     };
+  }
+  // lib.optionalAttrs (config.sops.secrets ? nix-access-tokens) {
+    extraOptions = "!include ${config.sops.secrets.nix-access-tokens.path}";
+  };
 }
