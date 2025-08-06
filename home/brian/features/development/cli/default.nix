@@ -1,3 +1,4 @@
+{ lib, ... }:
 {
   programs = {
     yazi.enable = true;
@@ -10,5 +11,15 @@
       enable = true;
       nix-direnv.enable = true;
     };
+  };
+  programs.bash = {
+    bashrcExtra = lib.mkAfter ''
+      if command -v direnv >/dev/null 2>&1; then
+        if [ -n "$CLAUDECODE" ]; then
+          eval "$(direnv hook bash)"
+          eval "$(DIRENV_LOG_FORMAT= direnv export bash)"
+        fi
+      fi
+    '';
   };
 }
