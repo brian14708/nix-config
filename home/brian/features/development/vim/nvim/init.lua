@@ -52,7 +52,7 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
--- Fold based on syntax
+-- Defer fold settings until after startup
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldlevel = 20
@@ -65,6 +65,7 @@ vim.opt.shm:append("I")
 
 vim.keymap.set("", "<leader>y", '"+y', { noremap = true, desc = "Yank to clipboard" })
 vim.keymap.set("", "<leader>p", '"+p', { noremap = true, desc = "Paste from clipboard" })
+vim.keymap.set("n", "<leader>cc", "<cmd>CopilotChatToggle<CR>", { desc = "Toggle Copilot Chat" })
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
@@ -102,15 +103,14 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     error("Error cloning lazy.nvim:\n" .. out)
   end
 end
-vim.opt.rtp:prepend("~/.config/nvim/override")
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-  "tpope/vim-sleuth",
+  { "tpope/vim-sleuth", event = { "BufReadPost", "BufNewFile" } },
 
   {
     "lewis6991/gitsigns.nvim",
-    event = "BufEnter",
+    event = { "BufReadPost", "BufNewFile" },
     opts = {
       signs = {
         add = { text = "+" },
@@ -174,7 +174,10 @@ require("lazy").setup({
 
   {
     "numToStr/Comment.nvim",
-    event = "BufEnter",
+    keys = {
+      { "gc", mode = { "n", "v" } },
+      { "gb", mode = { "n", "v" } },
+    },
     opts = {},
   },
 
@@ -234,8 +237,24 @@ require("lazy").setup({
 
   { -- Fuzzy Finder (files, lsp, etc)
     "nvim-telescope/telescope.nvim",
-    event = "VeryLazy",
-    branch = "0.1.x",
+    cmd = { "Telescope" },
+    -- stylua: ignore
+    keys = {
+      { "<leader>sh", desc = "[S]earch [H]elp" },
+      { "<leader>sk", desc = "[S]earch [K]eymaps" },
+      { "<leader>sf", desc = "[S]earch [F]iles" },
+      { "<leader>ss", desc = "[S]earch [S]elect Telescope" },
+      { "<leader>sw", desc = "[S]earch current [W]ord" },
+      { "<leader>sg", desc = "[S]earch by [G]rep" },
+      { "<leader>sd", desc = "[S]earch [D]iagnostics" },
+      { "<leader>sr", desc = "[S]earch [R]esume" },
+      { "<leader>s.", desc = '[S]earch Recent Files ("." for repeat)' },
+      { "<leader><leader>", desc = "[ ] Find existing buffers" },
+      { "<leader>/", desc = "[/] Fuzzily search in current buffer" },
+      { "<leader>s/", desc = "[S]earch [/] in Open Files" },
+      { "<leader>sn", desc = "[S]earch [N]eovim files" },
+    },
+    branch = "master",
     dependencies = {
       "nvim-lua/plenary.nvim",
       { -- If encountering errors, see telescope-fzf-native README for installation instructions
@@ -341,23 +360,8 @@ require("lazy").setup({
   {
     -- Main LSP Configuration
     "neovim/nvim-lspconfig",
-    event = { "BufReadPost", "BufNewFile" },
-    cmd = { "LspInfo", "LspInstall", "LspUninstall" },
+    event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      -- Useful status updates for LSP.
-      -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      {
-        "j-hui/fidget.nvim",
-        opts = {
-          notification = {
-            window = {
-              winblend = 0,
-            },
-          },
-        },
-      },
-
-      -- Allows extra capabilities provided by nvim-cmp
       "hrsh7th/cmp-nvim-lsp",
     },
     config = function()
@@ -413,6 +417,14 @@ require("lazy").setup({
           -- or a suggestion from your LSP for this to activate.
           map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction", { "n", "x" })
 
+          -- Organize imports
+          map("<leader>co", function()
+            vim.lsp.buf.code_action({
+              context = { only = { "source.organizeImports" } },
+              apply = true,
+            })
+          end, "[C]ode [O]rganize imports")
+
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header.
           map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
@@ -423,7 +435,7 @@ require("lazy").setup({
           --
           -- When you move your cursor, the highlights will be cleared (the second autocommand).
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
+          if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
             local highlight_augroup = vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
             vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
               buffer = event.buf,
@@ -487,40 +499,56 @@ require("lazy").setup({
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
         --
-        gopls = {},
-        basedpyright = {},
+        gopls = {
+          cmd = { "nix", "run", "nixpkgs#gopls" },
+        },
+        basedpyright = {
+          cmd = { "nix", "shell", "nixpkgs#basedpyright", "--command", "basedpyright-langserver", "--stdio" },
+        },
         rust_analyzer = {
+          cmd = { "nix", "shell", "nixpkgs#rust-analyzer", "--command", "rust-analyzer" },
           cmd_env = {
             CARGO_TARGET_DIR = "target/analyzer",
           },
         },
-        zls = {},
-        elixirls = {
-          cmd = { "elixir-ls" },
+        zls = {
+          cmd = { "nix", "run", "nixpkgs#zls" },
         },
-        ts_ls = {},
-        svelte = {},
-        nil_ls = {},
-        lua_ls = {
-          -- cmd = {...},
-          -- filetypes = { ...},
-          -- capabilities = {},
-          settings = {
-            Lua = {
-              diagnostics = {
-                globals = { "vim" },
-              },
-            },
-          },
+        elixirls = {
+          cmd = { "nix", "run", "nixpkgs#elixir-ls" },
+        },
+        ts_ls = {
+          cmd = { "nix", "run", "nixpkgs#typescript-language-server", "--", "--stdio" },
+        },
+        nil_ls = {
+          cmd = { "nix", "run", "nixpkgs#nil" },
+        },
+        yamlls = {
+          cmd = { "nix", "run", "nixpkgs#yaml-language-server", "--", "--stdio" },
+        },
+        jsonls = {
+          cmd = { "nix", "run", "nixpkgs#vscode-json-languageserver", "--", "--stdio" },
         },
       }
 
-      local lspconfig = require("lspconfig")
+      -- Defer LSP server setup to improve startup time
       for name, server in pairs(servers) do
         server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-        lspconfig[name].setup(server)
+        vim.lsp.config(name, server)
+        vim.lsp.enable(name)
       end
     end,
+  },
+  {
+    "j-hui/fidget.nvim",
+    event = "LspAttach",
+    opts = {
+      notification = {
+        window = {
+          winblend = 0,
+        },
+      },
+    },
   },
 
   { -- Autoformat
@@ -531,6 +559,10 @@ require("lazy").setup({
       {
         "<leader>f",
         function()
+          vim.lsp.buf.code_action({
+            context = { only = { "source.organizeImports" } },
+            apply = true,
+          })
           require("conform").format({ async = true, lsp_format = "fallback" })
         end,
         mode = "",
@@ -561,7 +593,6 @@ require("lazy").setup({
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
-        go = { "goimports", "gofumpt" },
       },
     },
   },
@@ -627,6 +658,13 @@ require("lazy").setup({
       local luasnip = require("luasnip")
       luasnip.config.setup({})
 
+      local has_words_before = function()
+        if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
+          return false
+        end
+        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+        return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
+      end
       cmp.setup({
         snippet = {
           expand = function(args)
@@ -650,7 +688,13 @@ require("lazy").setup({
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
 
           -- Accept ([y]es) the completion.
-          ["<Tab>"] = cmp.mapping.confirm({ select = true }),
+          ["<Tab>"] = vim.schedule_wrap(function(fallback)
+            if cmp.visible() and has_words_before() then
+              cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+            else
+              fallback()
+            end
+          end),
           ["<CR>"] = cmp.mapping.confirm({ select = true }),
 
           -- Manually trigger a completion from nvim-cmp.
@@ -682,85 +726,23 @@ require("lazy").setup({
     end,
   },
 
-  { -- Collection of various small independent plugins/modules
-    "echasnovski/mini.nvim",
-    config = function()
-      -- Better Around/Inside textobjects
-      --
-      -- Examples:
-      --  - va)  - [V]isually select [A]round [)]paren
-      --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
-      --  - ci'  - [C]hange [I]nside [']quote
-      require("mini.ai").setup({ n_lines = 500 })
-
-      -- Add/delete/replace surroundings (brackets, quotes, etc.)
-      --
-      -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
-      -- - sd'   - [S]urround [D]elete [']quotes
-      -- - sr)'  - [S]urround [R]eplace [)] [']
-      require("mini.surround").setup()
-
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      local statusline = require("mini.statusline")
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup({ use_icons = vim.g.have_nerd_font })
-
-      -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return "%2l:%-2v"
-      end
-
-      -- File explorer
-      local files = require("mini.files")
-      files.setup()
-      vim.keymap.set("n", "<leader>e", function()
-        files.open()
-      end, { desc = "[E]xplorer" })
-
-      local map_split = function(buf_id, lhs, direction)
-        local rhs = function()
-          -- Make new window and set it as target
-          local cur_target = files.get_explorer_state().target_window
-          local new_target = vim.api.nvim_win_call(cur_target, function()
-            vim.cmd(direction .. " split")
-            return vim.api.nvim_get_current_win()
-          end)
-
-          files.set_target_window(new_target)
-          files.go_in()
-        end
-
-        -- Adding `desc` will result into `show_help` entries
-        local desc = "Split " .. direction
-        vim.keymap.set("n", lhs, rhs, { buffer = buf_id, desc = desc })
-      end
-
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "MiniFilesBufferCreate",
-        callback = function(args)
-          local buf_id = args.data.buf_id
-          -- Tweak keys to your liking
-          map_split(buf_id, "<C-s>", "belowright horizontal")
-          map_split(buf_id, "<C-v>", "belowright vertical")
-          map_split(buf_id, "<C-t>", "tab")
-        end,
-      })
-
-      -- ... and there is more!
-      --  Check out: https://github.com/echasnovski/mini.nvim
+  {
+    "stevearc/oil.nvim",
+    opts = { keymaps = { ["<leader>e"] = "actions.close" } },
+    lazy = false,
+    dependencies = {
+      { "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
+    },
+    init = function()
+      vim.keymap.set("n", "<leader>e", "<CMD>Oil<CR>", { desc = "Open file explorer" })
     end,
   },
+
   { -- Highlight, edit, and navigate code
     "nvim-treesitter/nvim-treesitter",
-    event = { "BufReadPost", "BufNewFile" },
-    cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
+    branch = "main",
+    lazy = false,
     build = ":TSUpdate",
-    main = "nvim-treesitter.configs", -- Sets main module to use for opts
     opts = {
       ensure_installed = {
         "bash",
@@ -815,7 +797,27 @@ require("lazy").setup({
     end,
   },
   {
+    "folke/flash.nvim",
+    -- stylua: ignore
+    keys = {
+      { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+      { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+      { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+      { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+      { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
+    },
+  },
+  {
     "voldikss/vim-floaterm",
+    -- stylua: ignore
+    keys = {
+      { "<C-t>", "<CMD>FloatermToggle<CR>", desc = "Toggle floaterm" },
+      { "<C-n>", "<C-\\><C-N>:FloatermNew<CR>", mode = "t", desc = "Create a new floaterm window" },
+      { "<C-k>", "<C-\\><C-N>:FloatermPrev<CR>", mode = "t", desc = "Goto previous floaterm window" },
+      { "<C-j>", "<C-\\><C-N>:FloatermNext<CR>", mode = "t", desc = "Goto next floaterm window" },
+      { "<C-t>", "<C-\\><C-N>:FloatermToggle<CR>", mode = "t", desc = "Toggle floaterm" },
+      { "<C-d>", "<C-\\><C-N>:FloatermKill<CR>", mode = "t", desc = "Kill floaterm" },
+    },
     config = function()
       vim.g.floaterm_wintype = "float"
       vim.g.floaterm_position = "bottom"
@@ -827,39 +829,17 @@ require("lazy").setup({
       )
       vim.cmd.hi("FloatermBorder guibg=none")
     end,
-    cmd = { "FloatermNew", "FloatermToggle", "FloatermPrev", "FloatermNext" },
-    keys = {
-      { "<C-t>", "<CMD>FloatermToggle<CR>", desc = "Toggle floaterm" },
-      {
-        "<C-n>",
-        vim.api.nvim_replace_termcodes("<C-\\><C-N>:FloatermNew<CR>", true, true, true),
-        mode = { "t" },
-        desc = "Create a new floaterm window",
-      },
-      {
-        "<C-k>",
-        vim.api.nvim_replace_termcodes("<C-\\><C-N>:FloatermPrev<CR>", true, true, true),
-        mode = { "t" },
-        desc = "Goto previous floaterm window",
-      },
-      {
-        "<C-j>",
-        vim.api.nvim_replace_termcodes("<C-\\><C-N>:FloatermNext<CR>", true, true, true),
-        mode = { "t" },
-        desc = "Goto next floaterm window",
-      },
-      {
-        "<C-t>",
-        vim.api.nvim_replace_termcodes("<C-\\><C-N>:FloatermToggle<CR>", true, true, true),
-        mode = { "t" },
-        desc = "Toggle floaterm",
-      },
-      {
-        "<C-d>",
-        vim.api.nvim_replace_termcodes("<C-\\><C-N>:FloatermKill<CR>", true, true, true),
-        mode = { "t" },
-        desc = "Kill floaterm",
-      },
+  },
+
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    cmd = { "CopilotChatToggle", "CopilotChatOpen", "CopilotChat" },
+    dependencies = {
+      { "nvim-lua/plenary.nvim" },
+    },
+    build = "make tiktoken",
+    opts = {
+      -- See Configuration section for options
     },
   },
 
@@ -885,6 +865,8 @@ require("lazy").setup({
     },
   },
   performance = {
+    cache = { enabled = true },
+    reset_packpath = true,
     rtp = {
       disabled_plugins = {
         "2html_plugin",
@@ -914,6 +896,11 @@ require("lazy").setup({
         "compiler",
         "bugreport",
         "ftplugin",
+        "man",
+        "editorconfig",
+        "health",
+        "matchparen",
+        "nvim",
       },
     },
   },

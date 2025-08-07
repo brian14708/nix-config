@@ -22,14 +22,7 @@
       wget
       fd
       unzip
-
-      nil
-      gopls
-      gofumpt
-      gotools
-      basedpyright
-      rust-analyzer
-      typescript-language-server
+      tree-sitter
     ];
   };
 
