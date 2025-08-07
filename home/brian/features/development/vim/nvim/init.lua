@@ -65,6 +65,7 @@ vim.opt.shm:append("I")
 
 vim.keymap.set("", "<leader>y", '"+y', { noremap = true, desc = "Yank to clipboard" })
 vim.keymap.set("", "<leader>p", '"+p', { noremap = true, desc = "Paste from clipboard" })
+vim.keymap.set("n", "<leader>cc", "<cmd>CopilotChatToggle<CR>", { desc = "Toggle Copilot Chat" })
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
@@ -627,6 +628,13 @@ require("lazy").setup({
       local luasnip = require("luasnip")
       luasnip.config.setup({})
 
+      local has_words_before = function()
+        if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
+          return false
+        end
+        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+        return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
+      end
       cmp.setup({
         snippet = {
           expand = function(args)
@@ -650,7 +658,13 @@ require("lazy").setup({
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
 
           -- Accept ([y]es) the completion.
-          ["<Tab>"] = cmp.mapping.confirm({ select = true }),
+          ["<Tab>"] = vim.schedule_wrap(function(fallback)
+            if cmp.visible() and has_words_before() then
+              cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+            else
+              fallback()
+            end
+          end),
           ["<CR>"] = cmp.mapping.confirm({ select = true }),
 
           -- Manually trigger a completion from nvim-cmp.
@@ -815,6 +829,17 @@ require("lazy").setup({
     end,
   },
   {
+    "folke/flash.nvim",
+    -- stylua: ignore
+    keys = {
+      { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+      { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+      { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+      { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+      { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
+    },
+  },
+  {
     "voldikss/vim-floaterm",
     config = function()
       vim.g.floaterm_wintype = "float"
@@ -860,6 +885,18 @@ require("lazy").setup({
         mode = { "t" },
         desc = "Kill floaterm",
       },
+    },
+  },
+
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    cmd = { "CopilotChatToggle", "CopilotChatOpen", "CopilotChat" },
+    dependencies = {
+      { "nvim-lua/plenary.nvim" },
+    },
+    build = "make tiktoken",
+    opts = {
+      -- See Configuration section for options
     },
   },
 

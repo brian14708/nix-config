@@ -15,6 +15,29 @@
     enable = true;
     settings = {
       ui.default-command = "log";
+      fix.tools = {
+        nixfmt = {
+          command = [
+            "nix"
+            "run"
+            "nixpkgs#nixfmt"
+            "--"
+            "--filename=$path"
+          ];
+          patterns = [ "glob:'**/*.nix'" ];
+        };
+        ruff = {
+          command = [
+            "nix"
+            "run"
+            "nixpkgs#ruff"
+            "--"
+            "format"
+            "--stdin-filename=$path"
+          ];
+          patterns = [ "glob:'**/*.py'" ];
+        };
+      };
     };
   };
   programs.git = {
