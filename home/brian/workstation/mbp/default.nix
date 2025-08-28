@@ -51,4 +51,10 @@
       ui.pager = ":builtin";
     };
   };
+  programs.ssh = {
+    matchBlocks."github.com" = {
+      hostname = "github.com";
+      proxyCommand = "${pkgs.corkscrew}/bin/corkscrew 127.0.0.1 6152 %h %p";
+    };
+  };
 }
