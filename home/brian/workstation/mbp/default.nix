@@ -35,7 +35,7 @@
   };
   xdg.configFile."ghostty/config".text = ''
     font-family = "Maple Mono NF CN"
-    theme = "catppuccin-mocha"
+    theme = "Catppuccin Mocha"
   '';
   programs.neovide = {
     settings = {
