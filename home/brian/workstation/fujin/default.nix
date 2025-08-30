@@ -7,6 +7,7 @@
   imports = [
     ../base-linux.nix
     ../../features/development/cli
+    ../../features/themes/catppuccin
   ];
 
   home = {

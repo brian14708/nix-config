@@ -35,4 +35,5 @@
       ];
     };
   };
+  stylix.enable = true;
 }

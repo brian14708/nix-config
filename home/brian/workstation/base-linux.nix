@@ -22,6 +22,9 @@
     secrets."nix-store-gateway" = {
       sopsFile = ./secrets.yaml;
     };
+    secrets."claude" = {
+      sopsFile = ./secrets.yaml;
+    };
   };
   programs.go = {
     enable = true;

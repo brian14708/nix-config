@@ -28,6 +28,9 @@
     secrets."ssh" = {
       path = "/home/brian/.ssh/id_ed25519";
     };
+    secrets."claude" = {
+      sopsFile = ../../secrets.yaml;
+    };
   };
   programs.hyprlock.enable = lib.mkForce false;
   wayland.windowManager.niri.settings.input.keyboard.xkb.options = lib.mkForce "";

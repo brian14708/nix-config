@@ -29,6 +29,9 @@
     secrets."ssh" = {
       path = "/Users/brian/.ssh/id_ed25519";
     };
+    secrets."claude" = {
+      sopsFile = ../secrets.yaml;
+    };
   };
   xdg.configFile."ghostty/config".text = ''
     font-family = "Maple Mono NF CN"

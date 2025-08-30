@@ -65,6 +65,7 @@
     };
     lfs.enable = true;
     ignores = [
+      ".DS_Store"
       "/.direnv"
       "/.envrc"
       "/.env"

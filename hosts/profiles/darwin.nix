@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 let
   # Homebrew Mirror
   homebrew_mirror_env = {
@@ -29,4 +29,5 @@ in
       echo >&2 '${env_script}'
       ${env_script}
     '';
+  stylix.base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/default-dark.yaml";
 }

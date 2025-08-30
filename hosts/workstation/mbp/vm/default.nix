@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  lib,
   modulesPath,
   ...
 }:
@@ -75,12 +74,6 @@
   users.mutableUsers = false;
 
   hardware.graphics.enable = true;
-  services.greetd.settings = {
-    initial_session = {
-      command = "niri-session";
-      user = "brian";
-    };
-  };
   services.qemuGuest.enable = true;
   services.spice-vdagentd.enable = true;
 

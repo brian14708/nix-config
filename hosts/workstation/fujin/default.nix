@@ -52,4 +52,5 @@
       ];
     };
   };
+  stylix.enable = true;
 }
