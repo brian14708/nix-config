@@ -11,7 +11,6 @@
       with pkgs;
       [
         nh
-        nixVersions.latest
         nix-update
         home-manager
         sops

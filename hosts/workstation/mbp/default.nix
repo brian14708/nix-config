@@ -4,9 +4,7 @@
   ];
   system.stateVersion = 5;
   nix = {
-    settings = {
-      trusted-users = [ "brian" ];
-    };
+    enable = false;
   };
   homebrew = {
     enable = true;

@@ -93,7 +93,6 @@ in
   };
 
   nix = {
-    package = lib.mkDefault pkgs.nixVersions.latest;
     settings = {
       use-xdg-base-directories = true;
       experimental-features = [
@@ -112,5 +111,62 @@ in
   }
   // lib.optionalAttrs (config.sops.secrets ? nix-access-tokens) {
     extraOptions = "!include ${config.sops.secrets.nix-access-tokens.path}";
+  };
+
+  xdg.configFile = lib.optionalAttrs (!config.nix.enable) {
+    "nix/nix.conf".source =
+      let
+        inherit (lib)
+          boolToString
+          concatStringsSep
+          escape
+          floatToString
+          isBool
+          isConvertibleWithToString
+          isDerivation
+          isFloat
+          isInt
+          isList
+          isString
+          mapAttrsToList
+          toPretty
+          ;
+        mkValueString =
+          v:
+          if v == null then
+            ""
+          else if isInt v then
+            toString v
+          else if isBool v then
+            boolToString v
+          else if isFloat v then
+            floatToString v
+          else if isList v then
+            toString v
+          else if isDerivation v then
+            toString v
+          else if builtins.isPath v then
+            toString v
+          else if isString v then
+            v
+          else if isConvertibleWithToString v then
+            toString v
+          else
+            abort "The nix conf value: ${toPretty { } v} can not be encoded";
+
+        mkKeyValue = k: v: "${escape [ "=" ] k} = ${mkValueString v}";
+
+        mkKeyValuePairs = attrs: concatStringsSep "\n" (mapAttrsToList mkKeyValue attrs);
+
+        cfg = config.nix;
+      in
+      pkgs.writeTextFile {
+        name = "nix.conf";
+        text = ''
+          # WARNING: this file is generated from the home-manager
+          ${mkKeyValuePairs cfg.settings}
+          ${cfg.extraOptions}
+        '';
+      };
   };
 }
