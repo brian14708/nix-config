@@ -14,7 +14,7 @@
     eval "$(/opt/homebrew/bin/brew shellenv)"
   '';
   homebrew.casks = [
-    "tailscale"
+    "tailscale-app"
     "ghostty"
     "alfred"
     "surge"

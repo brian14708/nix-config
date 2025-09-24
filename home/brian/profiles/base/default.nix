@@ -38,8 +38,10 @@ in
       u = config.userinfo;
     in
     {
-      userName = u.name;
-      userEmail = builtins.head u.email;
+      settings = {
+        user.name = u.name;
+        user.email = builtins.head u.email;
+      };
       signing = {
         key = (builtins.head u.pgp).id;
       };

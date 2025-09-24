@@ -23,7 +23,10 @@
     kernelParams = [ "resume_offset=533760" ];
     resumeDevice = "/dev/mapper/root";
     kernelPatches = [
-      { patch = ./kernel/HID-hid-asus-Disable-OOBE-mode-on-the-ProArt-PX13.patch; }
+      {
+        name = "Disable OOBE mode on the ProArt PX13";
+        patch = ./kernel/HID-hid-asus-Disable-OOBE-mode-on-the-ProArt-PX13.patch;
+      }
     ];
   };
 

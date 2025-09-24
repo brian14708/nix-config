@@ -39,9 +39,11 @@
     };
   };
   home.packages = [
-    (pkgs.writeShellScriptBin "claude" ''
+    (pkgs.writeScriptBin "claude" ''
+      #! /usr/bin/env nix-shell
+      #! nix-shell -i bash -p bash nodejs pnpm
       source ${config.sops.secrets.claude.path}
-      exec ${pkgs.claude-code}/bin/claude "$@"
+      pnpm dlx "@anthropic-ai/claude-code" "$@"
     '')
   ];
 
