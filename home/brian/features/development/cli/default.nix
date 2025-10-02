@@ -39,12 +39,35 @@
     };
   };
   home.packages = [
-    (pkgs.writeScriptBin "claude" ''
-      #! /usr/bin/env nix-shell
-      #! nix-shell -i bash -p bash nodejs pnpm
-      source ${config.sops.secrets.claude.path}
-      pnpm dlx "@anthropic-ai/claude-code" "$@"
-    '')
+    (pkgs.writeShellApplication {
+      name = "claude";
+      text = ''
+        source ${config.sops.secrets.ai.path}
+        exec pnpm dlx "@anthropic-ai/claude-code" "$@"
+      '';
+      checkPhase = "";
+      runtimeInputs = [
+        pkgs.nodejs
+        pkgs.pnpm
+      ];
+      runtimeEnv = {
+        CLAUDE_CONFIG_DIR = "${config.xdg.configHome}/claude";
+      };
+    })
+    (pkgs.writeShellApplication {
+      name = "codex";
+      text = ''
+        source ${config.sops.secrets.ai.path}
+        exec pnpm dlx "@openai/codex" "$@"
+      '';
+      checkPhase = "";
+      runtimeInputs = [
+        pkgs.nodejs
+        pkgs.pnpm
+      ];
+      runtimeEnv = {
+        CODEX_HOME = "${config.xdg.configHome}/codex";
+      };
+    })
   ];
-
 }

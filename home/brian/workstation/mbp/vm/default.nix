@@ -28,7 +28,7 @@
     secrets."ssh" = {
       path = "/home/brian/.ssh/id_ed25519";
     };
-    secrets."claude" = {
+    secrets."ai" = {
       sopsFile = ../../secrets.yaml;
     };
   };

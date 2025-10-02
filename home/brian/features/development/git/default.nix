@@ -76,7 +76,9 @@
       "/.env"
       ".clangd/"
       ".claude"
-      "CLAUDE.local.md"
+      "/.todo"
+      "CLAUDE.md"
+      "AGENTS.md"
     ];
   };
 }

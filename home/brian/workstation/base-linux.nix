@@ -19,7 +19,7 @@
     secrets."nix-store-gateway" = {
       sopsFile = ./secrets.yaml;
     };
-    secrets."claude" = {
+    secrets."ai" = {
       sopsFile = ./secrets.yaml;
     };
   };
