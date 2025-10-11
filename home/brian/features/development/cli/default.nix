@@ -39,6 +39,8 @@
     };
   };
   home.packages = [
+    pkgs.fastmod
+
     (pkgs.writeShellApplication {
       name = "claude";
       text = ''

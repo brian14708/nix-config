@@ -31,6 +31,13 @@
               zig
               zls
             ];
+            shellHook = ''
+              # We unset some NIX environment variables that might interfere with the zig
+              # compiler.
+              # Issue: https://github.com/ziglang/zig/issues/18998
+              unset NIX_CFLAGS_COMPILE
+              unset NIX_LDFLAGS
+            '';
           };
           treefmt.programs = {
             zig.enable = true;

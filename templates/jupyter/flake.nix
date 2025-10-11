@@ -5,7 +5,7 @@
   };
 
   outputs =
-    inputs@{ flake-parts, ... }:
+    inputs@{ flake-parts, nixpkgs, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
         "x86_64-linux"
@@ -16,9 +16,14 @@
       perSystem =
         {
           pkgs,
+          system,
           ...
         }:
         {
+          _module.args.pkgs = import nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+          };
 
           devShells.default = pkgs.mkShell {
             venvDir = ".venv";
@@ -34,6 +39,9 @@
                 jupyter
                 numpy
               ]);
+            postShellHook = ''
+              PYTHONPATH=$PWD/$venvDir/${pkgs.python3.sitePackages}:$PYTHONPATH
+            '';
           };
         };
     };

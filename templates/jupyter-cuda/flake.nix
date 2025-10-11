@@ -46,8 +46,11 @@
                 pip
                 jupyter
                 numpy
-                torch
+                torch-bin
               ]);
+            postShellHook = ''
+              PYTHONPATH=$PWD/$venvDir/${pkgs.python3.sitePackages}:$PYTHONPATH
+            '';
           };
         };
     };

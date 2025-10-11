@@ -21,8 +21,8 @@
         {
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
-              texliveSmall
-              tlaplus18
+              (tlaplus18.override { jre = jdk25; })
+              jdk25
             ];
           };
         };

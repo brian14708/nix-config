@@ -54,7 +54,6 @@ vim.opt.scrolloff = 10
 
 -- Defer fold settings until after startup
 vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldlevel = 20
 
 -- Set the tab size
@@ -520,6 +519,9 @@ require("lazy").setup({
         ts_ls = {
           cmd = { "nix", "run", "nixpkgs#typescript-language-server", "--", "--stdio" },
         },
+        svelte = {
+          cmd = { "nix", "run", "nixpkgs#svelte-language-server", "--", "--stdio" },
+        },
         nil_ls = {
           cmd = { "nix", "run", "nixpkgs#nil" },
         },
@@ -743,32 +745,22 @@ require("lazy").setup({
     branch = "main",
     lazy = false,
     build = ":TSUpdate",
-    opts = {
-      ensure_installed = {
-        "bash",
-        "c",
-        "diff",
-        "html",
-        "lua",
-        "luadoc",
-        "markdown",
-        "markdown_inline",
-        "nix",
-        "query",
-        "vim",
-        "vimdoc",
-      },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { "ruby" },
-      },
-      indent = { enable = true, disable = { "ruby" } },
-    },
+    config = function(_, opts)
+      local treesitter = require("nvim-treesitter")
+      treesitter.setup(opts)
+
+      local installed = treesitter.get_installed()
+      vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+      vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+      vim.api.nvim_create_autocmd("FileType", {
+        callback = function(args)
+          local lang = vim.treesitter.language.get_lang(args.match)
+          if vim.tbl_contains(installed, lang) then
+            vim.treesitter.start(args.buf)
+          end
+        end,
+      })
+    end,
   },
 
   {
