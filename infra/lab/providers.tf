@@ -9,7 +9,7 @@ terraform {
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~> 4"
+      version = "~> 5"
     }
     sops = {
       source  = "carlpett/sops"
@@ -21,7 +21,7 @@ terraform {
     }
     google = {
       source  = "hashicorp/google"
-      version = "~> 6"
+      version = "~> 7"
     }
   }
 

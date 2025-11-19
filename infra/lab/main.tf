@@ -7,30 +7,39 @@ resource "random_password" "lab_tunnel_secret" {
 }
 
 resource "cloudflare_zero_trust_tunnel_cloudflared" "lab" {
-  account_id = data.sops_file.vars.data["cloudflare_account_id"]
-  name       = "lab"
-  secret     = base64sha256(random_password.lab_tunnel_secret.result)
+  account_id    = data.sops_file.vars.data["cloudflare_account_id"]
+  name          = "lab"
+  tunnel_secret = base64sha256(random_password.lab_tunnel_secret.result)
 }
 
 resource "cloudflare_zero_trust_tunnel_cloudflared_config" "lab" {
   tunnel_id  = cloudflare_zero_trust_tunnel_cloudflared.lab.id
   account_id = data.sops_file.vars.data["cloudflare_account_id"]
-  config {
-    ingress_rule {
-      hostname = cloudflare_record.lab.hostname
-      service  = "http://localhost"
-    }
-    ingress_rule {
-      service = "http_status:404"
-    }
+  config = {
+    ingress = [
+      {
+        hostname = "lab.014708.xyz"
+        service  = "http://localhost"
+      },
+      {
+        service = "http_status:404"
+      }
+    ]
   }
 }
 
-resource "cloudflare_record" "lab" {
+data "cloudflare_zero_trust_tunnel_cloudflared_token" "lab" {
+  account_id = data.sops_file.vars.data["cloudflare_account_id"]
+  tunnel_id  = cloudflare_zero_trust_tunnel_cloudflared.lab.id
+}
+
+
+resource "cloudflare_dns_record" "lab" {
   zone_id = data.sops_file.vars.data["cloudflare_zone_id"]
   name    = "lab"
-  content = cloudflare_zero_trust_tunnel_cloudflared.lab.cname
+  content = "${cloudflare_zero_trust_tunnel_cloudflared.lab.id}.cfargotunnel.com"
   type    = "CNAME"
+  ttl     = 1
   proxied = true
 }
 
@@ -45,7 +54,7 @@ resource "alicloud_instance" "watchtower" {
   user_data = base64gzip(templatefile("${path.module}/cloud-init.tpl", {
     secrets = {
       tailscale_key     = data.sops_file.vars.data["ts_auth"]
-      cloudflare_tunnel = cloudflare_zero_trust_tunnel_cloudflared.lab.tunnel_token
+      cloudflare_tunnel = data.cloudflare_zero_trust_tunnel_cloudflared_token.lab.token
     }
   }))
   lifecycle {
