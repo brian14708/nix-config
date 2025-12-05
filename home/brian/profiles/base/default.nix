@@ -113,6 +113,9 @@ in
   }
   // lib.optionalAttrs (config.sops.secrets ? nix-access-tokens) {
     extraOptions = "!include ${config.sops.secrets.nix-access-tokens.path}";
+  }
+  // lib.optionalAttrs (pkgs.stdenv.isDarwin) {
+    package = pkgs.nixVersions.latest;
   };
 
   xdg.configFile = lib.optionalAttrs (!config.nix.enable) {

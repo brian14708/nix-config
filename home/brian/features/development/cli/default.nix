@@ -38,10 +38,10 @@
       '';
     };
   };
-  home.packages = [
-    pkgs.fastmod
+  home.packages = with pkgs; [
+    fastmod
 
-    (pkgs.writeShellApplication {
+    (writeShellApplication {
       name = "claude";
       text = ''
         source ${config.sops.secrets.ai.path}
@@ -49,14 +49,14 @@
       '';
       checkPhase = "";
       runtimeInputs = [
-        pkgs.nodejs
-        pkgs.pnpm
+        nodejs
+        pnpm
       ];
       runtimeEnv = {
         CLAUDE_CONFIG_DIR = "${config.xdg.configHome}/claude";
       };
     })
-    (pkgs.writeShellApplication {
+    (writeShellApplication {
       name = "codex";
       text = ''
         source ${config.sops.secrets.ai.path}
@@ -64,8 +64,8 @@
       '';
       checkPhase = "";
       runtimeInputs = [
-        pkgs.nodejs
-        pkgs.pnpm
+        nodejs
+        pnpm
       ];
       runtimeEnv = {
         CODEX_HOME = "${config.xdg.configHome}/codex";

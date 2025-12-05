@@ -24,7 +24,7 @@ in
   config = mkIf cfg.enable {
     systemd.user.services.nix-store-gateway = {
       Service = {
-        ExecStartPre = ''/bin/sh -c 'while [ ! -f ${cfg.config} ]; do sleep 1; done' '';
+        ExecStartPre = "/bin/sh -c 'while [ ! -f ${cfg.config} ]; do sleep 1; done' ";
         Restart = "on-failure";
         ExecStart = "${pkg}/bin/nix-store-gateway [::1]:${toString cfg.port} ${cfg.config}";
       };

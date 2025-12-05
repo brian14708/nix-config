@@ -14,7 +14,7 @@
       colima
       docker-client
       nil
-      nixfmt-rfc-style
+      nixfmt
       maple-mono.NF-CN
     ];
   };

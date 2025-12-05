@@ -99,9 +99,18 @@
       turbo = "auto";
     };
   };
+  documentation = {
+    dev.enable = true;
+    man = {
+      man-db.enable = false;
+      mandoc.enable = true;
+    };
+  };
   environment.systemPackages = with pkgs; [
     ghostty.terminfo
     foot.terminfo
+    man-pages
+    man-pages-posix
   ];
   programs.nix-index-database.comma.enable = true;
   programs.nix-index.enable = false;
