@@ -1,11 +1,13 @@
 {
   pkgs,
   config,
+  inputs,
   ...
 }:
 {
   imports = [
     ../profiles/linux.nix
+    inputs.nix-index-database.nixosModules.nix-index
   ];
   boot = {
     kernelParams = [ "mitigations=off" ];
@@ -94,5 +96,8 @@
   };
   environment.systemPackages = with pkgs; [
     ghostty.terminfo
+    foot.terminfo
   ];
+  programs.nix-index-database.comma.enable = true;
+  programs.nix-index.enable = false;
 }
