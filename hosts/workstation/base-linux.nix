@@ -88,10 +88,15 @@
   };
 
   powerManagement.enable = true;
-  services.tlp = {
-    enable = true;
-    settings = {
-      "DEVICES_TO_ENABLE_ON_STARTUP" = "bluetooth wifi";
+  services.auto-cpufreq.enable = true;
+  services.auto-cpufreq.settings = {
+    battery = {
+      governor = "powersave";
+      turbo = "never";
+    };
+    charger = {
+      governor = "performance";
+      turbo = "auto";
     };
   };
   environment.systemPackages = with pkgs; [
