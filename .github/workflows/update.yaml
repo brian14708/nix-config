@@ -1,0 +1,44 @@
+name: Weekly Update
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+jobs:
+  update-and-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v14
+
+      - name: Configure Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@v8
+
+      - name: Install dependencies
+        run: nix profile install nixpkgs#just nixpkgs#nix-update
+
+      - name: Run update
+        run: just update
+
+      - name: Run flake check
+        run: nix flake check
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Update dependencies"
+          git push
