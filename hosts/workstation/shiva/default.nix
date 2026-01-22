@@ -53,11 +53,6 @@
     ];
   };
   systemd.services.tailscaled.path = [ pkgs.iputils ];
-  networking.supplicant = {
-    DBUS = {
-      userControlled.enable = true;
-    };
-  };
 
   home-manager = {
     useGlobalPkgs = true;
