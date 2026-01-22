@@ -18,7 +18,7 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@v14
 
       - name: Configure Nix cache
-        uses: DeterminateSystems/magic-nix-cache-action@v8
+        uses: DeterminateSystems/magic-nix-cache-action@v13
 
       - name: Install dependencies
         run: nix profile install nixpkgs#just nixpkgs#nix-update
