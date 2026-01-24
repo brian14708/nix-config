@@ -38,6 +38,9 @@
   };
   wayland.windowManager.niri = {
     settings = {
+      debug = {
+        render-drm-device = "/dev/dri/renderD129";
+      };
       "output \"eDP-1\"" = {
         scale = 2.0;
       };
