@@ -34,7 +34,6 @@ in
         mihomo
         tailscale-subnet
         amd
-        nvidia
         stylix
         home-manager
       ];
@@ -54,7 +53,6 @@ in
       };
 
       virtualisation.podman.enable = true;
-      hardware.nvidia-container-toolkit.enable = true;
       hardware.graphics.enable = true;
 
       disko.devices = {

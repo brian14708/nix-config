@@ -48,9 +48,24 @@
         ];
 
       programs = {
-        yazi.enable = true;
+        yazi = {
+          enable = true;
+          shellWrapperName = "y";
+        };
         eza.enable = true;
         ripgrep.enable = true;
+        zellij = {
+          enable = true;
+          settings = {
+            pane_frames = false;
+            show_startup_tips = false;
+            default_layout = "compact";
+            env = {
+              TERM = "xterm-256color";
+              COLORTERM = "truecolor";
+            };
+          };
+        };
         jq.enable = true;
         bash.enable = true;
         starship.enable = true;
@@ -59,16 +74,7 @@
           enable = true;
           nix-direnv.enable = true;
         };
-        nushell = {
-          enable = true;
-          extraConfig = ''
-            $env.config.show_banner = false
-          '';
-        };
-        carapace = {
-          enable = true;
-          enableNushellIntegration = true;
-        };
+        carapace.enable = true;
         bash = {
           bashrcExtra = lib.mkAfter ''
             if command -v direnv >/dev/null 2>&1; then

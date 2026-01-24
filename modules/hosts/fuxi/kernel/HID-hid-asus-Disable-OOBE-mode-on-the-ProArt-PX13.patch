@@ -25,22 +25,5 @@ index 599c836507ff..f1ce14da1e2b 100644
  		if (drvdata->quirks & QUIRK_ROG_ALLY_XPAD) {
  			intf = to_usb_interface(hdev->dev.parent);
  			udev = interface_to_usbdev(intf);
-diff --git a/include/linux/platform_data/x86/asus-wmi.h b/include/linux/platform_data/x86/asus-wmi.h
-index 783e2a336861..fc4ba801675e 100644
---- a/include/linux/platform_data/x86/asus-wmi.h
-+++ b/include/linux/platform_data/x86/asus-wmi.h
-@@ -189,6 +189,11 @@ static const struct dmi_system_id asus_use_hid_led_dmi_ids[] = {
- 			DMI_MATCH(DMI_PRODUCT_FAMILY, "ProArt P16"),
- 		},
- 	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_PRODUCT_FAMILY, "ProArt PX13"),
-+		},
-+	},
- 	{
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_NAME, "GA403U"),
 -- 
 2.49.0
-
