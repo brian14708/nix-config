@@ -3,6 +3,11 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
+    import-tree.url = "github:vic/import-tree";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -31,7 +36,10 @@
     };
     stylix = {
       url = "github:nix-community/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-parts.follows = "flake-parts";
+      };
     };
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
@@ -48,6 +56,7 @@
   outputs =
     inputs@{
       self,
+      flake-parts,
       nixpkgs,
       home-manager,
       nix-darwin,
@@ -61,8 +70,7 @@
         "aarch64-linux"
         "aarch64-darwin"
       ];
-      forAllSystems = lib.genAttrs systems;
-      pkgsFor = forAllSystems (
+      pkgsFor = lib.genAttrs systems (
         system:
         import nixpkgs {
           inherit system;
@@ -74,9 +82,6 @@
           ];
           config.allowUnfree = true;
         }
-      );
-      treefmtEval = forAllSystems (
-        system: inputs.treefmt-nix.lib.evalModule pkgsFor.${system} ./treefmt.nix
       );
       mapConfig =
         func: configs:
@@ -91,159 +96,172 @@
           ) configs
         );
     in
-    {
-      nixosConfigurations =
-        let
-          nixosConfig =
-            {
-              system ? "x86_64-linux",
-              modules,
-            }:
-            lib.nixosSystem {
-              inherit system;
-              modules = [
-                inputs.sops-nix.nixosModules.sops
-                inputs.disko.nixosModules.disko
-                inputs.home-manager.nixosModules.home-manager
-                inputs.stylix.nixosModules.stylix
-                ./modules/nixos
-              ]
-              ++ modules;
-              pkgs = pkgsFor.${system};
-              specialArgs = {
-                inherit (self) inputs outputs;
-              };
-            };
-        in
-        mapConfig nixosConfig {
-          aether = {
-            modules = [ ./hosts/workstation/aether ];
-          };
-          fujin = {
-            modules = [ ./hosts/workstation/fujin ];
-          };
-          fuxi = {
-            modules = [ ./hosts/workstation/fuxi ];
-          };
-          shiva = {
-            modules = [ ./hosts/workstation/shiva ];
-          };
-          styx = {
-            modules = [ ./hosts/workstation/styx ];
-          };
-          macbookpro-vm = {
-            modules = [ ./hosts/workstation/mbp/vm ];
-            system = "aarch64-linux";
-          };
-          lab01 = {
-            modules = [ ./hosts/lab/lab01 ];
-          };
-          watchtower = {
-            modules = [ ./hosts/lab/watchtower ];
-          };
-          lab-aliyun = {
-            modules = [ ./hosts/lab/base-aliyun.nix ];
-          };
-        };
-
-      deploy.nodes =
-        let
-          deployConfig =
-            {
-              hostname,
-              sshUser ? "ops",
-              system ? "x86_64-linux",
-            }:
-            {
-              inherit sshUser hostname;
-              profiles =
-                let
-                  inherit (deploy-rs.lib.${system}) activate;
-                in
-                {
-                  system = {
-                    user = "root";
-                    path = activate.nixos self.nixosConfigurations.${hostname};
-                  };
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "aarch64-darwin"
+      ];
+      flake = {
+        nixosConfigurations =
+          let
+            nixosConfig =
+              {
+                system ? "x86_64-linux",
+                modules,
+              }:
+              lib.nixosSystem {
+                inherit system;
+                modules = [
+                  inputs.sops-nix.nixosModules.sops
+                  inputs.disko.nixosModules.disko
+                  inputs.home-manager.nixosModules.home-manager
+                  inputs.stylix.nixosModules.stylix
+                  ./modules/nixos
+                ]
+                ++ modules;
+                pkgs = pkgsFor.${system};
+                specialArgs = {
+                  inherit (self) inputs outputs;
                 };
-            };
-        in
-        mapConfig deployConfig {
-          "watchtower" = {
-            hostname = "watchtower";
-          };
-          "lab01" = {
-            enable = true;
-            hostname = "lab01";
-          };
-        };
-
-      homeConfigurations =
-        let
-          hmConfig =
-            {
-              system ? "x86_64-linux",
-              modules,
-            }:
-            home-manager.lib.homeManagerConfiguration {
-              modules = [
-                inputs.stylix.homeModules.stylix
-                ./modules/home-manager
-              ]
-              ++ modules;
-              pkgs = pkgsFor.${system};
-              extraSpecialArgs = {
-                inherit (self) inputs outputs;
-                hmStandalone = true;
               };
+          in
+          mapConfig nixosConfig {
+            aether = {
+              modules = [ ./hosts/workstation/aether ];
             };
-        in
-        mapConfig hmConfig {
-        };
-
-      darwinConfigurations =
-        let
-          darwinConfig =
-            {
-              system ? "aarch64-darwin",
-              modules,
-            }:
-            nix-darwin.lib.darwinSystem {
-              inherit system;
-              modules = [
-                inputs.stylix.darwinModules.stylix
-                ./modules/nix-darwin
-              ]
-              ++ modules;
-              pkgs = pkgsFor.${system};
-              specialArgs = {
-                inherit (self) inputs outputs;
-              };
+            fujin = {
+              modules = [ ./hosts/workstation/fujin ];
             };
-
-        in
-        mapConfig darwinConfig {
-          "macbookpro" = {
-            modules = [ ./hosts/workstation/mbp ];
+            fuxi = {
+              modules = [ ./hosts/workstation/fuxi ];
+            };
+            shiva = {
+              modules = [ ./hosts/workstation/shiva ];
+            };
+            styx = {
+              modules = [ ./hosts/workstation/styx ];
+            };
+            macbookpro-vm = {
+              modules = [ ./hosts/workstation/mbp/vm ];
+              system = "aarch64-linux";
+            };
+            lab01 = {
+              modules = [ ./hosts/lab/lab01 ];
+            };
+            watchtower = {
+              modules = [ ./hosts/lab/watchtower ];
+            };
+            lab-aliyun = {
+              modules = [ ./hosts/lab/base-aliyun.nix ];
+            };
           };
-        };
 
-      templates = import ./templates { };
+        deploy.nodes =
+          let
+            deployConfig =
+              {
+                hostname,
+                sshUser ? "ops",
+                system ? "x86_64-linux",
+              }:
+              {
+                inherit sshUser hostname;
+                profiles =
+                  let
+                    inherit (deploy-rs.lib.${system}) activate;
+                  in
+                  {
+                    system = {
+                      user = "root";
+                      path = activate.nixos self.nixosConfigurations.${hostname};
+                    };
+                  };
+              };
+          in
+          mapConfig deployConfig {
+            "watchtower" = {
+              hostname = "watchtower";
+            };
+            "lab01" = {
+              enable = true;
+              hostname = "lab01";
+            };
+          };
 
-      formatter = forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
-      checks = forAllSystems (
-        system:
+        homeConfigurations =
+          let
+            hmConfig =
+              {
+                system ? "x86_64-linux",
+                modules,
+              }:
+              home-manager.lib.homeManagerConfiguration {
+                modules = [
+                  inputs.stylix.homeModules.stylix
+                  ./modules/home-manager
+                ]
+                ++ modules;
+                pkgs = pkgsFor.${system};
+                extraSpecialArgs = {
+                  inherit (self) inputs outputs;
+                  hmStandalone = true;
+                };
+              };
+          in
+          mapConfig hmConfig {
+          };
+
+        darwinConfigurations =
+          let
+            darwinConfig =
+              {
+                system ? "aarch64-darwin",
+                modules,
+              }:
+              nix-darwin.lib.darwinSystem {
+                inherit system;
+                modules = [
+                  inputs.stylix.darwinModules.stylix
+                  ./modules/nix-darwin
+                ]
+                ++ modules;
+                pkgs = pkgsFor.${system};
+                specialArgs = {
+                  inherit (self) inputs outputs;
+                };
+              };
+
+          in
+          mapConfig darwinConfig {
+            "macbookpro" = {
+              modules = [ ./hosts/workstation/mbp ];
+            };
+          };
+
+        templates = import ./templates { };
+
+      };
+
+      perSystem =
         {
-          formatting = treefmtEval.${system}.config.build.check self;
-        }
-        // deploy-rs.lib.${system}.deployChecks self.deploy
-      );
-      devShells = forAllSystems (
-        system:
-        import ./shell.nix {
-          pkgs = pkgsFor.${system};
-        }
-      );
+          config,
+          pkgs,
+          system,
+          ...
+        }:
+        let
+          treefmt = inputs.treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
+        in
+        {
+          _module.args.pkgs = pkgsFor.${system};
+          formatter = treefmt.config.build.wrapper;
+          checks = {
+            formatting = treefmt.config.build.check self;
+          }
+          // deploy-rs.lib.${system}.deployChecks self.deploy;
+          devShells = import ./shell.nix { inherit pkgs; };
+        };
     };
 
   nixConfig = {
