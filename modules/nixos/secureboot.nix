@@ -1,18 +1,17 @@
+{ inputs, ... }:
 {
-  lib,
-  inputs,
-  config,
-  ...
-}:
-with lib;
-{
-  imports = [
-    inputs.lanzaboote.nixosModules.lanzaboote
-  ];
-  options = {
-    boot.secureboot.enable = mkEnableOption "Enable secureboot";
+  flake-file.inputs = {
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
-  config = mkIf config.boot.secureboot.enable {
+
+  flake.modules.nixos.secureboot = {
+    imports = [
+      inputs.lanzaboote.nixosModules.lanzaboote
+    ];
+
     boot = {
       initrd.systemd.enable = true;
       loader = {

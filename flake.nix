@@ -1,280 +1,8 @@
+# DO-NOT-EDIT. This file was auto-generated using github:vic/flake-file.
+# Use `nix run .#write-flake` to regenerate it.
 {
-  description = "Nix configuration";
 
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    flake-parts = {
-      url = "github:hercules-ci/flake-parts";
-      inputs.nixpkgs-lib.follows = "nixpkgs";
-    };
-    import-tree.url = "github:vic/import-tree";
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nix-darwin = {
-      url = "github:nix-darwin/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    disko = {
-      url = "github:nix-community/disko";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    lanzaboote = {
-      url = "github:nix-community/lanzaboote";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-      };
-    };
-    treefmt-nix = {
-      url = "github:numtide/treefmt-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    stylix = {
-      url = "github:nix-community/stylix";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-parts.follows = "flake-parts";
-      };
-    };
-    nix-index-database = {
-      url = "github:nix-community/nix-index-database";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    colmena = {
-      url = "github:zhaofengli/colmena";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-      };
-    };
-  };
-
-  outputs =
-    inputs@{
-      self,
-      flake-parts,
-      nixpkgs,
-      home-manager,
-      nix-darwin,
-      ...
-    }:
-    let
-      inherit (nixpkgs) lib;
-      systems = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "aarch64-darwin"
-      ];
-      pkgsFor = lib.genAttrs systems (
-        system:
-        import nixpkgs {
-          inherit system;
-          overlays = [
-            inputs.nix-darwin.overlays.default
-            (import ./overlays)
-            (final: _prev: import ./pkgs { pkgs = final; })
-          ];
-          config.allowUnfree = true;
-        }
-      );
-      mapConfig =
-        func: configs:
-        lib.mapAttrs (_name: value: func (builtins.removeAttrs value [ "enable" ])) (
-          lib.filterAttrs (
-            _name:
-            {
-              enable ? true,
-              ...
-            }:
-            enable
-          ) configs
-        );
-    in
-    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "aarch64-darwin"
-      ];
-      flake = {
-        nixosConfigurations =
-          let
-            nixosConfig =
-              {
-                system ? "x86_64-linux",
-                modules,
-              }:
-              lib.nixosSystem {
-                inherit system;
-                modules = [
-                  inputs.sops-nix.nixosModules.sops
-                  inputs.disko.nixosModules.disko
-                  inputs.home-manager.nixosModules.home-manager
-                  inputs.stylix.nixosModules.stylix
-                  ./modules/nixos
-                ]
-                ++ modules;
-                pkgs = pkgsFor.${system};
-                specialArgs = {
-                  inherit (self) inputs outputs;
-                };
-              };
-          in
-          mapConfig nixosConfig {
-            aether = {
-              modules = [ ./hosts/workstation/aether ];
-            };
-            fujin = {
-              modules = [ ./hosts/workstation/fujin ];
-            };
-            fuxi = {
-              modules = [ ./hosts/workstation/fuxi ];
-            };
-            shiva = {
-              modules = [ ./hosts/workstation/shiva ];
-            };
-            styx = {
-              modules = [ ./hosts/workstation/styx ];
-            };
-            macbookpro-vm = {
-              modules = [ ./hosts/workstation/mbp/vm ];
-              system = "aarch64-linux";
-            };
-            lab01 = {
-              modules = [ ./hosts/lab/lab01 ];
-            };
-            watchtower = {
-              modules = [ ./hosts/lab/watchtower ];
-            };
-            lab-aliyun = {
-              modules = [ ./hosts/lab/base-aliyun.nix ];
-            };
-          };
-
-        colmena = {
-          meta = {
-            nixpkgs = import nixpkgs {
-              system = "x86_64-linux";
-              overlays = [
-                inputs.nix-darwin.overlays.default
-                (import ./overlays)
-                (final: _prev: import ./pkgs { pkgs = final; })
-              ];
-              config.allowUnfree = true;
-            };
-            specialArgs = {
-              inherit (self) inputs outputs;
-            };
-          };
-
-          watchtower = {
-            deployment = {
-              targetHost = "watchtower";
-              targetUser = "ops";
-            };
-            imports = [
-              inputs.sops-nix.nixosModules.sops
-              inputs.disko.nixosModules.disko
-              inputs.home-manager.nixosModules.home-manager
-              inputs.stylix.nixosModules.stylix
-              ./modules/nixos
-              ./hosts/lab/watchtower
-            ];
-          };
-
-          lab01 = {
-            deployment = {
-              targetHost = "lab01";
-              targetUser = "ops";
-            };
-            imports = [
-              inputs.sops-nix.nixosModules.sops
-              inputs.disko.nixosModules.disko
-              inputs.home-manager.nixosModules.home-manager
-              inputs.stylix.nixosModules.stylix
-              ./modules/nixos
-              ./hosts/lab/lab01
-            ];
-          };
-        };
-
-        homeConfigurations =
-          let
-            hmConfig =
-              {
-                system ? "x86_64-linux",
-                modules,
-              }:
-              home-manager.lib.homeManagerConfiguration {
-                modules = [
-                  inputs.stylix.homeModules.stylix
-                  ./modules/home-manager
-                ]
-                ++ modules;
-                pkgs = pkgsFor.${system};
-                extraSpecialArgs = {
-                  inherit (self) inputs outputs;
-                  hmStandalone = true;
-                };
-              };
-          in
-          mapConfig hmConfig {
-          };
-
-        darwinConfigurations =
-          let
-            darwinConfig =
-              {
-                system ? "aarch64-darwin",
-                modules,
-              }:
-              nix-darwin.lib.darwinSystem {
-                inherit system;
-                modules = [
-                  inputs.stylix.darwinModules.stylix
-                  ./modules/nix-darwin
-                ]
-                ++ modules;
-                pkgs = pkgsFor.${system};
-                specialArgs = {
-                  inherit (self) inputs outputs;
-                };
-              };
-
-          in
-          mapConfig darwinConfig {
-            "macbookpro" = {
-              modules = [ ./hosts/workstation/mbp ];
-            };
-          };
-
-        templates = import ./templates { };
-
-      };
-
-      perSystem =
-        {
-          config,
-          pkgs,
-          system,
-          ...
-        }:
-        let
-          treefmt = inputs.treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
-        in
-        {
-          _module.args.pkgs = pkgsFor.${system};
-          formatter = treefmt.config.build.wrapper;
-          checks = {
-            formatting = treefmt.config.build.check self;
-          };
-          devShells = import ./shell.nix { inherit pkgs; };
-        };
-    };
+  outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
 
   nixConfig = {
     extra-substituters = [
@@ -285,4 +13,38 @@
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
   };
+
+  inputs = {
+    disko = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-community/disko";
+    };
+    flake-file.url = "github:vic/flake-file";
+    flake-parts = {
+      inputs.nixpkgs-lib.follows = "nixpkgs-lib";
+      url = "github:hercules-ci/flake-parts";
+    };
+    home-manager = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-community/home-manager";
+    };
+    import-tree.url = "github:vic/import-tree";
+    lanzaboote = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-community/lanzaboote";
+    };
+    nix-index-database = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-community/nix-index-database";
+    };
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs-lib.follows = "nixpkgs";
+    pkgs-by-name-for-flake-parts.url = "github:drupol/pkgs-by-name-for-flake-parts";
+    systems.url = "github:nix-systems/default";
+    treefmt-nix = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:numtide/treefmt-nix";
+    };
+  };
+
 }
