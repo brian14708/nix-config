@@ -9,56 +9,11 @@ keys:
     - &fujin age16ec47u39azzkgwt2m3mr2qe7vrn6zme32vh2f62zx8samlewe56s0ru8kv
     - &styx age1pfd04uk8s4qjrmdz2tchs5d0m0fjll2eev78r2klj3j39tdlap3qkclleq
 creation_rules:
-  # per host
-  - path_regex: \/aether\/secrets\.yaml$
-    key_groups:
-      - age:
-          - *aether
-        pgp: *owners
-  - path_regex: \/shiva\/secrets\.yaml$
-    key_groups:
-      - age:
-          - *shiva
-        pgp: *owners
-  - path_regex: \/fuxi\/secrets\.yaml$
-    key_groups:
-      - age:
-          - *fuxi
-        pgp: *owners
-  - path_regex: \/mbp\/secrets\.yaml$
-    key_groups:
-      - age:
-          - *mbp
-        pgp: *owners
-  - path_regex: \/fujin\/secrets\.yaml$
-    key_groups:
-      - age:
-          - *fujin
-        pgp: *owners
-  - path_regex: \/styx\/secrets\.yaml$
-    key_groups:
-      - age:
-          - *styx
-        pgp: *owners
-  # profile secrets
-  - path_regex: \/workstation\/secrets\.yaml$
-    key_groups:
-      - age:
-          - *aether
-          - *shiva
-          - *fuxi
-          - *fujin
-          - *mbp
-          - *styx
-        pgp: *owners
-  # infra
   - path_regex: ^infra\/(.*\.)?secrets\.yaml$
     key_groups:
-      - age:
-          - *aether
-          - *shiva
-          - *fuxi
-          - *fujin
-          - *mbp
-          - *styx
+      - age: *hosts
+        pgp: *owners
+  - path_regex: ^configs\/(.*\.)?secrets\.yaml$
+    key_groups:
+      - age: *hosts
         pgp: *owners

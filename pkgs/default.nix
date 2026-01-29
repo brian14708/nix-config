@@ -1,8 +1,14 @@
-{
-  pkgs ? import <nixpkgs> { },
-}:
-{
-  rime-ice = pkgs.callPackage ./rime-ice.nix { };
-  dnsmasq-china-list = pkgs.callPackage ./dnsmasq-china-list.nix { };
-  nix-store-gateway = pkgs.callPackage ./nix-store-gateway.nix { };
+final: prev:
+let
+  localPackages = prev.lib.packagesFromDirectoryRecursive {
+    inherit (final) callPackage;
+    directory = ./by-name;
+  };
+in
+localPackages
+// {
+  tailscale = prev.tailscale.overrideAttrs (old: {
+    patches = (old.patches or [ ]) ++ [ ./tailscale.patch ];
+    doCheck = false;
+  });
 }

@@ -17,9 +17,9 @@ image-lab-aliyun:
 
 update:
     nix flake update
-    nix-update --file ./pkgs/default.nix --version=branch=main rime-ice
-    nix-update --file ./pkgs/default.nix --version=branch=main nix-store-gateway
-    nix-update --file ./pkgs/default.nix --version=branch=master dnsmasq-china-list
+    nix-update --flake --version=branch=main rime-ice
+    nix-update --flake --version=branch=main nix-store-gateway
+    nix-update --flake --version=branch=master dnsmasq-china-list
 
 gc:
     nh clean all
