@@ -45,8 +45,8 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    deploy-rs = {
-      url = "github:szlend/deploy-rs/fix-show-derivation-parsing";
+    colmena = {
+      url = "github:zhaofengli/colmena";
       inputs = {
         nixpkgs.follows = "nixpkgs";
       };
@@ -60,7 +60,6 @@
       nixpkgs,
       home-manager,
       nix-darwin,
-      deploy-rs,
       ...
     }:
     let
@@ -75,7 +74,6 @@
         import nixpkgs {
           inherit system;
           overlays = [
-            deploy-rs.overlays.default
             inputs.nix-darwin.overlays.default
             (import ./overlays)
             (final: _prev: import ./pkgs { pkgs = final; })
@@ -157,37 +155,52 @@
             };
           };
 
-        deploy.nodes =
-          let
-            deployConfig =
-              {
-                hostname,
-                sshUser ? "ops",
-                system ? "x86_64-linux",
-              }:
-              {
-                inherit sshUser hostname;
-                profiles =
-                  let
-                    inherit (deploy-rs.lib.${system}) activate;
-                  in
-                  {
-                    system = {
-                      user = "root";
-                      path = activate.nixos self.nixosConfigurations.${hostname};
-                    };
-                  };
-              };
-          in
-          mapConfig deployConfig {
-            "watchtower" = {
-              hostname = "watchtower";
+        colmena = {
+          meta = {
+            nixpkgs = import nixpkgs {
+              system = "x86_64-linux";
+              overlays = [
+                inputs.nix-darwin.overlays.default
+                (import ./overlays)
+                (final: _prev: import ./pkgs { pkgs = final; })
+              ];
+              config.allowUnfree = true;
             };
-            "lab01" = {
-              enable = true;
-              hostname = "lab01";
+            specialArgs = {
+              inherit (self) inputs outputs;
             };
           };
+
+          watchtower = {
+            deployment = {
+              targetHost = "watchtower";
+              targetUser = "ops";
+            };
+            imports = [
+              inputs.sops-nix.nixosModules.sops
+              inputs.disko.nixosModules.disko
+              inputs.home-manager.nixosModules.home-manager
+              inputs.stylix.nixosModules.stylix
+              ./modules/nixos
+              ./hosts/lab/watchtower
+            ];
+          };
+
+          lab01 = {
+            deployment = {
+              targetHost = "lab01";
+              targetUser = "ops";
+            };
+            imports = [
+              inputs.sops-nix.nixosModules.sops
+              inputs.disko.nixosModules.disko
+              inputs.home-manager.nixosModules.home-manager
+              inputs.stylix.nixosModules.stylix
+              ./modules/nixos
+              ./hosts/lab/lab01
+            ];
+          };
+        };
 
         homeConfigurations =
           let
@@ -258,8 +271,7 @@
           formatter = treefmt.config.build.wrapper;
           checks = {
             formatting = treefmt.config.build.check self;
-          }
-          // deploy-rs.lib.${system}.deployChecks self.deploy;
+          };
           devShells = import ./shell.nix { inherit pkgs; };
         };
     };

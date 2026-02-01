@@ -17,6 +17,6 @@
         just
         opentofu
       ]
-      ++ (if pkgs.stdenv.isDarwin then [ darwin-rebuild ] else [ deploy-rs.deploy-rs ]);
+      ++ (if pkgs.stdenv.isDarwin then [ darwin-rebuild ] else [ pkgs.colmena ]);
   };
 }
