@@ -12,6 +12,7 @@
     enable = true;
     settings = {
       ui.default-command = "log";
+      git.private-commits = "description('wip:*') | description('private:*')";
       fix.tools = {
         nixfmt = {
           command = [
