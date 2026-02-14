@@ -34,6 +34,7 @@ in
         debug.render-drm-device = "/dev/dri/renderD129";
         "output \"eDP-1\"".scale = 2.0;
         "output \"Dell Inc. DELL D2720DS 8QHGNS2\"".scale = 1.5;
+        "output \"Invalid Vendor Codename - RTK Monitor Unknown\"".scale = 3;
       };
     };
 

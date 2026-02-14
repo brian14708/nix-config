@@ -73,7 +73,6 @@ in
         extraGroups = [ "docker" ];
       };
       environment.systemPackages = [ pkgs.minikube ];
-      hardware.nvidia-container-toolkit.enable = true;
 
       services.tailscale = {
         useRoutingFeatures = "server";

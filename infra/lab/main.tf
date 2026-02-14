@@ -19,7 +19,7 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "lab" {
     ingress = [
       {
         hostname = "lab.014708.xyz"
-        service  = "http://localhost"
+        service  = "http://[fd7a:115c:a1e0::4f01:4a1a]:3000"
       },
       {
         service = "http_status:404"
