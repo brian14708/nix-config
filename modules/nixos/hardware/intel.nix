@@ -1,7 +1,10 @@
 {
   flake.modules.nixos.intel =
-    { pkgs, ... }:
+    { pkgs, modulesPath, ... }:
     {
+      imports = [
+        (modulesPath + "/hardware/cpu/intel-npu.nix")
+      ];
       hardware.cpu.intel.updateMicrocode = true;
       hardware.graphics = {
         enable = true;
