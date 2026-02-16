@@ -20,6 +20,10 @@
       url = "github:zhaofengli/colmena";
     };
     crane.url = "github:ipetkov/crane";
+    den = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:brian14708/den";
+    };
     disko = {
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:nix-community/disko";
