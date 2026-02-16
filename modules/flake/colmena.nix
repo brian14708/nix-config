@@ -6,9 +6,7 @@
 {
   flake-file.inputs.colmena = {
     url = "github:zhaofengli/colmena";
-    inputs = {
-      nixpkgs.follows = "nixpkgs";
-    };
+    inputs.nixpkgs.follows = "nixpkgs";
   };
 
   flake.colmena = {

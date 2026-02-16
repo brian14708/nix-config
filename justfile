@@ -20,6 +20,7 @@ update:
     nix-update --flake --version=branch=main rime-ice
     nix-update --flake --version=branch=main nix-store-gateway
     nix-update --flake --version=branch=master dnsmasq-china-list
+    nix run .#write-flake
 
 gc:
     nh clean all
