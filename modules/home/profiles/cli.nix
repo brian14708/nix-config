@@ -16,6 +16,7 @@
         (with pkgs; [
           fastmod
           devenv
+          bubblewrap
           (writeShellApplication {
             name = "ob";
             text = ''

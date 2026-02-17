@@ -5,7 +5,6 @@
     inputs = {
       nixpkgs.follows = "nixpkgs";
       flake-parts.follows = "flake-parts";
-      systems.follows = "systems";
     };
   };
 
