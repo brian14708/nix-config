@@ -68,6 +68,7 @@ in
         inputs.disko.nixosModules.disko
       ]
       ++ (with nixos; [
+        workstation
         locale-cn
         sops
         niri
@@ -77,7 +78,7 @@ in
         stylix
       ]);
 
-      nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
+      nixpkgs.hostPlatform = "aarch64-linux";
 
       disko.devices = {
         disk.vda = {
@@ -153,7 +154,6 @@ in
               "wheel"
             ];
             openssh.authorizedKeys.keys = owner.ssh;
-            hashedPassword = "!";
           };
         };
       };
