@@ -5,6 +5,7 @@
   outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
 
   nixConfig = {
+    abort-on-warn = true;
     extra-substituters = [
       "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
       "https://nix-community.cachix.org"
@@ -19,7 +20,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:zhaofengli/colmena";
     };
-    crane.url = "github:ipetkov/crane";
     den = {
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:brian14708/den";
@@ -28,7 +28,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:nix-community/disko";
     };
-    flake-compat.url = "github:nixos/flake-compat";
     flake-file.url = "github:vic/flake-file";
     flake-parts = {
       inputs.nixpkgs-lib.follows = "nixpkgs-lib";
@@ -43,10 +42,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:nix-community/lanzaboote";
     };
-    nix-auto-follow = {
-      inputs.nixpkgs.follows = "nixpkgs";
-      url = "github:fzakaria/nix-auto-follow";
-    };
     nix-darwin = {
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:nix-darwin/nix-darwin";
@@ -57,10 +52,6 @@
     };
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-lib.follows = "nixpkgs";
-    rust-overlay = {
-      inputs.nixpkgs.follows = "nixpkgs";
-      url = "github:oxalica/rust-overlay";
-    };
     sops-nix = {
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:Mic92/sops-nix";

@@ -1,6 +1,6 @@
 {
   flake.modules.homeManager.vscode =
-    { pkgs, config, ... }:
+    { pkgs, ... }:
     {
       programs.vscode = {
         enable = true;

@@ -57,7 +57,6 @@ in
   flake.modules.nixos."hosts/macbookpro-vm" =
     {
       pkgs,
-      lib,
       modulesPath,
       config,
       ...
