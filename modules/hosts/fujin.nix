@@ -62,6 +62,9 @@ in
       system.stateVersion = "24.11";
       stylix.enable = true;
 
+      boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+      boot.binfmt.preferStaticEmulators = true;
+
       services = {
         tailscale = {
           useRoutingFeatures = "both";
