@@ -27,6 +27,10 @@
           "configs/unbound" = {
             mode = "0444";
           };
+          "configs/aws-credentials" = {
+            path = "/root/.aws/credentials";
+            mode = "0600";
+          };
         };
       };
     };
@@ -42,7 +46,10 @@
         gnupg.sshKeyPaths = [ ];
         defaultSopsFile = inputs.self + /configs/secrets.yaml;
         secrets = {
-          "configs/nix-store-gateway" = { };
+          "configs/aws-credentials" = {
+            path = "${config.home.homeDirectory}/.aws/credentials";
+            mode = "0600";
+          };
           "configs/nix-access-tokens" = { };
           "configs/nix-secret-key" = { };
           "configs/ai" = { };

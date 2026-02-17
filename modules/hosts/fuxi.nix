@@ -4,7 +4,7 @@ let
 in
 {
   flake.modules.homeManager."hosts/fuxi" =
-    { pkgs, config, ... }:
+    { pkgs, ... }:
     {
       imports = with hm; [
         workstation-linux
@@ -23,11 +23,6 @@ in
       services.gpg-agent = {
         enable = true;
         pinentry.package = pkgs.pinentry-tty;
-      };
-
-      services.nix-store-gateway = {
-        enable = true;
-        config = config.sops.secrets."configs/nix-store-gateway".path;
       };
 
       wayland.windowManager.niri.settings = {

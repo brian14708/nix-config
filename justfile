@@ -18,15 +18,20 @@ image-lab-aliyun:
 update:
     nix flake update
     nix-update --flake --version=branch=main rime-ice
-    nix-update --flake --version=branch=main nix-store-gateway
     nix-update --flake --version=branch=master dnsmasq-china-list
     nix run .#write-flake
 
 gc:
     nh clean all
 
-cache:
-    nix copy --to http://[::1]:4444 \
+cache host='':
+    #!/usr/bin/env sh
+    set -eu
+    dest='s3://nix-cache-miecho3l?endpoint=oss-cn-beijing.aliyuncs.com&addressing-style=virtual&profile=nix-cache-miecho3l'
+    host='{{host}}'
+    if [ -z "$host" ]; then
+        host="$(hostname -s 2>/dev/null || hostname)"
+    fi
+    nix copy --to "$dest" \
         .#devShells.x86_64-linux.default \
-        .#nixosConfigurations.fuxi.config.system.build.toplevel \
-        .#nixosConfigurations.shiva.config.system.build.toplevel
+        ".#nixosConfigurations.${host}.config.system.build.toplevel"

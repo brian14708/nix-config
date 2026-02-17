@@ -6,12 +6,14 @@
   ];
 
   flake-file = {
-    inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    inputs.flake-compat.url = "github:nixos/flake-compat";
-    inputs.crane.url = "github:ipetkov/crane";
-    inputs.rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
+    inputs = {
+      nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+      flake-compat.url = "github:nixos/flake-compat";
+      crane.url = "github:ipetkov/crane";
+      rust-overlay = {
+        url = "github:oxalica/rust-overlay";
+        inputs.nixpkgs.follows = "nixpkgs";
+      };
     };
     nixConfig = {
       extra-substituters = [
