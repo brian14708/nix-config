@@ -5,6 +5,7 @@
       imports = [
         (modulesPath + "/hardware/cpu/intel-npu.nix")
       ];
+      services.thermald.enable = true;
       hardware.cpu.intel.updateMicrocode = true;
       hardware.graphics = {
         enable = true;

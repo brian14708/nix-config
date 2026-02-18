@@ -89,10 +89,13 @@ in
             "/.envrc"
             "/.env"
             ".clangd/"
-            ".claude"
-            "/.todo"
+            ".claude/"
+            ".worktrees/"
             "CLAUDE.md"
             "AGENTS.md"
+            ".ralph/"
+            "ralph.yml"
+            "PROMPT.md"
           ];
         };
       };

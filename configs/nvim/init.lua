@@ -64,7 +64,6 @@ vim.opt.shm:append("I")
 
 vim.keymap.set("", "<leader>y", '"+y', { noremap = true, desc = "Yank to clipboard" })
 vim.keymap.set("", "<leader>p", '"+p', { noremap = true, desc = "Paste from clipboard" })
-vim.keymap.set("n", "<leader>cc", "<cmd>CopilotChatToggle<CR>", { desc = "Toggle Copilot Chat" })
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
@@ -599,17 +598,6 @@ require("lazy").setup({
     },
   },
 
-  { -- Copilot
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    config = function()
-      require("copilot").setup({
-        suggestion = { enabled = false },
-        panel = { enabled = false },
-      })
-    end,
-  },
-
   { -- Autocompletion
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
@@ -645,14 +633,6 @@ require("lazy").setup({
       --  into multiple repos for maintenance purposes.
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-path",
-
-      {
-        "zbirenbaum/copilot-cmp",
-        dependencies = "copilot.lua",
-        config = function()
-          require("copilot_cmp").setup()
-        end,
-      },
     },
     config = function()
       -- See `:help cmp`
@@ -719,7 +699,6 @@ require("lazy").setup({
           --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
         }),
         sources = {
-          { name = "copilot" },
           { name = "nvim_lsp" },
           { name = "luasnip" },
           { name = "path" },
@@ -821,18 +800,6 @@ require("lazy").setup({
       )
       vim.cmd.hi("FloatermBorder guibg=none")
     end,
-  },
-
-  {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    cmd = { "CopilotChatToggle", "CopilotChatOpen", "CopilotChat" },
-    dependencies = {
-      { "nvim-lua/plenary.nvim" },
-    },
-    build = "make tiktoken",
-    opts = {
-      -- See Configuration section for options
-    },
   },
 
   require("theme"),

@@ -24,6 +24,9 @@ in
         firewall.allowedTCPPorts = [
           47321
         ];
+        firewall.allowedUDPPorts = [
+          47320
+        ];
       };
       system.stateVersion = "24.11";
 
@@ -40,6 +43,7 @@ in
           };
           extraSetFlags = [
             "--accept-dns=false"
+            "--relay-server-port=47320"
           ];
         };
 

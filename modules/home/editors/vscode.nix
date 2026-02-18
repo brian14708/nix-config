@@ -1,9 +1,6 @@
 {
   flake.modules.homeManager.vscode =
     { pkgs, config, ... }:
-    let
-      inherit (config.programs.vscode.package) pname;
-    in
     {
       programs.vscode = {
         enable = true;
@@ -12,21 +9,10 @@
           enableUpdateCheck = false;
           enableExtensionUpdateCheck = false;
 
-          extensions =
-            with pkgs.vscode-extensions;
-            [
-              vscodevim.vim
-              mkhl.direnv
-            ]
-            ++ (
-              if pname == "cursor" then
-                [ ]
-              else
-                [
-                  github.copilot
-                  github.copilot-chat
-                ]
-            );
+          extensions = with pkgs.vscode-extensions; [
+            vscodevim.vim
+            mkhl.direnv
+          ];
 
           userSettings = {
             "window.menuBarVisibility" = "toggle";
