@@ -20,11 +20,8 @@ jobs:
       - name: Configure Nix cache
         uses: DeterminateSystems/magic-nix-cache-action@v13
 
-      - name: Install dependencies
-        run: nix profile install nixpkgs#just nixpkgs#nix-update
-
       - name: Run update
-        run: just update
+        run: nix run nixpkgs#just update
 
       - name: Run flake check
         run: nix flake check

@@ -8,7 +8,9 @@ let
   prefix = "hosts/";
 in
 {
-  flake.modules.nixos.base = { };
+  flake.modules.nixos.base = {
+    imports = [ config.flake.modules.generic.owner ];
+  };
   flake.nixosConfigurations = lib.pipe config.flake.modules.nixos [
     (lib.filterAttrs (name: _: lib.hasPrefix prefix name))
     (lib.mapAttrs' (

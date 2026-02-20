@@ -1,13 +1,15 @@
 { config, ... }:
 let
-  inherit (config.flake.meta) owner;
   inherit (config.flake.modules) nixos;
 in
 {
   flake.modules.homeManager."hosts/lab01" = { };
 
   flake.modules.nixos."hosts/lab01" =
-    { pkgs, ... }:
+    { pkgs, config, ... }:
+    let
+      inherit (config) owner;
+    in
     {
       imports = with nixos; [
         lab-aliyun

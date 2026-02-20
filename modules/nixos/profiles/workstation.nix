@@ -1,12 +1,8 @@
 toplevel@{
   inputs,
   lib,
-  config,
   ...
 }:
-let
-  inherit (config.flake.meta) owner;
-in
 {
   flake-file.inputs = {
     disko = {
@@ -17,6 +13,9 @@ in
 
   flake.modules.nixos.workstation =
     { pkgs, config, ... }:
+    let
+      inherit (config) owner;
+    in
     {
       imports = with toplevel.config.flake.modules.nixos; [
         inputs.disko.nixosModules.disko

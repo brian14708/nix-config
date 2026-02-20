@@ -1,6 +1,5 @@
 { config, ... }:
 let
-  inherit (config.flake.meta) owner;
   inherit (config.flake.modules) nixos;
 in
 {
@@ -12,6 +11,9 @@ in
       modulesPath,
       ...
     }:
+    let
+      inherit (config) owner;
+    in
     {
       imports = [
         (modulesPath + "/profiles/minimal.nix")

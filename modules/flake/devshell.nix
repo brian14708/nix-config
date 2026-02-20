@@ -9,8 +9,6 @@
         '';
         nativeBuildInputs = with pkgs; [
           nh
-          nix-update
-          home-manager
           sops
           just
           opentofu

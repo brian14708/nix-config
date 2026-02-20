@@ -9,20 +9,22 @@ nix:
     fi
 
 lab:
-    cd infra/lab && [ -d .terraform ] || SOPS_GPG_EXEC=/dev/null sops exec-env ./env.secrets.yaml 'tofu init'
-    cd infra/lab && SOPS_GPG_EXEC=/dev/null sops exec-env ./env.secrets.yaml 'tofu apply'
+    #!/usr/bin/env bash
+    set -euo pipefail
+    cd infra/lab
+    if [ ! -d .terraform ]; then
+        SOPS_GPG_EXEC=/dev/null sops exec-env ./env.secrets.yaml 'tofu init'
+    fi
+    SOPS_GPG_EXEC=/dev/null sops exec-env ./env.secrets.yaml 'tofu apply'
 
 image-lab-aliyun:
     nix build .#nixosConfigurations.lab-aliyun.config.system.build.qcow2
 
 update:
     nix flake update
-    nix-update --flake --version=branch=main rime-ice
-    nix-update --flake --version=branch=master dnsmasq-china-list
+    nix run nixpkgs#nix-update -- --flake --version=branch=main rime-ice
+    nix run nixpkgs#nix-update -- --flake --version=branch=master dnsmasq-china-list
     nix run .#write-flake
-
-gc:
-    nh clean all
 
 cache host='':
     #!/usr/bin/env sh

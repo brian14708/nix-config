@@ -9,7 +9,9 @@ toplevel@{
   };
 
   flake.modules = {
-    homeManager.base = { };
+    homeManager.base = {
+      imports = [ toplevel.config.flake.modules.generic.owner ];
+    };
 
     nixos.home-manager =
       { config, ... }:
@@ -19,12 +21,12 @@ toplevel@{
         home-manager = {
           useGlobalPkgs = true;
           useUserPackages = true;
-          users.${toplevel.config.flake.meta.owner.username}.imports = [
+          users.${config.owner.username}.imports = [
             (
               { osConfig, ... }:
               {
                 home = {
-                  inherit (toplevel.config.flake.meta.owner) username;
+                  inherit (config.owner) username;
                   inherit (osConfig.system) stateVersion;
                 };
               }
@@ -43,10 +45,10 @@ toplevel@{
         home-manager = {
           useGlobalPkgs = true;
           useUserPackages = true;
-          users.${toplevel.config.flake.meta.owner.username}.imports = [
+          users.${config.owner.username}.imports = [
             {
               home = {
-                inherit (toplevel.config.flake.meta.owner) username;
+                inherit (config.owner) username;
               };
             }
             toplevel.config.flake.modules.homeManager.base

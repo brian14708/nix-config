@@ -1,10 +1,10 @@
-{ config, ... }:
-let
-  inherit (config.flake.meta) owner;
-in
+{ ... }:
 {
   flake.modules.homeManager.git =
-    { pkgs, ... }:
+    { pkgs, config, ... }:
+    let
+      inherit (config) owner;
+    in
     {
       home.packages = with pkgs; [
         jjui

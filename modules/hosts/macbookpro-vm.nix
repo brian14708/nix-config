@@ -4,7 +4,6 @@
   ...
 }:
 let
-  inherit (config.flake.meta) owner;
   hm = config.flake.modules.homeManager;
   inherit (config.flake.modules) nixos;
 in
@@ -60,8 +59,12 @@ in
       pkgs,
       lib,
       modulesPath,
+      config,
       ...
     }:
+    let
+      inherit (config) owner;
+    in
     {
       imports = [
         (modulesPath + "/profiles/qemu-guest.nix")

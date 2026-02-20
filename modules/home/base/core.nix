@@ -1,6 +1,5 @@
 { config, ... }:
 let
-  inherit (config.flake.meta) owner;
   hm = config.flake.modules.homeManager;
 in
 {
@@ -12,6 +11,7 @@ in
       ...
     }:
     let
+      inherit (config) owner;
       inherit (config.home) homeDirectory;
     in
     {
