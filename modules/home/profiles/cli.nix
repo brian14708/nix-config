@@ -13,7 +13,20 @@
           hasAi = config ? sops && config.sops.secrets ? "configs/ai";
           aiEnv = config.sops.secrets."configs/ai".path;
         in
-        (with pkgs; [ fastmod ])
+        (with pkgs; [
+          fastmod
+          (writeShellApplication {
+            name = "ob";
+            text = ''
+              exec pnpm dlx obsidian-headless "$@"
+            '';
+            checkPhase = "";
+            runtimeInputs = [
+              nodejs
+              pnpm
+            ];
+          })
+        ])
         ++ lib.optionals hasAi [
           (pkgs.writeShellApplication {
             name = "claude";
@@ -44,18 +57,6 @@
             runtimeEnv = {
               CODEX_HOME = "${config.xdg.configHome}/codex";
             };
-          })
-          (pkgs.writeShellApplication {
-            name = "ralph";
-            text = ''
-              source ${aiEnv}
-              exec pnpm dlx "@ralph-orchestrator/ralph-cli" "$@"
-            '';
-            checkPhase = "";
-            runtimeInputs = [
-              pkgs.nodejs
-              pkgs.pnpm
-            ];
           })
         ];
 
