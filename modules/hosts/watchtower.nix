@@ -4,8 +4,9 @@ let
 in
 {
   flake.modules.nixos."hosts/watchtower" =
-    { pkgs, ... }:
+    { pkgs, config, ... }:
     let
+      inherit (config) owner;
       tls-cert =
         cn:
         (pkgs.runCommand "selfSignedCert" { buildInputs = [ pkgs.openssl ]; } ''
@@ -22,6 +23,7 @@ in
       networking = {
         hostName = "watchtower";
         firewall.allowedTCPPorts = [
+          42222
           47321
         ];
         firewall.allowedUDPPorts = [
@@ -34,7 +36,39 @@ in
         tmux
       ];
 
+      users.users.jump = {
+        uid = 2001;
+        isNormalUser = true;
+        description = "SSH jump account";
+        hashedPassword = "!";
+        openssh.authorizedKeys.keys = owner.ssh;
+      };
+
       services = {
+        openssh = {
+          ports = [
+            22
+            42222
+          ];
+          extraConfig = ''
+            Match LocalPort 42222
+              AllowUsers jump
+              AuthenticationMethods publickey
+              KbdInteractiveAuthentication no
+              PasswordAuthentication no
+              PubkeyAuthentication yes
+              PermitRootLogin no
+              AllowAgentForwarding no
+              AllowStreamLocalForwarding no
+              AllowTcpForwarding local
+              GatewayPorts no
+              MaxSessions 0
+              PermitTunnel no
+              PermitTTY no
+              X11Forwarding no
+          '';
+        };
+
         tailscale = {
           derper = {
             enable = true;
