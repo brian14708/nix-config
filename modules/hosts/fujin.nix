@@ -4,13 +4,23 @@ let
 in
 {
   flake.modules.homeManager."hosts/fujin" =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
     {
       imports = with hm; [
         workstation-linux
         cli
         catppuccin
       ];
+      home = {
+        packages = with pkgs; [
+          nodejs
+          pnpm
+          python3
+          uv
+        ];
+        sessionVariables.PNPM_HOME = "${config.xdg.dataHome}/pnpm";
+        sessionPath = [ config.home.sessionVariables.PNPM_HOME ];
+      };
       programs.gpg = {
         enable = true;
       };
