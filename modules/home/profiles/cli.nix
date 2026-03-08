@@ -15,6 +15,7 @@
         in
         (with pkgs; [
           fastmod
+          devenv
           (writeShellApplication {
             name = "ob";
             text = ''
