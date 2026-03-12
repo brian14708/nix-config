@@ -9,8 +9,6 @@ let
 in
 {
   flake = {
-    overlays.default = overlay;
-
     modules = {
       nixos.base = {
         nix.settings = {
