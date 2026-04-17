@@ -17,31 +17,18 @@ in
         catppuccin
       ];
 
-      home.packages = with pkgs; [ obsidian ];
+      # Lock screen immediately on startup (autologin + lock = secure remote access)
+      wayland.windowManager.niri.spawnAtStartup = [ "${pkgs.hyprlock}/bin/hyprlock" ];
 
       programs.gpg.enable = true;
       services.gpg-agent = {
         enable = true;
         pinentry.package = pkgs.pinentry-tty;
       };
-
-      wayland.windowManager.hyprland.settings = {
-        env = [
-          "AQ_DRM_DEVICES,/dev/dri/card1"
-        ];
-        monitor = [
-          "desc:AOC Q2790PQ PSKP5HA003512, 2560x1440, auto, 1.6"
-          "eDP-1, preferred, auto, 2"
-        ];
-        bindl = [
-          ''switch:off:Lid Switch,exec,hyprctl keyword monitor "eDP-1, preferred, auto, auto"''
-          ''switch:on:Lid Switch,exec,hyprctl keyword monitor "eDP-1, disable"''
-        ];
-      };
     };
 
   flake.modules.nixos."hosts/styx" =
-    { ... }:
+    { lib, pkgs, ... }:
     {
       imports = with config.flake.modules.nixos; [
         workstation
@@ -50,17 +37,30 @@ in
         mihomo
         niri
         intel
-        nvidia
         stylix
         home-manager
-        (config.flake.factory.disko-workstation { })
+        (config.flake.factory.disko-workstation {
+          diskName = "sda";
+          device = "/dev/sda";
+        })
       ];
 
       networking.hostName = "styx";
-      system.stateVersion = "24.11";
+      system.stateVersion = "26.05";
       stylix.enable = true;
 
+      services.sunshine = {
+        enable = true;
+        capSysAdmin = true;
+        openFirewall = true;
+      };
+
+      # Autologin for remote access (Sunshine needs a running session)
+      services.greetd.settings.default_session = {
+        command = lib.mkForce "${pkgs.niri}/bin/niri-session";
+        user = lib.mkForce "brian";
+      };
+
       virtualisation.podman.enable = true;
-      hardware.nvidia-container-toolkit.enable = true;
     };
 }

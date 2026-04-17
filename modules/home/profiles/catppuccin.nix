@@ -259,5 +259,6 @@
         addons = [ pkgs.catppuccin-fcitx5 ];
         settings.addons.classicui.globalSection.Theme = "catppuccin-${flavor}-${accent}";
       };
+      gtk.gtk4.theme = config.gtk.theme;
     };
 }

@@ -1,4 +1,3 @@
-{ ... }:
 {
   flake.modules.homeManager.git =
     { pkgs, config, ... }:
@@ -54,6 +53,7 @@
 
         git = {
           enable = true;
+          signing.format = null;
           settings = {
             user = {
               inherit (owner) name;
