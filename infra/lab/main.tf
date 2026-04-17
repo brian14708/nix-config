@@ -43,6 +43,15 @@ resource "cloudflare_dns_record" "lab" {
   proxied = true
 }
 
+resource "cloudflare_dns_record" "jump" {
+  zone_id = data.sops_file.vars.data["cloudflare_zone_id"]
+  name    = "jump"
+  content = alicloud_eip_address.watchtower.ip_address
+  type    = "A"
+  ttl     = 300
+  proxied = false
+}
+
 resource "alicloud_instance" "watchtower" {
   instance_name   = "watchtower"
   host_name       = "watchtower"
