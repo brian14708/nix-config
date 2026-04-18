@@ -82,6 +82,7 @@ toplevel@{
             "flakes"
           ];
           trusted-users = [ owner.username ];
+          max-jobs = "auto";
         };
         optimise.automatic = true;
         gc = {
@@ -169,7 +170,7 @@ toplevel@{
     };
 
   flake.modules.darwin.workstation =
-    { pkgs, config, ... }:
+    { config, ... }:
     let
       inherit (config) owner;
     in

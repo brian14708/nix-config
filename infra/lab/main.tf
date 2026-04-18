@@ -53,13 +53,14 @@ resource "cloudflare_dns_record" "jump" {
 }
 
 resource "alicloud_instance" "watchtower" {
-  instance_name   = "watchtower"
-  host_name       = "watchtower"
-  image_id        = alicloud_image_import.cn_nixos_20250531.id
-  instance_type   = "ecs.t6-c2m1.large"
-  renewal_status  = "AutoRenewal"
-  security_groups = [alicloud_security_group.cn.id]
-  vswitch_id      = alicloud_vswitch.cn.id
+  instance_name     = "watchtower"
+  host_name         = "watchtower"
+  image_id          = alicloud_image_import.cn_nixos_20250531.id
+  instance_type     = "ecs.t6-c2m1.large"
+  renewal_status    = "AutoRenewal"
+  auto_renew_period = 12
+  security_groups   = [alicloud_security_group.cn.id]
+  vswitch_id        = alicloud_vswitch.cn.id
   user_data = base64gzip(templatefile("${path.module}/cloud-init.tpl", {
     secrets = {
       tailscale_key     = data.sops_file.vars.data["ts_auth"]

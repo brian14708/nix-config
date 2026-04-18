@@ -5,9 +5,11 @@ prev.lib.mergeAttrsList [
     directory = ./by-name;
   })
   {
-    tailscale = prev.tailscale.overrideAttrs (old: {
-      patches = (old.patches or [ ]) ++ [ ./tailscale.patch ];
-      doCheck = false;
-    });
+    tailscale = prev.tailscale.overrideAttrs (
+      finalAttrs: prevAttrs: {
+        patches = (prevAttrs.patches or [ ]) ++ [ ./tailscale.patch ];
+        doCheck = false;
+      }
+    );
   }
 ]

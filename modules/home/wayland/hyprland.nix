@@ -33,7 +33,7 @@ in
           ];
           bind = [
             "$mod, Return, exec, footclient -N || ${launcher} foot"
-            "$mod, Space, exec, ${pkgs.fuzzel}/bin/fuzzel --launch-prefix=\"${launcher}\""
+            "$mod, Space, exec, ${lib.getExe pkgs.fuzzel} --launch-prefix=\"${launcher}\""
             "$mod, Tab, layoutmsg, swapwithmaster"
             "$mod, f, fullscreen, 1"
             "$mod SHIFT, f, fullscreen, 0"
@@ -67,25 +67,25 @@ in
 
             (
               "$mod, P, exec, "
-              + "${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\" - |"
+              + "${lib.getExe pkgs.grim} -g \"$(${lib.getExe pkgs.slurp})\" - |"
               + "${pkgs.wl-clipboard}/bin/wl-copy -t image/png"
             )
             (
               ", Print, exec, "
-              + "${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\" - |"
+              + "${lib.getExe pkgs.grim} -g \"$(${lib.getExe pkgs.slurp})\" - |"
               + "${pkgs.wl-clipboard}/bin/wl-copy -t image/png"
             )
             ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
             ", XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
             ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"
             ", XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+"
-            ", XF86AudioPlay, exec, ${pkgs.playerctl}/bin/playerctl play-pause"
-            ", XF86AudioStop, exec, ${pkgs.playerctl}/bin/playerctl stop"
-            ", XF86AudioNext, exec, ${pkgs.playerctl}/bin/playerctl next"
-            ", XF86AudioPrev, exec, ${pkgs.playerctl}/bin/playerctl previous"
+            ", XF86AudioPlay, exec, ${lib.getExe pkgs.playerctl} play-pause"
+            ", XF86AudioStop, exec, ${lib.getExe pkgs.playerctl} stop"
+            ", XF86AudioNext, exec, ${lib.getExe pkgs.playerctl} next"
+            ", XF86AudioPrev, exec, ${lib.getExe pkgs.playerctl} previous"
 
-            ", XF86MonBrightnessUp, exec, ${pkgs.brightnessctl}/bin/brightnessctl set +10%"
-            ", XF86MonBrightnessDown, exec, ${pkgs.brightnessctl}/bin/brightnessctl set 10%-"
+            ", XF86MonBrightnessUp, exec, ${lib.getExe pkgs.brightnessctl} set +10%"
+            ", XF86MonBrightnessDown, exec, ${lib.getExe pkgs.brightnessctl} set 10%-"
           ];
           binde = [
             "$mod, h, resizeactive, -50 0"

@@ -1,12 +1,12 @@
 { config, ... }:
 let
-  hm = config.flake.modules.homeManager;
+  inherit (config.flake.modules) homeManager nixos;
 in
 {
   flake.modules.homeManager."hosts/styx" =
-    { pkgs, ... }:
+    { pkgs, lib, ... }:
     {
-      imports = with hm; [
+      imports = with homeManager; [
         workstation-linux
         niri
         fcitx5
@@ -18,7 +18,7 @@ in
       ];
 
       # Lock screen immediately on startup (autologin + lock = secure remote access)
-      wayland.windowManager.niri.spawnAtStartup = [ "${pkgs.hyprlock}/bin/hyprlock" ];
+      wayland.windowManager.niri.spawnAtStartup = [ (lib.getExe pkgs.hyprlock) ];
 
       programs.gpg.enable = true;
       services.gpg-agent = {
@@ -30,7 +30,7 @@ in
   flake.modules.nixos."hosts/styx" =
     { lib, pkgs, ... }:
     {
-      imports = with config.flake.modules.nixos; [
+      imports = with nixos; [
         workstation
         secureboot
         locale-cn

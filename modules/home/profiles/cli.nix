@@ -16,11 +16,10 @@
         (with pkgs; [
           fastmod
           devenv
-          bubblewrap
           (writeShellApplication {
             name = "ob";
             text = ''
-              exec pnpm dlx obsidian-headless "$@"
+              exec pnpm --allow-build=better-sqlite3 dlx obsidian-headless "$@"
             '';
             checkPhase = "";
             runtimeInputs = [
@@ -29,6 +28,9 @@
             ];
           })
         ])
+        ++ lib.optionals pkgs.stdenv.isLinux [
+          pkgs.bubblewrap
+        ]
         ++ lib.optionals hasAi [
           (pkgs.writeShellApplication {
             name = "claude";
@@ -49,6 +51,7 @@
             name = "codex";
             text = ''
               source ${aiEnv}
+              ${pkgs.gnused}/bin/sed -i 's|base_url = ".*"|base_url = "'"$OPENAI_BASE_URL"'"|g' "$CODEX_HOME/config.toml"
               exec pnpm dlx "@openai/codex" "$@"
             '';
             checkPhase = "";
@@ -82,7 +85,6 @@
           };
         };
         jq.enable = true;
-        bash.enable = true;
         starship.enable = true;
         zoxide.enable = true;
         direnv = {
@@ -91,6 +93,7 @@
         };
         carapace.enable = true;
         bash = {
+          enable = true;
           bashrcExtra = lib.mkAfter ''
             if command -v direnv >/dev/null 2>&1; then
               if [ -n "$CLAUDECODE" ]; then

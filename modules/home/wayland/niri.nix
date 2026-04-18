@@ -7,6 +7,7 @@ in
     {
       config,
       pkgs,
+      lib,
       ...
     }:
     {
@@ -37,7 +38,7 @@ in
             "Mod+Return".spawn = builtins.toString (
               pkgs.writeScript "foot-launch" ''
                 #!${pkgs.dash}/bin/dash
-                ${pkgs.foot}/bin/footclient -N || ${pkgs.foot}/bin/foot
+                ${pkgs.foot}/bin/footclient -N || ${lib.getExe pkgs.foot}
               ''
             );
             "Mod+x".spawn = [
@@ -69,28 +70,28 @@ in
               "toggle"
             ];
             "XF86AudioPlay".spawn = [
-              "${pkgs.playerctl}/bin/playerctl"
+              (lib.getExe pkgs.playerctl)
               "play-pause"
             ];
             "XF86AudioStop".spawn = [
-              "${pkgs.playerctl}/bin/playerctl"
+              (lib.getExe pkgs.playerctl)
               "stop"
             ];
             "XF86AudioNext".spawn = [
-              "${pkgs.playerctl}/bin/playerctl"
+              (lib.getExe pkgs.playerctl)
               "next"
             ];
             "XF86AudioPrev".spawn = [
-              "${pkgs.playerctl}/bin/playerctl"
+              (lib.getExe pkgs.playerctl)
               "previous"
             ];
             "XF86MonBrightnessUp".spawn = [
-              "${pkgs.brightnessctl}/bin/brightnessctl"
+              (lib.getExe pkgs.brightnessctl)
               "set"
               "+10%"
             ];
             "XF86MonBrightnessDown".spawn = [
-              "${pkgs.brightnessctl}/bin/brightnessctl"
+              (lib.getExe pkgs.brightnessctl)
               "set"
               "10%-"
             ];

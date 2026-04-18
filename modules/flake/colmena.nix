@@ -20,9 +20,7 @@ in
 
   flake.colmena = {
     meta = {
-      nixpkgs = import inputs.nixpkgs {
-        system = "x86_64-linux";
-      };
+      nixpkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
     };
 
     watchtower = mkHost "watchtower" {

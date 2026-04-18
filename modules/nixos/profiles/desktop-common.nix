@@ -1,12 +1,12 @@
 {
   flake.modules.nixos.desktop-common =
-    { pkgs, ... }:
+    { pkgs, lib, ... }:
     {
       services.greetd = {
         enable = true;
         settings = {
           default_session = {
-            command = "${pkgs.tuigreet}/bin/tuigreet --time --remember-session";
+            command = "${lib.getExe pkgs.tuigreet} --time --remember-session";
             user = "greeter";
           };
         };

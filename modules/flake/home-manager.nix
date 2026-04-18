@@ -9,9 +9,12 @@ toplevel@{
   };
 
   flake.modules = {
-    homeManager.base = {
-      imports = [ toplevel.config.flake.modules.generic.owner ];
-    };
+    homeManager.base =
+      { lib, ... }:
+      {
+        imports = [ toplevel.config.flake.modules.generic.owner ];
+        home.enableNixpkgsReleaseCheck = lib.mkDefault false;
+      };
 
     nixos.home-manager =
       { config, ... }:

@@ -13,11 +13,14 @@
       { pkgs, ... }:
       {
         imports = [ inputs.stylix.nixosModules.stylix ];
+        stylix.enableReleaseChecks = lib.mkDefault false;
         stylix.base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/default-dark.yaml";
+        stylix.targets.kmscon.enable = lib.mkDefault false;
       };
 
     homeManager.stylix = {
       imports = [ inputs.stylix.homeModules.stylix ];
+      stylix.enableReleaseChecks = lib.mkDefault false;
     };
 
     darwin.stylix =

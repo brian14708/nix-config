@@ -1,6 +1,6 @@
 {
   flake.modules.homeManager.wayland =
-    { pkgs, ... }:
+    { pkgs, lib, ... }:
     let
       timeoutCommand = builtins.toString (
         pkgs.writeScript "timeout-command" ''
@@ -31,7 +31,7 @@
             "foot"
             "--server"
           ]
-          [ "${pkgs.waybar}/bin/waybar" ]
+          [ (lib.getExe pkgs.waybar) ]
         ];
       };
 
@@ -70,13 +70,13 @@
             general = {
               before_sleep_cmd = "loginctl lock-session";
               after_sleep_cmd = resumeCommand;
-              lock_cmd = "pidof hyprlock || ${pkgs.hyprlock}/bin/hyprlock";
+              lock_cmd = "pidof hyprlock || ${lib.getExe pkgs.hyprlock}";
             };
 
             listener = [
               {
                 timeout = 120;
-                on-timeout = "${pkgs.hyprlock}/bin/hyprlock";
+                on-timeout = lib.getExe pkgs.hyprlock;
               }
               {
                 timeout = 180;

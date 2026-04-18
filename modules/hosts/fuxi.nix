@@ -1,12 +1,12 @@
-{ config, inputs, ... }:
+{ config, ... }:
 let
-  hm = config.flake.modules.homeManager;
+  inherit (config.flake.modules) homeManager nixos;
 in
 {
   flake.modules.homeManager."hosts/fuxi" =
     { pkgs, ... }:
     {
-      imports = with hm; [
+      imports = with homeManager; [
         workstation-linux
         niri
         fcitx5
@@ -36,7 +36,7 @@ in
   flake.modules.nixos."hosts/fuxi" =
     { ... }:
     {
-      imports = with config.flake.modules.nixos; [
+      imports = with nixos; [
         workstation
         secureboot
         locale-cn
@@ -44,7 +44,7 @@ in
         tailscale-subnet
         niri
         amd
-        # nvidia
+        nvidia
         stylix
         home-manager
         (config.flake.factory.disko-workstation { })
@@ -57,12 +57,6 @@ in
       boot = {
         kernelParams = [ "resume_offset=533760" ];
         resumeDevice = "/dev/mapper/root";
-        kernelPatches = [
-          {
-            name = "Disable OOBE mode on the ProArt PX13";
-            patch = inputs.self + /configs/HID-hid-asus-Disable-OOBE-mode-on-the-ProArt-PX13.patch;
-          }
-        ];
       };
 
       environment.sessionVariables = {

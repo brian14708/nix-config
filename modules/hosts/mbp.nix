@@ -1,12 +1,12 @@
 { config, ... }:
 let
-  hm = config.flake.modules.homeManager;
+  inherit (config.flake.modules) homeManager darwin;
 in
 {
   flake.modules.homeManager."hosts/macbookpro" =
     { pkgs, config, ... }:
     {
-      imports = with hm; [
+      imports = with homeManager; [
         cli
         sops
       ];
@@ -42,23 +42,17 @@ in
             ui.pager = ":builtin";
           };
         };
-        ssh = {
-          matchBlocks."github.com" = {
-            hostname = "github.com";
-            proxyCommand = "${pkgs.corkscrew}/bin/corkscrew 127.0.0.1 6152 %h %p";
-          };
-        };
       };
       xdg.configFile."ghostty/config".text = ''
         font-family = "Maple Mono NF CN"
         theme = "Catppuccin Mocha"
       '';
       targets.darwin.defaults.NSGlobalDomain.ApplePressAndHoldEnabled = false;
+      stylix.targets.gtk.enable = false;
     };
 
   flake.modules.darwin."hosts/macbookpro" = {
-    imports = with config.flake.modules.darwin; [
-      base
+    imports = with darwin; [
       locale-cn
       home-manager
       stylix
@@ -81,14 +75,6 @@ in
     programs.zsh.shellInit = ''
       eval "$(/opt/homebrew/bin/brew shellenv)"
     '';
-    homebrew.casks = [
-      "tailscale-app"
-      "ghostty"
-      "alfred"
-      "surge"
-      "1password"
-      "obsidian"
-    ];
     users.users.brian.home = "/Users/brian";
   };
 }

@@ -1,12 +1,12 @@
 { config, ... }:
 let
-  hm = config.flake.modules.homeManager;
+  inherit (config.flake.modules) homeManager nixos;
 in
 {
   flake.modules.homeManager."hosts/shiva" =
     { pkgs, ... }:
     {
-      imports = with hm; [
+      imports = with homeManager; [
         workstation-linux
         niri
         fcitx5
@@ -46,7 +46,7 @@ in
   flake.modules.nixos."hosts/shiva" =
     { pkgs, ... }:
     {
-      imports = with config.flake.modules.nixos; [
+      imports = with nixos; [
         workstation
         secureboot
         locale-cn
@@ -54,7 +54,7 @@ in
         docker
         niri
         intel
-        # nvidia
+        nvidia
         stylix
         home-manager
         (config.flake.factory.disko-workstation { })

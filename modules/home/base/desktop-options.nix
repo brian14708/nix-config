@@ -28,7 +28,7 @@
       config = lib.mkIf cfg.enable {
         my.desktop.startupCommands = [
           [
-            "${pkgs.swaybg}/bin/swaybg"
+            (lib.getExe pkgs.swaybg)
             "-i"
             "${cfg.wallpaper}"
           ]

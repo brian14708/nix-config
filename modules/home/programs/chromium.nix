@@ -1,6 +1,6 @@
 {
   flake.modules.homeManager.chromium =
-    { pkgs, ... }:
+    { pkgs, lib, ... }:
     {
       programs.chromium = {
         enable = true;
@@ -29,7 +29,7 @@
       home.packages = [ pkgs.captive-browser ];
       xdg.configFile."captive-browser.toml".text = ''
         browser = """
-          ${pkgs.chromium}/bin/chromium \
+          ${lib.getExe pkgs.chromium} \
             --user-data-dir=''${XDG_DATA_HOME:-$HOME/.local/share}/chromium-captive \
             --proxy-server="socks5://$PROXY" \
             --host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE localhost" \

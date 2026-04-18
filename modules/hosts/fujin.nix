@@ -1,12 +1,12 @@
 { config, ... }:
 let
-  hm = config.flake.modules.homeManager;
+  inherit (config.flake.modules) homeManager nixos;
 in
 {
   flake.modules.homeManager."hosts/fujin" =
     { config, pkgs, ... }:
     {
-      imports = with hm; [
+      imports = with homeManager; [
         workstation-linux
         cli
         catppuccin
@@ -33,7 +33,7 @@ in
   flake.modules.nixos."hosts/fujin" =
     { ... }:
     {
-      imports = with config.flake.modules.nixos; [
+      imports = with nixos; [
         workstation
         secureboot
         locale-cn
@@ -63,7 +63,6 @@ in
         hardware.bolt.enable = true;
       };
 
-      virtualisation.podman.enable = true;
       hardware.graphics.enable = true;
     };
 }

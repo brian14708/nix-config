@@ -11,7 +11,6 @@ in
       ...
     }:
     let
-      inherit (config) owner;
       inherit (config.home) homeDirectory;
     in
     {
@@ -23,11 +22,12 @@ in
       ];
 
       news.display = "silent";
+      home.enableNixpkgsReleaseCheck = false;
 
       home = {
         preferXdgDirectories = true;
         sessionVariables = {
-          PAGER = "${pkgs.less}/bin/less -RXF";
+          PAGER = "${lib.getExe pkgs.less} -RXF";
         };
         sessionPath = [
           "${homeDirectory}/.local/bin"
@@ -39,27 +39,12 @@ in
       programs = {
         home-manager.enable = true;
 
-        git = {
-          settings = {
-            user = {
-              inherit (owner) name;
-              email = builtins.head owner.email;
-            };
-          };
-          signing.key = builtins.head owner.pgp;
-        };
-
-        jujutsu.settings.user = {
-          inherit (owner) name;
-          email = builtins.head owner.email;
-        };
-
         ssh = {
           enable = true;
           enableDefaultConfig = false;
-          matchBlocks."*" = {
-            compression = true;
-            addKeysToAgent = "yes";
+          settings."*" = {
+            Compression = true;
+            AddKeysToAgent = "yes";
           };
           extraConfig = ''
             ObscureKeystrokeTiming no

@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   fetchFromGitHub,
   format ? "raw",
@@ -7,13 +8,13 @@
 }:
 stdenv.mkDerivation {
   pname = "dnsmasq-china-list";
-  version = "0-unstable-2026-04-20";
+  version = "0-unstable-2026-06-08";
 
   src = fetchFromGitHub {
     owner = "felixonmars";
     repo = "dnsmasq-china-list";
-    rev = "398b1c9788949fdbf69bed17410884fb4d43eb4a";
-    hash = "sha256-bYPhI2/YOo5Ke/EkTOYNQ4IDcOHSn89WeeEbTtCl5MI=";
+    rev = "d87a5bc1d76b87a6729e9e5355c35be0fc2ff6cd";
+    hash = "sha256-waRZ1d+czcG/TerzKbkPjCjcCkCQm6hAlXkAZ7DfkG0=";
   };
 
   buildPhase = ''
@@ -21,4 +22,11 @@ stdenv.mkDerivation {
     make SERVER=${server} ${format}
     cp *.conf *.txt $out
   '';
+
+  meta = {
+    description = "Chinese-specific configuration to improve your favorite DNS server";
+    homepage = "https://github.com/felixonmars/dnsmasq-china-list";
+    license = lib.licenses.wtfpl;
+    platforms = lib.platforms.all;
+  };
 }

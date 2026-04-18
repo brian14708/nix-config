@@ -4,7 +4,12 @@ let
 in
 {
   flake.modules.nixos."hosts/watchtower" =
-    { pkgs, config, ... }:
+    {
+      pkgs,
+      config,
+      lib,
+      ...
+    }:
     let
       inherit (config) owner;
       tls-cert =
@@ -131,7 +136,7 @@ in
         wantedBy = [ "multi-user.target" ];
         script = ''
           export TUNNEL_TOKEN=$(${pkgs.systemd}/bin/systemd-creds cat TUNNEL_TOKEN)
-          exec ${pkgs.cloudflared}/bin/cloudflared tunnel --no-autoupdate run
+          exec ${lib.getExe pkgs.cloudflared} tunnel --no-autoupdate run
         '';
         serviceConfig = {
           DynamicUser = true;

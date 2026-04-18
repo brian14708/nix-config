@@ -23,7 +23,10 @@ in
       name: module: {
         name = lib.removePrefix prefix name;
         value = inputs.nix-darwin.lib.darwinSystem {
-          modules = [ module ];
+          modules = [
+            config.flake.modules.darwin.base
+            module
+          ];
         };
       }
     ))

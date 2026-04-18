@@ -22,6 +22,8 @@
     {
       stylix = {
         enable = true;
+        enableReleaseChecks = lib.mkDefault false;
+        polarity = "dark";
         base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-${flavor}.yaml";
         fonts = {
           serif = {
@@ -259,6 +261,5 @@
         addons = [ pkgs.catppuccin-fcitx5 ];
         settings.addons.classicui.globalSection.Theme = "catppuccin-${flavor}-${accent}";
       };
-      gtk.gtk4.theme = config.gtk.theme;
     };
 }
