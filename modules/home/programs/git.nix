@@ -59,13 +59,18 @@
               inherit (owner) name;
               email = builtins.head owner.email;
             };
-            aliases = {
-              sclone = "clone --filter=blob:none";
+            alias = {
+              sclone = "clone --depth=1 --filter=blob:none";
               pushf = "push --force-with-lease";
               lg = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
               fixup = "!git commit --fixup $(git select)";
               select = "!git log --oneline --decorate --color | ${pkgs.fzf}/bin/fzf +s +m --ansi | ${pkgs.gnused}/bin/sed \"s/ .*//\"";
-              gc-all = "!git reflog expire --expire=now --all && git gc --aggressive --prune=now";
+              gc-all = ''
+                !git remote | xargs -r -n 1 git remote prune && \
+                    git worktree prune && \
+                    git reflog expire --expire=now --expire-unreachable=now --all && \
+                    git gc --aggressive --prune=now
+              '';
               cleanup = "!git branch --merged | grep -E -v '^\\*|master|main|dev' | xargs -r git branch -d";
               uncommit = "reset HEAD~1";
               save = "commit -am";
@@ -81,21 +86,21 @@
             };
             pull.rebase = true;
             init.defaultBranch = "main";
+            push.autoSetupRemote = true;
           };
           lfs.enable = true;
           ignores = [
             ".DS_Store"
-            "/.direnv"
-            "/.envrc"
-            "/.env"
+            ".direnv"
+            ".envrc"
+            ".env"
             ".clangd/"
             ".claude/"
             ".worktrees/"
             "CLAUDE.md"
             "AGENTS.md"
-            ".ralph/"
-            "ralph.yml"
             "PROMPT.md"
+            ".codex"
           ];
         };
       };

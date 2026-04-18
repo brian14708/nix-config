@@ -16,11 +16,10 @@
         (with pkgs; [
           fastmod
           devenv
-          bubblewrap
           (writeShellApplication {
             name = "ob";
             text = ''
-              exec pnpm dlx obsidian-headless "$@"
+              exec pnpm --allow-build=better-sqlite3 dlx obsidian-headless "$@"
             '';
             checkPhase = "";
             runtimeInputs = [
@@ -29,6 +28,9 @@
             ];
           })
         ])
+        ++ lib.optionals pkgs.stdenv.isLinux [
+          pkgs.bubblewrap
+        ]
         ++ lib.optionals hasAi [
           (pkgs.writeShellApplication {
             name = "claude";

@@ -44,7 +44,7 @@ in
         tailscale-subnet
         niri
         amd
-        # nvidia
+        nvidia
         stylix
         home-manager
         (config.flake.factory.disko-workstation { })
@@ -57,12 +57,6 @@ in
       boot = {
         kernelParams = [ "resume_offset=533760" ];
         resumeDevice = "/dev/mapper/root";
-        kernelPatches = [
-          {
-            name = "Disable OOBE mode on the ProArt PX13";
-            patch = inputs.self + /configs/HID-hid-asus-Disable-OOBE-mode-on-the-ProArt-PX13.patch;
-          }
-        ];
       };
 
       environment.sessionVariables = {

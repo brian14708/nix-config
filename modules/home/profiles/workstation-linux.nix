@@ -13,6 +13,9 @@ in
       programs.tmux = {
         enable = true;
         mouse = true;
+        keyMode = "vi";
+        terminal = "tmux-256color";
+        focusEvents = true;
       };
     };
 }

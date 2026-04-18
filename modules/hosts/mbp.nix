@@ -43,9 +43,9 @@ in
           };
         };
         ssh = {
-          matchBlocks."github.com" = {
-            hostname = "github.com";
-            proxyCommand = "${pkgs.corkscrew}/bin/corkscrew 127.0.0.1 6152 %h %p";
+          settings."github.com" = {
+            HostName = "github.com";
+            ProxyCommand = "${pkgs.corkscrew}/bin/corkscrew 127.0.0.1 6152 %h %p";
           };
         };
       };
@@ -54,6 +54,7 @@ in
         theme = "Catppuccin Mocha"
       '';
       targets.darwin.defaults.NSGlobalDomain.ApplePressAndHoldEnabled = false;
+      gtk.gtk4.theme = null;
     };
 
   flake.modules.darwin."hosts/macbookpro" = {
@@ -81,14 +82,6 @@ in
     programs.zsh.shellInit = ''
       eval "$(/opt/homebrew/bin/brew shellenv)"
     '';
-    homebrew.casks = [
-      "tailscale-app"
-      "ghostty"
-      "alfred"
-      "surge"
-      "1password"
-      "obsidian"
-    ];
     users.users.brian.home = "/Users/brian";
   };
 }

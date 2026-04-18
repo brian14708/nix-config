@@ -57,9 +57,9 @@ in
         ssh = {
           enable = true;
           enableDefaultConfig = false;
-          matchBlocks."*" = {
-            compression = true;
-            addKeysToAgent = "yes";
+          settings."*" = {
+            Compression = true;
+            AddKeysToAgent = "yes";
           };
           extraConfig = ''
             ObscureKeystrokeTiming no
