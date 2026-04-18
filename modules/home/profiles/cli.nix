@@ -16,7 +16,6 @@
         (with pkgs; [
           fastmod
           devenv
-          bubblewrap
           (writeShellApplication {
             name = "ob";
             text = ''
@@ -29,6 +28,9 @@
             ];
           })
         ])
+        ++ lib.optionals pkgs.stdenv.isLinux [
+          pkgs.bubblewrap
+        ]
         ++ lib.optionals hasAi [
           (pkgs.writeShellApplication {
             name = "claude";

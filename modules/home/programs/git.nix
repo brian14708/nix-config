@@ -85,17 +85,16 @@
           lfs.enable = true;
           ignores = [
             ".DS_Store"
-            "/.direnv"
-            "/.envrc"
-            "/.env"
+            ".direnv"
+            ".envrc"
+            ".env"
             ".clangd/"
             ".claude/"
             ".worktrees/"
             "CLAUDE.md"
             "AGENTS.md"
-            ".ralph/"
-            "ralph.yml"
             "PROMPT.md"
+            ".codex"
           ];
         };
       };
