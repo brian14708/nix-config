@@ -53,7 +53,7 @@ in
         mihomo
         niri
         intel
-        # nvidia
+        nvidia
         stylix
         home-manager
         (config.flake.factory.disko-workstation { })

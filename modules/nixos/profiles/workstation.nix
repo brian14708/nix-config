@@ -81,6 +81,7 @@ toplevel@{
             "flakes"
           ];
           trusted-users = [ owner.username ];
+          max-jobs = "auto";
         };
         optimise.automatic = true;
         gc = {

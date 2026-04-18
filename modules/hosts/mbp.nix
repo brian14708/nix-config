@@ -54,6 +54,7 @@ in
         theme = "Catppuccin Mocha"
       '';
       targets.darwin.defaults.NSGlobalDomain.ApplePressAndHoldEnabled = false;
+      gtk.gtk4.theme = null;
     };
 
   flake.modules.darwin."hosts/macbookpro" = {
