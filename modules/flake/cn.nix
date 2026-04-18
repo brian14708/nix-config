@@ -35,6 +35,7 @@ in
       nix.settings = {
         substituters = [
           "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store?priority=10"
+          "https://mirrors.ustc.edu.cn/nix-channels/store?priority=20"
           "https://cache.nixos.org?priority=100"
         ];
       };
@@ -47,6 +48,15 @@ in
       in
       {
         home.file = {
+          ".npmrc".text = ''
+            registry=https://registry.npmmirror.com
+          '';
+
+          ".config/pip/pip.conf".text = ''
+            [global]
+            index-url = https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
+          '';
+
           ".cargo/config.toml".text = lib.mkBefore ''
             [source.crates-io]
             replace-with = 'rsproxy-sparse'
@@ -69,7 +79,8 @@ in
         nix.settings = {
           substituters = [
             "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store?priority=10"
-            "s3://nix-cache-miecho3l?endpoint=oss-cn-beijing.aliyuncs.com&addressing-style=virtual&profile=nix-cache-miecho3l&priority=20"
+            "https://mirrors.ustc.edu.cn/nix-channels/store?priority=20"
+            "s3://nix-cache-miecho3l?endpoint=oss-cn-beijing.aliyuncs.com&addressing-style=virtual&profile=nix-cache-miecho3l&priority=30"
             "https://cache.nixos.org?priority=100"
           ];
         };
