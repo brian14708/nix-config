@@ -18,6 +18,7 @@
           git
           wget
           fd
+          fzf
           unzip
           tree-sitter
         ];
