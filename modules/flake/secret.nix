@@ -35,6 +35,25 @@
       };
     };
 
+  flake.modules.darwin.sops =
+    { ... }:
+    {
+      imports = [ inputs.sops-nix.darwinModules.sops ];
+      sops = {
+        age.sshKeyPaths = [ ];
+        age.keyFile = "/var/lib/sops-nix/keys.txt";
+        gnupg.sshKeyPaths = [ ];
+        defaultSopsFile = inputs.self + /configs/secrets.yaml;
+
+        secrets = {
+          "configs/aws-credentials" = {
+            path = "/var/root/.aws/credentials";
+            mode = "0600";
+          };
+        };
+      };
+    };
+
   flake.modules.homeManager.sops =
     { config, ... }:
     {

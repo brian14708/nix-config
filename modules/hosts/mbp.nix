@@ -62,6 +62,8 @@ in
       locale-cn
       home-manager
       stylix
+      sops
+      workstation
     ];
     networking.hostName = "macbookpro";
     system = {

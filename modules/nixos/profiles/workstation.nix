@@ -142,4 +142,19 @@ toplevel@{
         man-pages-posix
       ];
     };
+
+  flake.modules.darwin.workstation =
+    { pkgs, config, ... }:
+    let
+      inherit (config) owner;
+    in
+    {
+      sops.secrets = {
+        "hosts/${config.networking.hostName}/sops" = {
+          owner = owner.username;
+          path = "/Users/${owner.username}/.config/sops/age/keys.txt";
+          mode = "0600";
+        };
+      };
+    };
 }
