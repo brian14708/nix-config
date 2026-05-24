@@ -51,6 +51,7 @@ in
         secureboot
         locale-cn
         mihomo
+        docker
         niri
         intel
         # nvidia
@@ -62,12 +63,6 @@ in
       networking.hostName = "shiva";
       system.stateVersion = "24.11";
       stylix.enable = true;
-      virtualisation.docker = {
-        enable = true;
-      };
-      users.users.brian = {
-        extraGroups = [ "docker" ];
-      };
       environment.systemPackages = [ pkgs.minikube ];
 
       services.tailscale = {

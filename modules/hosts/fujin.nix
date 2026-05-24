@@ -38,6 +38,7 @@ in
         secureboot
         locale-cn
         mihomo
+        docker
         tailscale-subnet
         amd
         stylix
