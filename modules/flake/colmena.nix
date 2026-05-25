@@ -3,6 +3,15 @@
   config,
   ...
 }:
+let
+  mkHost = name: deployment: {
+    inherit deployment;
+    imports = [
+      config.flake.modules.nixos.base
+      config.flake.modules.nixos."hosts/${name}"
+    ];
+  };
+in
 {
   flake-file.inputs.colmena = {
     url = "github:zhaofengli/colmena";
@@ -16,26 +25,14 @@
       };
     };
 
-    watchtower = {
-      deployment = {
-        targetHost = "watchtower";
-        targetUser = "ops";
-      };
-      imports = [
-        config.flake.modules.nixos.base
-        config.flake.modules.nixos."hosts/watchtower"
-      ];
+    watchtower = mkHost "watchtower" {
+      targetHost = "watchtower";
+      targetUser = "ops";
     };
 
-    lab01 = {
-      deployment = {
-        targetHost = "lab01";
-        targetUser = "ops";
-      };
-      imports = [
-        config.flake.modules.nixos.base
-        config.flake.modules.nixos."hosts/lab01"
-      ];
+    lab01 = mkHost "lab01" {
+      targetHost = "lab01";
+      targetUser = "ops";
     };
   };
 }

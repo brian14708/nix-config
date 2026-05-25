@@ -128,13 +128,13 @@ in
             type: url-test
             use:
             - proxy
-            filter: "(?i)japan|jp|japan|日"
+            filter: "(?i)japan|jp|日"
           - name: usa
             type: url-test
             use:
             - proxy
             filter: "(?i)美|us|unitedstates|united states"
-          - name: UK
+          - name: uk
             type: url-test
             use:
             - proxy

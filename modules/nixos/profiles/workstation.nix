@@ -42,6 +42,7 @@ toplevel@{
 
       nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
       boot = {
+        # Personal machine with controlled workloads — accept the Spectre/Meltdown tradeoff for performance.
         kernelParams = [ "mitigations=off" ];
         kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
       };
@@ -85,21 +86,47 @@ toplevel@{
         optimise.automatic = true;
         gc = {
           automatic = true;
-          options = "--delete-older-than 7d";
+          options = "--delete-older-than 14d";
         };
       };
 
-      zramSwap.enable = true;
+      zramSwap = {
+        enable = true;
+        algorithm = "zstd";
+        memoryPercent = 50;
+      };
       services.tailscale = {
         enable = true;
       };
+
+      services.scx = lib.mkIf pkgs.stdenv.hostPlatform.isx86_64 {
+        enable = true;
+        scheduler = "scx_lavd";
+      };
+      systemd.oomd = {
+        enable = true;
+        enableUserSlices = true;
+      };
+      services.fstrim.enable = true;
+
+      services.journald.extraConfig = ''
+        SystemMaxUse=500M
+        MaxRetentionSec=2w
+      '';
 
       hardware.bluetooth = {
         enable = true;
         powerOnBoot = true;
       };
       systemd.coredump.enable = false;
-      boot.kernel.sysctl."kernel.core_pattern" = "|/run/current-system/sw/bin/false";
+      boot.tmp.cleanOnBoot = true;
+      boot.kernelModules = [ "tcp_bbr" ];
+      boot.kernel.sysctl = {
+        "kernel.core_pattern" = "|/run/current-system/sw/bin/false";
+        "vm.swappiness" = 180;
+        "net.core.default_qdisc" = "fq";
+        "net.ipv4.tcp_congestion_control" = "bbr";
+      };
       networking.networkmanager = {
         enable = true;
         wifi.backend = "iwd";
@@ -121,8 +148,6 @@ toplevel@{
       services.tlp = {
         enable = true;
         settings = {
-          CPU_SCALING_GOVERNOR_ON_AC = "performance";
-          CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
           CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
           CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
           CPU_BOOST_ON_BAT = 0;
