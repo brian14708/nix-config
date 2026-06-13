@@ -28,8 +28,9 @@ in
       targetUser = "ops";
     };
 
-    lab01 = mkHost "lab01" {
-      targetHost = "lab01";
+    omniagent = mkHost "omniagent" {
+      targetHost = "ssh.omni-agent.xyz";
+      targetPort = 22;
       targetUser = "ops";
     };
   };
