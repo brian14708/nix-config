@@ -34,6 +34,9 @@ in
         firewall.allowedUDPPorts = [
           47320
         ];
+        firewall.trustedInterfaces = [
+          config.services.tailscale.interfaceName
+        ];
       };
       system.stateVersion = "24.11";
 
@@ -75,6 +78,8 @@ in
         };
 
         tailscale = {
+          enable = true;
+          authKeyFile = "/var/secrets/tailscale_key";
           derper = {
             enable = true;
             domain = "derp-901";
@@ -124,6 +129,7 @@ in
 
         cloudflared.enable = true;
       };
+      systemd.services.tailscaled-autoconnect.after = [ "cloud-final.service" ];
       systemd.services.cloudflared-tunnel = {
         after = [
           "network.target"

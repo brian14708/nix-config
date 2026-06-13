@@ -55,6 +55,11 @@ provider "alicloud" {
   alias  = "cn"
 }
 
+provider "alicloud" {
+  region = "cn-hongkong"
+  alias  = "hk"
+}
+
 provider "sops" {}
 
 provider "google" {}
