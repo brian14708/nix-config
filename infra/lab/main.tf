@@ -18,11 +18,7 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "lab" {
   config = {
     ingress = [
       {
-        hostname = "lab.014708.xyz"
-        service  = "http://[fd7a:115c:a1e0::4f01:4a1a]:4444"
-      },
-      {
-        service = "http_status:404"
+        service = "http://127.0.0.1:80"
       }
     ]
   }
@@ -33,10 +29,9 @@ data "cloudflare_zero_trust_tunnel_cloudflared_token" "lab" {
   tunnel_id  = cloudflare_zero_trust_tunnel_cloudflared.lab.id
 }
 
-
-resource "cloudflare_dns_record" "lab" {
+resource "cloudflare_dns_record" "lab_wildcard" {
   zone_id = data.sops_file.vars.data["cloudflare_zone_id"]
-  name    = "lab"
+  name    = "*"
   content = "${cloudflare_zero_trust_tunnel_cloudflared.lab.id}.cfargotunnel.com"
   type    = "CNAME"
   ttl     = 1
@@ -103,9 +98,7 @@ resource "alicloud_instance" "lab01" {
   security_groups      = [alicloud_security_group.cn.id]
   vswitch_id           = alicloud_vswitch.cn.id
   user_data = base64gzip(templatefile("${path.module}/cloud-init.tpl", {
-    secrets = {
-      tailscale_key = data.sops_file.vars.data["ts_auth"]
-    }
+    secrets = {}
   }))
   system_disk_category       = "cloud_essd_entry"
   system_disk_size           = "20"
