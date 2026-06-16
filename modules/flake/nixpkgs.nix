@@ -18,10 +18,6 @@ in
         nixpkgs = {
           overlays = [ overlay ];
           config.allowUnfree = true;
-          config.permittedInsecurePackages = [
-            "electron-38.8.4"
-          ];
-
         };
       };
 

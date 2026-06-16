@@ -20,6 +20,8 @@
       accentVariant = if flavor == "latte" then "light" else "dark";
     in
     {
+      home.pointerCursor.enable = true;
+
       stylix = {
         enable = true;
         enableReleaseChecks = lib.mkDefault false;
