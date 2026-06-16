@@ -15,8 +15,10 @@ in
 
       wayland.windowManager.niri = {
         enable = true;
-        spawnAtStartup = config.my.desktop.startupCommands;
         settings = {
+          _children = map (command: {
+            spawn-at-startup._args = command;
+          }) config.my.desktop.startupCommands;
           input = {
             keyboard = {
               xkb = {
@@ -35,12 +37,10 @@ in
           prefer-no-csd = [ ];
           binds = {
             "Mod+Space".spawn = "fuzzel";
-            "Mod+Return".spawn = builtins.toString (
-              pkgs.writeScript "foot-launch" ''
-                #!${pkgs.dash}/bin/dash
-                ${pkgs.foot}/bin/footclient -N || ${lib.getExe pkgs.foot}
-              ''
-            );
+            "Mod+Return".spawn = [
+              (lib.getExe' pkgs.foot "footclient")
+              "-N"
+            ];
             "Mod+x".spawn = [
               "loginctl"
               "lock-session"

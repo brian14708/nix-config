@@ -18,7 +18,7 @@ in
       ];
 
       # Lock screen immediately on startup (autologin + lock = secure remote access)
-      wayland.windowManager.niri.spawnAtStartup = [ (lib.getExe pkgs.hyprlock) ];
+      my.desktop.startupCommands = [ [ (lib.getExe pkgs.hyprlock) ] ];
 
       programs.gpg.enable = true;
       services.gpg-agent = {

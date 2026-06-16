@@ -22,6 +22,7 @@
       );
     in
     {
+      home.pointerCursor.enable = true;
       home.pointerCursor.size = 24;
 
       my.desktop = {

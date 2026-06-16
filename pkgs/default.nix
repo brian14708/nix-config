@@ -6,7 +6,7 @@ prev.lib.mergeAttrsList [
   })
   {
     tailscale = prev.tailscale.overrideAttrs (
-      finalAttrs: prevAttrs: {
+      _finalAttrs: prevAttrs: {
         patches = (prevAttrs.patches or [ ]) ++ [ ./tailscale.patch ];
         doCheck = false;
       }

@@ -26,6 +26,8 @@
       };
 
       config = lib.mkIf cfg.enable {
+        home.packages = [ pkgs.swaybg ];
+
         my.desktop.startupCommands = [
           [
             (lib.getExe pkgs.swaybg)

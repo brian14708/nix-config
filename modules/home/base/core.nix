@@ -34,7 +34,7 @@ in
         ];
       };
 
-      services.ssh-agent.enable = !pkgs.stdenv.isDarwin;
+      services.ssh-agent.enable = !pkgs.stdenv.hostPlatform.isDarwin;
 
       programs = {
         home-manager.enable = true;
@@ -88,7 +88,7 @@ in
       // lib.optionalAttrs (config ? sops && config.sops.secrets ? "configs/nix-access-tokens") {
         extraOptions = "!include ${config.sops.secrets."configs/nix-access-tokens".path}";
       }
-      // lib.optionalAttrs pkgs.stdenv.isDarwin {
+      // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
         package = pkgs.nixVersions.latest;
       };
 
