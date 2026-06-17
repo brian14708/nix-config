@@ -414,10 +414,13 @@ require("lazy").setup({
   },
 
   {
-    "nvim-treesitter/nvim-treesitter",
+    "neovim-treesitter/nvim-treesitter",
     branch = "main",
-    event = { "BufReadPost", "BufNewFile" },
+    lazy = false,
     build = ":TSUpdate",
+    dependencies = {
+      "neovim-treesitter/treesitter-parser-registry",
+    },
     config = function(_, opts)
       local treesitter = require("nvim-treesitter")
       treesitter.setup(opts)
