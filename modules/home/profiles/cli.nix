@@ -36,6 +36,7 @@
             name = "claude";
             text = ''
               source ${aiEnv}
+              export PNPM_CONFIG_MINIMUM_RELEASE_AGE=0
               exec pnpm dlx "@anthropic-ai/claude-code" "$@"
             '';
             checkPhase = "";
@@ -52,6 +53,7 @@
             text = ''
               source ${aiEnv}
               ${pkgs.gnused}/bin/sed -i 's|base_url = ".*"|base_url = "'"$OPENAI_BASE_URL"'"|g' "$CODEX_HOME/config.toml"
+              export PNPM_CONFIG_MINIMUM_RELEASE_AGE=0
               exec pnpm dlx "@openai/codex" "$@"
             '';
             checkPhase = "";
@@ -72,6 +74,17 @@
         };
         eza.enable = true;
         ripgrep.enable = true;
+        herdr = {
+          enable = true;
+          settings = {
+            ui = {
+              show_agent_labels_on_pane_borders = false;
+              sound.enabled = false;
+              toast.delivery = "off";
+            };
+            onboarding = false;
+          };
+        };
         zellij = {
           enable = true;
           settings = {

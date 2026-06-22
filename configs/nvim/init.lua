@@ -6,8 +6,6 @@ vim.g.loaded_perl_provider = 0
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_ruby_provider = 0
 
-vim.loader.enable()
-
 vim.opt.termguicolors = true
 vim.opt.number = true
 vim.opt.relativenumber = true
@@ -33,16 +31,15 @@ vim.opt.scrolloff = 8
 vim.opt.sidescrolloff = 8
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
-vim.opt.completeopt = { "menuone", "noselect" }
 vim.opt.pumheight = 10
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.shm:append("I")
 
-vim.keymap.set("", "<leader>y", '"+y', { noremap = true, desc = "Yank to clipboard" })
-vim.keymap.set("", "<leader>p", '"+p', { noremap = true, desc = "Paste from clipboard" })
+vim.keymap.set({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank to clipboard" })
+vim.keymap.set({ "n", "v" }, "<leader>p", '"+p', { desc = "Paste from clipboard" })
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
-vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
+vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic location list" })
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
 vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
@@ -197,7 +194,7 @@ require("lazy").setup({
           end
         end
         fzf.live_grep({
-          cmd = "rg --column --line-number --no-heading --color=always --smart-case -- %s " .. table.concat(paths, " "),
+          cmd = "rg --column --line-number --no-heading --color=always --smart-case -- {q} " .. table.concat(paths, " "),
           prompt = "Live Grep (open files)> ",
         })
       end, { desc = "[S]earch [/] in Open Files" })
@@ -215,8 +212,6 @@ require("lazy").setup({
       "saghen/blink.cmp",
     },
     config = function()
-      vim.env.RUSTC_BOOTSTRAP = "1"
-
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
         callback = function(event)
@@ -292,6 +287,7 @@ require("lazy").setup({
         rust_analyzer = {
           cmd = { "nix", "shell", "nixpkgs#rust-analyzer", "--command", "rust-analyzer" },
           cmd_env = {
+            RUSTC_BOOTSTRAP = "1",
             CARGO_TARGET_DIR = "target/analyzer",
           },
         },
@@ -403,7 +399,8 @@ require("lazy").setup({
 
   {
     "stevearc/oil.nvim",
-    cmd = "Oil",
+    -- Must load eagerly to hijack directory buffers since netrw is disabled.
+    lazy = false,
     keys = {
       { "<leader>e", "<CMD>Oil<CR>", desc = "Open file explorer" },
     },
@@ -433,7 +430,6 @@ require("lazy").setup({
         local lang = vim.treesitter.language.get_lang(ft)
         if lang and vim.tbl_contains(installed, lang) then
           pcall(vim.treesitter.start, buf)
-          vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
         end
       end
       vim.api.nvim_create_autocmd("FileType", {
@@ -483,7 +479,7 @@ require("lazy").setup({
       { "<C-k>", "<C-\\><C-N>:FloatermPrev<CR>", mode = "t", desc = "Goto previous floaterm window" },
       { "<C-j>", "<C-\\><C-N>:FloatermNext<CR>", mode = "t", desc = "Goto next floaterm window" },
       { "<C-t>", "<C-\\><C-N>:FloatermToggle<CR>", mode = "t", desc = "Toggle floaterm" },
-      { "<C-d>", "<C-\\><C-N>:FloatermKill<CR>", mode = "t", desc = "Kill floaterm" },
+      { "<C-x>", "<C-\\><C-N>:FloatermKill<CR>", mode = "t", desc = "Kill floaterm" },
     },
     config = function()
       vim.g.floaterm_wintype = "float"
@@ -500,6 +496,8 @@ require("lazy").setup({
 
   { import = "plugins" },
 }, {
+  -- stdpath("config") is the read-only Nix store; keep the lockfile in state.
+  lockfile = vim.fn.stdpath("state") .. "/lazy-lock.json",
   rocks = { enabled = false },
   ui = { border = "single" },
   performance = {

@@ -41,49 +41,44 @@ in
       };
     };
 
-    homeManager.locale-cn =
-      { config, ... }:
-      let
-        home = config.home.homeDirectory;
-      in
-      {
-        home.file = {
-          ".npmrc".text = ''
-            registry=https://registry.npmmirror.com
-          '';
+    homeManager.locale-cn = {
+      xdg.configFile."pip/pip.conf".text = ''
+        [global]
+        index-url = https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
+      '';
 
-          ".config/pip/pip.conf".text = ''
-            [global]
-            index-url = https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
-          '';
-
-          ".cargo/config.toml".text = lib.mkBefore ''
-            [source.crates-io]
-            replace-with = 'rsproxy-sparse'
-            [source.rsproxy]
-            registry = "https://rsproxy.cn/crates.io-index"
-            [source.rsproxy-sparse]
-            registry = "sparse+https://rsproxy.cn/index/"
-            [registries.rsproxy]
-            index = "https://rsproxy.cn/crates.io-index"
-            [net]
-            git-fetch-with-cli = true
-          '';
+      programs = {
+        cargo = {
+          enable = true;
+          package = null;
+          settings = {
+            source = {
+              crates-io.replace-with = "rsproxy-sparse";
+              rsproxy.registry = "https://rsproxy.cn/crates.io-index";
+              rsproxy-sparse.registry = "sparse+https://rsproxy.cn/index/";
+            };
+            registries.rsproxy.index = "https://rsproxy.cn/crates.io-index";
+            net.git-fetch-with-cli = true;
+          };
         };
 
-        xdg.configFile."go/env".text = ''
-          GOPATH=${home}/.local/go
-          GOPROXY=https://goproxy.cn,direct
-        '';
+        go.env.GOPROXY = "https://goproxy.cn,direct";
 
-        nix.settings = {
-          substituters = [
-            "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store?priority=10"
-            "https://mirrors.ustc.edu.cn/nix-channels/store?priority=20"
-            "s3://nix-cache-miecho3l?endpoint=oss-cn-beijing.aliyuncs.com&addressing-style=virtual&profile=nix-cache-miecho3l&priority=30"
-            "https://cache.nixos.org?priority=100"
-          ];
+        npm = {
+          enable = true;
+          package = null;
+          settings.registry = "https://registry.npmmirror.com";
         };
       };
+
+      nix.settings = {
+        substituters = [
+          "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store?priority=10"
+          "https://mirrors.ustc.edu.cn/nix-channels/store?priority=20"
+          "s3://nix-cache-miecho3l?endpoint=oss-cn-beijing.aliyuncs.com&addressing-style=virtual&profile=nix-cache-miecho3l&priority=30"
+          "https://cache.nixos.org?priority=100"
+        ];
+      };
+    };
   };
 }

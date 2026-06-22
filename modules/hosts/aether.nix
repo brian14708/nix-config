@@ -45,6 +45,14 @@ in
     system.stateVersion = "26.05";
     stylix.enable = true;
 
+    boot = {
+      resumeDevice = "/dev/mapper/root";
+      kernelParams = [
+        "resume_offset=533760"
+        "xe.enable_dpcd_backlight=1"
+      ];
+    };
+
     virtualisation.podman.enable = true;
     boot.initrd.availableKernelModules = [
       "xhci_pci"
