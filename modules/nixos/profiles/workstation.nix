@@ -127,6 +127,9 @@ toplevel@{
         "vm.swappiness" = 180;
         "net.core.default_qdisc" = "fq";
         "net.ipv4.tcp_congestion_control" = "bbr";
+        "net.ipv4.tcp_fastopen" = 3;
+        "net.ipv4.tcp_mtu_probing" = 1;
+        "net.ipv4.tcp_slow_start_after_idle" = 0;
       };
       networking.networkmanager = {
         enable = true;
@@ -152,6 +155,8 @@ toplevel@{
           CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
           CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
           CPU_BOOST_ON_BAT = 0;
+          WIFI_PWR_ON_AC = "off";
+          WIFI_PWR_ON_BAT = "on";
         };
       };
       documentation = {
