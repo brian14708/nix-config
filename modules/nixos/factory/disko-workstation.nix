@@ -9,6 +9,14 @@
       swapSize ? "32G",
       compression ? "zstd",
     }:
+    let
+      btrfsMountOptions = [
+        "compress=${compression}"
+        "noatime"
+        "ssd"
+        "discard=async"
+      ];
+    in
     {
       disko.devices = {
         disk = {
@@ -40,18 +48,15 @@
                         "@" = { };
                         "@/root" = {
                           mountpoint = "/";
-                          mountOptions = [ "compress=${compression}" ];
+                          mountOptions = btrfsMountOptions;
                         };
                         "@/home" = {
                           mountpoint = "/home";
-                          mountOptions = [ "compress=${compression}" ];
+                          mountOptions = btrfsMountOptions;
                         };
                         "@/nix" = {
                           mountpoint = "/nix";
-                          mountOptions = [
-                            "compress=${compression}"
-                            "noatime"
-                          ];
+                          mountOptions = btrfsMountOptions;
                         };
                         "@/swap" = {
                           mountpoint = "/nix/swap";

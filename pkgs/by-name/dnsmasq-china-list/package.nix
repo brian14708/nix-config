@@ -1,12 +1,12 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
   format ? "raw",
   server ? "114.114.114.114",
   ...
 }:
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "dnsmasq-china-list";
   version = "0-unstable-2026-07-19";
 
