@@ -2,25 +2,25 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.opentofu.org/aliyun/alicloud" {
-  version     = "1.282.0"
+  version     = "1.284.0"
   constraints = "~> 1.0"
   hashes = [
-    "h1:/VAUx1eZHqO0z6vo+edrs3LPfZqRTqIXZBeLly65X/Q=",
-    "h1:0vOGdihPYF7dqwdzl/LkqjcqcEH51rVaIfAdkO9Nzdk=",
-    "h1:DHrvepL9UgdbCZ410/TAeWF+mEHg46iCTQyKZGm++kk=",
-    "h1:Qwhk/A7JdqzSVcjrHRpQJdcEClvw+jL9ybBjL/jZrRk=",
-    "h1:eAAVH4YPvMXQ7dGoea/K4cydrz86eMf4Z0XaqCOnIH0=",
-    "zh:0f2c5e98e75fd665e87f5dbcf11b2f1b7c363328ed24bbc44749511365bd8c28",
-    "zh:0fe78d9c017a3b5ea22ed38cee445e422597ce15300e9f31c3fa645d13e6ef9b",
-    "zh:11f5e85080f310025484d86385b622caf0d96580bd1f01312fc0d93598bbc96f",
-    "zh:12aef09f00580d6a8e219345cc7ed295d5b8fa56c417553dcfe480fd6151e11c",
-    "zh:2e88f9b5a4b498a765dcc9c586595d1a361d2b5f03ef61d2acd644da5f2f0d86",
-    "zh:4d2b51cce9fac7bb46373a3a3f792ec47f01346601788ea42e5e18c5d5933547",
-    "zh:5a2dd1437ad5d1e70e0dcdcc699015046fa54bb7c16a0e0b1d5a12eafcf21bc2",
-    "zh:75cd138f29602271d79b4900f83bd5def4f2c16ebe19fdd97bd0439b74901807",
-    "zh:92cfa7a3760bef7906ab3e283c2411d74824f26acd73c8c046b8060b1e90ed49",
-    "zh:e297bd9ea7293df5a813d3811d081edff70d5b2a8ea0ba1517a25c032f4571a7",
-    "zh:ff608c5520b39e80bcce8239b5e898d400c47df866273f4f7928357a88eb2eee",
+    "h1:00e09NMMterlsrrCjyyg8f5kVFGH2z5fF61qNna8rYw=",
+    "h1:7a4Ls6qVXvJRL9ghvwqmdELtQW5kVWx0fCjEvyEzoWw=",
+    "h1:GdUwSsWr0Li0iahA9owpSyzulNhT4QE96fBMtglQbjM=",
+    "h1:maECexUPFXG/Licjt+9daR6Pa182YkWaU06FAXXuchU=",
+    "h1:xFrKcHA/2frzLPsHwY6oOW7e8P+hZjI53wKdiHOZ7hc=",
+    "zh:047b9c9e77b3541d8877ff1179e362bb6786134834d81cfc7512a1df964cb873",
+    "zh:04900abc2d85af3ce66179936bd5968f94e284851897896e5f7ec88e9c29fcf2",
+    "zh:346a0f04dee4c4ac36c529eadfc053e7e9263a8cce4979b55ddfc335a9b89ff3",
+    "zh:86fb7794ec7f9f9a79fc4850ad2e485210833b75492b8092cc4280392315ce1c",
+    "zh:8ac6523ba10ae3806ed6f937a9607a778dc925fc93fd0529cf4203f72c90f52f",
+    "zh:8fb2c149f18272bee8f587094814e7c44b110321548942099646895cf28efcf6",
+    "zh:9c05937ec722f255e9b0cbfa191b4c8bdc33923364c24a02aa77434d95244601",
+    "zh:a43ce39c26dd8f50be22f7ef44cc25f9db55c8e90bb967e33d7f1a0d5f604576",
+    "zh:b8056a7be00929944c1ddd405d9cf56f8cfaa19ed8c9235d137fe39fdc6981a4",
+    "zh:c175a7db2fab179dc54738abd99817f2e3c11bffdd00e08816679e8dd25b99a9",
+    "zh:fefe1a0cb9a3e229844e5c6175e2181fd98b228279a51af984418120fc7a106f",
   ]
 }
 
