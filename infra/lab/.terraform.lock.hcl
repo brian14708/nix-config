@@ -2,25 +2,25 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.opentofu.org/aliyun/alicloud" {
-  version     = "1.284.0"
+  version     = "1.285.0"
   constraints = "~> 1.0"
   hashes = [
-    "h1:00e09NMMterlsrrCjyyg8f5kVFGH2z5fF61qNna8rYw=",
-    "h1:7a4Ls6qVXvJRL9ghvwqmdELtQW5kVWx0fCjEvyEzoWw=",
-    "h1:GdUwSsWr0Li0iahA9owpSyzulNhT4QE96fBMtglQbjM=",
-    "h1:maECexUPFXG/Licjt+9daR6Pa182YkWaU06FAXXuchU=",
-    "h1:xFrKcHA/2frzLPsHwY6oOW7e8P+hZjI53wKdiHOZ7hc=",
-    "zh:047b9c9e77b3541d8877ff1179e362bb6786134834d81cfc7512a1df964cb873",
-    "zh:04900abc2d85af3ce66179936bd5968f94e284851897896e5f7ec88e9c29fcf2",
-    "zh:346a0f04dee4c4ac36c529eadfc053e7e9263a8cce4979b55ddfc335a9b89ff3",
-    "zh:86fb7794ec7f9f9a79fc4850ad2e485210833b75492b8092cc4280392315ce1c",
-    "zh:8ac6523ba10ae3806ed6f937a9607a778dc925fc93fd0529cf4203f72c90f52f",
-    "zh:8fb2c149f18272bee8f587094814e7c44b110321548942099646895cf28efcf6",
-    "zh:9c05937ec722f255e9b0cbfa191b4c8bdc33923364c24a02aa77434d95244601",
-    "zh:a43ce39c26dd8f50be22f7ef44cc25f9db55c8e90bb967e33d7f1a0d5f604576",
-    "zh:b8056a7be00929944c1ddd405d9cf56f8cfaa19ed8c9235d137fe39fdc6981a4",
-    "zh:c175a7db2fab179dc54738abd99817f2e3c11bffdd00e08816679e8dd25b99a9",
-    "zh:fefe1a0cb9a3e229844e5c6175e2181fd98b228279a51af984418120fc7a106f",
+    "h1:Qbf32W3f1RYD6/x6d9aGynppzIr8edb0a1/hopLfatI=",
+    "h1:QnpkFfKTw5+b+aO2nUGADpIJwHraFIoF0zt8E5w10DE=",
+    "h1:Y+EW4FUd2hoSohTCBAPcw9SQUCo6ibo4HWrcl2nCyp0=",
+    "h1:s7P5YaS0ikxdwZVp+FIUl2VqTkbCZVYsvoD84Nuesiw=",
+    "h1:xIDLNoAqnzvvMZkMhMDA7R3li32pAgS9xp+MfSFiFvU=",
+    "zh:02310c8e8bb5e1e7553f51b4f0848f43bb05dc753d3a4088188f0d7349650400",
+    "zh:11486ff04727d1209da99a74065c18f4aeaf42d20be3262cfb303351c0ce8235",
+    "zh:2c95026792a78d3e4b65a7059594be99daf3f529c45220bc91fc5d1eb6ea1ba9",
+    "zh:3fcbc3be8dfb70cfdb22a2d69c9cd6e8af550e952750ed18c0f661fe08f875b1",
+    "zh:8e9923917993309df1e6208916fa7f5109faba6b474fc8ca862ed38e3582f832",
+    "zh:a9abed2f842b1567088520f78db5a69173549901f4a29b68e17eb8ddd6472d3f",
+    "zh:c1b01b5ed6b049172ee3370402666d78d6effe14201434d82560d4d10b0fc4ce",
+    "zh:c8233975cc16fdf2ad20c1c999c6364812e56e30e05da81db7e6bf168f79c7e0",
+    "zh:dccd0ff560f022e19f0e10d23fd96a2756ff32951f2b7c81edf6855cb871d774",
+    "zh:e04803f07b9d4cbd159971f97bbc9f5728b24552f18c06d2b4d6e4f64d44692d",
+    "zh:feb93fd0a875b9de0542b1b48c1e537a1538d78a9985a3be1bbf0a29257e6c94",
   ]
 }
 
