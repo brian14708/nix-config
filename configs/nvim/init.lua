@@ -194,7 +194,8 @@ require("lazy").setup({
           end
         end
         fzf.live_grep({
-          cmd = "rg --column --line-number --no-heading --color=always --smart-case -- {q} " .. table.concat(paths, " "),
+          cmd = "rg --column --line-number --no-heading --color=always --smart-case -- {q} "
+            .. table.concat(paths, " "),
           prompt = "Live Grep (open files)> ",
         })
       end, { desc = "[S]earch [/] in Open Files" })

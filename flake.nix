@@ -15,8 +15,8 @@
   };
 
   inputs = {
-    colmena = {
-      url = "github:zhaofengli/colmena";
+    deploy-rs = {
+      url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     disko = {

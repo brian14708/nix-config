@@ -12,7 +12,7 @@
           sops
           just
           opentofu
-          colmena
+          deploy-rs
         ];
       };
     };

@@ -4,34 +4,30 @@
   ...
 }:
 let
-  mkHost = name: deployment: {
-    inherit deployment;
-    imports = [
-      config.flake.modules.nixos.base
-      config.flake.modules.nixos."hosts/${name}"
-    ];
+  deployLib = inputs.deploy-rs.lib.x86_64-linux;
+
+  mkNode = name: hostname: {
+    inherit hostname;
+    sshUser = "ops";
+    profiles.system = {
+      user = "root";
+      path = deployLib.activate.nixos config.flake.nixosConfigurations.${name};
+    };
   };
 in
 {
-  flake-file.inputs.colmena = {
-    url = "github:zhaofengli/colmena";
+  flake-file.inputs.deploy-rs = {
+    url = "github:serokell/deploy-rs";
     inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  flake.colmena = {
-    meta = {
-      nixpkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-    };
-
-    watchtower = mkHost "watchtower" {
-      targetHost = "watchtower";
-      targetUser = "ops";
-    };
-
-    omniagent = mkHost "omniagent" {
-      targetHost = "ssh.omni-agent.xyz";
-      targetPort = 22;
-      targetUser = "ops";
-    };
+  flake.deploy.nodes = {
+    watchtower = mkNode "watchtower" "watchtower";
   };
+
+  perSystem =
+    { system, ... }:
+    {
+      checks = inputs.deploy-rs.lib.${system}.deployChecks config.flake.deploy;
+    };
 }
