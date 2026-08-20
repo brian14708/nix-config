@@ -107,10 +107,10 @@ toplevel@{
       };
       services.fstrim.enable = true;
 
-      services.journald.extraConfig = ''
-        SystemMaxUse=500M
-        MaxRetentionSec=2w
-      '';
+      services.journald.settings.Journal = {
+        SystemMaxUse = "500M";
+        MaxRetentionSec = "2w";
+      };
 
       hardware.bluetooth = {
         enable = true;
