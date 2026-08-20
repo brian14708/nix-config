@@ -51,7 +51,7 @@ in
       stylix.enable = true;
 
       boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-      boot.binfmt.preferStaticEmulators = true;
+      boot.binfmt.preferStaticEmulators = false;
 
       services = {
         tailscale = {
