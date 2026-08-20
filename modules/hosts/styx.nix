@@ -4,7 +4,7 @@ let
 in
 {
   flake.modules.homeManager."hosts/styx" =
-    { pkgs, lib, ... }:
+    { pkgs, ... }:
     {
       imports = with homeManager; [
         workstation-linux
@@ -17,9 +17,6 @@ in
         catppuccin
       ];
 
-      # Lock screen immediately on startup (autologin + lock = secure remote access)
-      my.desktop.startupCommands = [ [ (lib.getExe pkgs.hyprlock) ] ];
-
       programs.gpg.enable = true;
       services.gpg-agent = {
         enable = true;
@@ -28,7 +25,7 @@ in
     };
 
   flake.modules.nixos."hosts/styx" =
-    { lib, pkgs, ... }:
+    { pkgs, ... }:
     {
       imports = with nixos; [
         workstation
@@ -56,18 +53,6 @@ in
         ];
       };
       systemd.services.tailscaled.path = [ pkgs.iputils ];
-
-      services.sunshine = {
-        enable = true;
-        capSysAdmin = true;
-        openFirewall = true;
-      };
-
-      # Autologin for remote access (Sunshine needs a running session)
-      services.greetd.settings.default_session = {
-        command = lib.mkForce "${pkgs.niri}/bin/niri-session";
-        user = lib.mkForce "brian";
-      };
 
       virtualisation.podman.enable = true;
     };
