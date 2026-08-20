@@ -169,7 +169,6 @@ toplevel@{
       };
       environment.systemPackages = with pkgs; [
         ghostty.terminfo
-        foot.terminfo
         man-pages
         man-pages-posix
       ];

@@ -28,10 +28,6 @@
       my.desktop = {
         enable = true;
         startupCommands = [
-          [
-            "foot"
-            "--server"
-          ]
           [ (lib.getExe pkgs.waybar) ]
         ];
       };
@@ -48,14 +44,11 @@
         };
         waybar.enable = true;
         fuzzel.enable = true;
-        foot = {
+        ghostty = {
           enable = true;
           settings = {
-            scrollback.multiplier = 4;
-            text-bindings = {
-              "\\x0a" = "Shift+Return Control+Return Shift+Control+Return";
-              "\\x09" = "Control+Tab";
-            };
+            scrollback-limit = 10000;
+            app-notifications = false;
           };
         };
         neovim.extraPackages = [
@@ -64,7 +57,12 @@
       };
 
       services = {
-        mako.enable = true;
+        mako = {
+          enable = true;
+          settings = {
+            "default-timeout" = 5000;
+          };
+        };
         hypridle = {
           enable = true;
           settings = {

@@ -32,7 +32,7 @@ in
             "NIXOS_OZONE_WL,1"
           ];
           bind = [
-            "$mod, Return, exec, footclient -N || ${launcher} foot"
+            "$mod, Return, exec, ${launcher}${lib.getExe pkgs.ghostty} --gtk-single-instance=true"
             "$mod, Space, exec, ${lib.getExe pkgs.fuzzel} --launch-prefix=\"${launcher}\""
             "$mod, Tab, layoutmsg, swapwithmaster"
             "$mod, f, fullscreen, 1"

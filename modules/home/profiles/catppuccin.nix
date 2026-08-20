@@ -2,7 +2,6 @@
   flake.modules.homeManager.catppuccin =
     {
       pkgs,
-      config,
       lib,
       ...
     }:
@@ -104,7 +103,9 @@
           }
         ];
 
-        foot.settings.main.font = lib.mkForce "${codeFont}:size=${toString config.stylix.fonts.sizes.terminal}";
+        ghostty.settings = {
+          "font-family" = lib.mkForce [ codeFont ];
+        };
 
         vscode.profiles.default.userSettings = {
           "editor.fontFamily" = lib.mkForce codeFont;

@@ -38,8 +38,8 @@ in
           binds = {
             "Mod+Space".spawn = "fuzzel";
             "Mod+Return".spawn = [
-              (lib.getExe' pkgs.foot "footclient")
-              "-N"
+              (lib.getExe pkgs.ghostty)
+              "--gtk-single-instance=true"
             ];
             "Mod+x".spawn = [
               "loginctl"
