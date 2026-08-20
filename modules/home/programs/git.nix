@@ -18,6 +18,12 @@
         jujutsu = {
           enable = true;
           settings = {
+            "--scope" = [
+              {
+                "--when".commands = [ "log" ];
+                ui.paginate = "never";
+              }
+            ];
             user = {
               inherit (owner) name;
               email = builtins.head owner.email;
