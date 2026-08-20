@@ -2,25 +2,25 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.opentofu.org/aliyun/alicloud" {
-  version     = "1.288.0"
+  version     = "1.289.0"
   constraints = "~> 1.0"
   hashes = [
-    "h1:/+Thec/pI8GbrV5tJP1SmuJFCtCQrSjSqhJ/TTetMcA=",
-    "h1:0bVxcSZ462P8NQ7iXnSXY+fziCh7EvqhQZg+OjjyRL8=",
-    "h1:GKEeG/29X/Pl6TNB+UGmhR3niZeeQQk/oXCzvLqQHl0=",
-    "h1:YH0A0021p5i02CWa1n+qJAXVAogag1cHD7A60EIUsQQ=",
-    "h1:qapDUEMqvVDOYgp/u+xGhSniZNrrmJdRsogI/qeNH3c=",
-    "zh:024de51d8f581306bb5d19c74f1e72146b1cb027c4631cbebce17be45815d099",
-    "zh:3fe1f95e591158fae4b86fdcac6f98557e2f0d62a3fce87a24b5f706c796161b",
-    "zh:643685e06130b4cfa38d0dda144151524552f881c8e57905644867e778bd146d",
-    "zh:788490bc6aa5248f4a5443973f8cae0f95a39cb41ceb4fd99a6e388f2df24ac1",
-    "zh:89f00a049d40e42c44ea6cb304a5485f872242c38b3626f2cdde04516236d437",
-    "zh:8be6da71de4167110d9ecf5dd6f887a816789a447e4c497618d2f264d9bb2af4",
-    "zh:9a7272b1ec20b1154ff69ba8a80dfbeb58a1cdcb2eea4e71230d589b8100e73f",
-    "zh:ba94563ff1dfe387f065e03da816357c29b0da8d699cdd4a70eb41ba34871a46",
-    "zh:cdd60f5e2f2937c4c308a3bf126ae84368aea12bd43460a7ee762f042afd7093",
-    "zh:dd4b537ba16d86b9835b7aadfc503247bde6c49bdf03b9c9f4b3d38f9120d6a9",
-    "zh:e96468fb3f9b1f87e69a3c9ef8aef99abe61e36c967d84235d20dd42619e5fb6",
+    "h1:GJZquXzBUyuvGWUN8gy6xYhmYDvZbwxQiceD6rxpP34=",
+    "h1:MQ3qia5L8Up/EFWFZdSIhhazbn+Eu/mFp4aPHmnDrQY=",
+    "h1:SWC0JSNSpH8xxDwx3J1HsgEIng7gR03r9Lj/s2IWULs=",
+    "h1:eG6XtJ65z/p3tTATKFIG8pzDekkdX7IaRojw2ekyQmc=",
+    "h1:w+ylFW+wulzKt4QqCvq9HWbvm/WBFkOuBgi0TH5/WtY=",
+    "zh:233cd0e606c3c498f943c7f98c4eb1e05d83a9070eca34af44312c5ad0a368a0",
+    "zh:5359735b1e3cf0caaa3ac2078fb9369cfb196e6c69137695b80fdae56c7ecee6",
+    "zh:5b518510df2428c6116de8346ebcf06372e6062fe54d07d415d882fff0ac7fe1",
+    "zh:9f49a4a4998131a238b168f0fa40f836387065eca1f10bedb4f07103452eb2b4",
+    "zh:b10d7e5e2b53208fccee81948279c6e9a56d5333374a67492f8a01c128ac5cae",
+    "zh:bb664ec3302ca79db125b48c9f05e2efadbcd8cecf3754f604037ff8561b9cf7",
+    "zh:c5026f7902dc0e6cf890ed98e6a81f03339bb4e18aefbb219930eece9bffee85",
+    "zh:d039bbdccbcf50448a832cd72174ac10677f427fffdf4403a28c852e54e41ba8",
+    "zh:dc82c91c6a04ae5d19255bc84723f9f51932840f236a8be9d59fe851e90dcc1b",
+    "zh:dcb69797445c7405b3b4bbd250cbcf9b683428861ab671a81ca5877b80988115",
+    "zh:e019fcd5d48177f95b50812c05b66f6404718faeddbb19f395551e980e1d9e58",
   ]
 }
 
