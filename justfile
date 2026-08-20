@@ -21,7 +21,7 @@ image-lab-aliyun:
     nix build .#nixosConfigurations.lab-aliyun.config.system.build.qcow2
 
 update:
-    nix flake update
+    nix flake update --override-input nixpkgs github:nixos/nixpkgs
     nix run nixpkgs#nix-update -- --flake --version=branch=main rime-ice
     nix run nixpkgs#nix-update -- --flake --version=branch=master dnsmasq-china-list
     nix run .#write-flake
