@@ -51,6 +51,7 @@
           waybar.enable = false;
           fcitx5.enable = false;
           vscode.enable = false;
+          rofi.enable = false;
         };
       };
 

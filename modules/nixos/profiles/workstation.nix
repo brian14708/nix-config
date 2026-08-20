@@ -75,12 +75,12 @@ toplevel@{
       nix = {
         package = pkgs.nixVersions.latest;
         channel.enable = false;
-        nixPath = [ "nixpkgs=${pkgs.path}" ];
         settings = {
           experimental-features = [
             "nix-command"
             "flakes"
           ];
+          nix-path = [ "nixpkgs=${pkgs.path}" ];
           trusted-users = [ owner.username ];
           max-jobs = "auto";
           cores = lib.mkDefault 4;
@@ -107,10 +107,10 @@ toplevel@{
       };
       services.fstrim.enable = true;
 
-      services.journald.extraConfig = ''
-        SystemMaxUse=500M
-        MaxRetentionSec=2w
-      '';
+      services.journald.settings.Journal = {
+        SystemMaxUse = "500M";
+        MaxRetentionSec = "2w";
+      };
 
       hardware.bluetooth = {
         enable = true;
