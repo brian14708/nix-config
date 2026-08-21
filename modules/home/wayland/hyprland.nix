@@ -33,6 +33,7 @@ in
           ];
           bind = [
             "$mod, Return, exec, ${launcher}${lib.getExe pkgs.ghostty} --gtk-single-instance=true"
+            "$mod CONTROL, Return, exec, ${launcher}${lib.getExe pkgs.ghostty} -e herdr"
             "$mod, Space, exec, ${lib.getExe pkgs.fuzzel} --launch-prefix=\"${launcher}\""
             "$mod, Tab, layoutmsg, swapwithmaster"
             "$mod, f, fullscreen, 1"

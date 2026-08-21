@@ -46,6 +46,8 @@ in
       xdg.configFile."ghostty/config".text = ''
         font-family = "Maple Mono NF CN"
         theme = "Catppuccin Mocha"
+        working-directory = "home"
+        window-inherit-working-directory = false
       '';
       targets.darwin.defaults.NSGlobalDomain.ApplePressAndHoldEnabled = false;
       stylix.targets.gtk.enable = false;
