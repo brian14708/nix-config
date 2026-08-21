@@ -49,6 +49,8 @@
           settings = {
             scrollback-limit = 10000;
             app-notifications = false;
+            working-directory = "home";
+            window-inherit-working-directory = false;
           };
         };
         neovim.extraPackages = [
