@@ -77,16 +77,21 @@
         herdr = {
           enable = true;
           settings = {
+            terminal.shell_mode = "login";
+            update.version_check = false;
             ui = {
-              show_agent_labels_on_pane_borders = false;
+              agent_panel_sort = "priority";
+              status_indicators = "symbols";
+              hide_tab_bar_when_single_tab = true;
+              show_agent_labels_on_pane_borders = true;
               sound.enabled = false;
-              toast.delivery = "off";
+              toast.delivery = "terminal";
             };
             onboarding = false;
           };
         };
         zellij = {
-          enable = true;
+          enable = false;
           settings = {
             pane_frames = false;
             show_startup_tips = false;

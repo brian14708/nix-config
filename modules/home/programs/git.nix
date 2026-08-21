@@ -103,7 +103,6 @@
             ".claude/"
             ".worktrees/"
             "CLAUDE.md"
-            "AGENTS.md"
             "PROMPT.md"
             ".codex"
           ];

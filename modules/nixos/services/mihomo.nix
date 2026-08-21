@@ -161,6 +161,8 @@ in
           - AND,(AND,(DST-PORT,443),(NETWORK,UDP)),(NOT,((GEOSITE,cn))),REJECT
 
           - GEOSITE,category-ai-chat-!cn,ai
+          - DOMAIN-SUFFIX,registry.k8s.io,ai
+          - DOMAIN-SUFFIX,pkg.dev,ai
           - GEOSITE,CN,DIRECT
           - RULE-SET,proxy,auto-fast
           - GEOIP,CN,DIRECT

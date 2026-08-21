@@ -26,6 +26,15 @@ resource "alicloud_ram_access_key" "nix_cache" {
   user_name = alicloud_ram_user.nix_cache.name
 }
 
+resource "alicloud_ram_user" "lab_oss" {
+  provider = alicloud.cn
+  name     = "lab-oss"
+}
+
+resource "alicloud_ram_access_key" "lab_oss" {
+  user_name = alicloud_ram_user.lab_oss.name
+}
+
 
 resource "alicloud_oss_bucket" "nix_cache" {
   provider = alicloud.cn
@@ -62,4 +71,39 @@ resource "alicloud_oss_bucket_policy" "nix_cache" {
     ]
   })
   bucket = alicloud_oss_bucket.nix_cache.bucket
+}
+
+resource "alicloud_oss_bucket" "lab_oss" {
+  provider      = alicloud.cn
+  bucket        = "lab-bistro"
+  storage_class = "Standard"
+
+  lifecycle {
+    ignore_changes = [policy]
+  }
+}
+
+resource "alicloud_oss_bucket_acl" "lab_oss" {
+  provider = alicloud.cn
+  bucket   = alicloud_oss_bucket.lab_oss.bucket
+  acl      = "private"
+}
+
+resource "alicloud_oss_bucket_policy" "lab_oss" {
+  provider = alicloud.cn
+  bucket   = alicloud_oss_bucket.lab_oss.bucket
+  policy = jsonencode({
+    "Version" : "1",
+    "Statement" : [
+      {
+        "Action" : ["oss:*"],
+        "Effect" : "Allow",
+        "Principal" : [alicloud_ram_user.lab_oss.id],
+        "Resource" : [
+          "acs:oss:*:${alicloud_oss_bucket.lab_oss.owner}:${alicloud_oss_bucket.lab_oss.bucket}",
+          "acs:oss:*:${alicloud_oss_bucket.lab_oss.owner}:${alicloud_oss_bucket.lab_oss.bucket}/*"
+        ]
+      }
+    ]
+  })
 }

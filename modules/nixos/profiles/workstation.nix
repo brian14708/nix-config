@@ -101,10 +101,6 @@ toplevel@{
         enable = true;
       };
 
-      services.scx = lib.mkIf pkgs.stdenv.hostPlatform.isx86_64 {
-        enable = true;
-        scheduler = "scx_lavd";
-      };
       systemd.oomd = {
         enable = true;
         enableUserSlices = true;
@@ -125,7 +121,7 @@ toplevel@{
       boot.kernelModules = [ "tcp_bbr" ];
       boot.kernel.sysctl = {
         "kernel.core_pattern" = "|/run/current-system/sw/bin/false";
-        "vm.swappiness" = 180;
+        "vm.swappiness" = 100;
         "net.core.default_qdisc" = "fq";
         "net.ipv4.tcp_congestion_control" = "bbr";
         "net.ipv4.tcp_fastopen" = 3;
@@ -154,8 +150,12 @@ toplevel@{
         enable = true;
         settings = {
           CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
-          CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
+          CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
           CPU_BOOST_ON_BAT = 0;
+          RUNTIME_PM_ON_AC = "auto";
+          RUNTIME_PM_ON_BAT = "auto";
+          USB_AUTOSUSPEND = 1;
+          SOUND_POWER_SAVE_ON_BAT = 1;
           WIFI_PWR_ON_AC = "off";
           WIFI_PWR_ON_BAT = "on";
         };

@@ -41,6 +41,11 @@ in
               (lib.getExe pkgs.ghostty)
               "--gtk-single-instance=true"
             ];
+            "Mod+Ctrl+Return".spawn = [
+              (lib.getExe pkgs.ghostty)
+              "-e"
+              "herdr"
+            ];
             "Mod+x".spawn = [
               "loginctl"
               "lock-session"
