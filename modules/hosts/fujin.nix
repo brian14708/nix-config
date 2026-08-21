@@ -39,6 +39,7 @@ in
         locale-cn
         mihomo
         docker
+        k3s
         tailscale-subnet
         amd
         stylix
