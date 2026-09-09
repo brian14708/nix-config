@@ -6,27 +6,112 @@
       lib,
       ...
     }:
+    let
+      hasAi = config ? sops && config.sops.secrets ? "configs/ai";
+      aiEnv = config.sops.secrets."configs/ai".path;
+      codexTemplate = (pkgs.formats.toml { }).generate "codex-config.toml" {
+        model_provider = "proxy";
+        model_providers.proxy = {
+          name = "proxy";
+          base_url = "__OPENAI_BASE_URL__";
+          env_key = "OPENAI_API_KEY";
+          wire_api = "responses";
+          requires_openai_auth = true;
+        };
+        analytics.enabled = false;
+      };
+    in
     {
+      xdg.configFile."mise/config.toml".source = (pkgs.formats.toml { }).generate "mise.toml" {
+        settings = {
+          minimum_release_age = "0";
+          # Keep mise's NixOS node source-build behavior explicit while
+          # retaining precompiled runtimes on Darwin.
+          all_compile = pkgs.stdenv.hostPlatform.isLinux;
+        };
+        tools = {
+          codex = "latest";
+          "claude-code" = "latest";
+        };
+      };
+
       # Optional: provide AI CLI wrappers when the secret is present.
       home.packages =
         let
-          hasAi = config ? sops && config.sops.secrets ? "configs/ai";
-          aiEnv = config.sops.secrets."configs/ai".path;
+          agentLauncher = pkgs.writeShellApplication {
+            name = "agent";
+            runtimeInputs = with pkgs; [
+              coreutils
+              fzf
+              gnugrep
+            ];
+            text = ''
+              set -Eeuo pipefail
+              IFS=$'\n\t'
+              state_file="''${XDG_STATE_HOME:-$HOME/.local/state}/desktop-agent/default"
+              configured="codex"
+              permission="auto"
+
+              selected() {
+                if [ -s "$state_file" ]; then
+                  head -n 1 "$state_file"
+                else
+                  printf '%s\n' "$configured"
+                fi
+              }
+
+              usage() {
+                echo "Usage: agent [pick|prompt <text...>|doctor]"
+              }
+
+              pick() {
+                mkdir -p "$(dirname "$state_file")"
+                choice=$(printf 'claude\ncodex\n' | fzf --prompt='Agent> ' --height=40% --layout=reverse --border) || exit 0
+                case "$choice" in
+                  claude|codex) printf '%s\n' "$choice" > "$state_file"; echo "Default agent: $choice" ;;
+                  *) echo "Unsupported agent: $choice" >&2; exit 1 ;;
+                esac
+              }
+
+              agent=$(selected)
+              case "''${1:-}" in
+                pick) pick; exit 0 ;;
+                doctor)
+                  printf 'agent=%s\npermission=%s\n' "$agent" "$permission"
+                  command -v "$agent" >/dev/null 2>&1 || { echo "missing executable: $agent" >&2; exit 1; }
+                  echo ready
+                  exit 0
+                  ;;
+                prompt) shift; [ "$#" -gt 0 ] || { usage >&2; exit 2; }; prompt="$*" ;;
+                -h|--help) usage; exit 0 ;;
+                "") prompt="" ;;
+                *) prompt="$*" ;;
+              esac
+
+              command -v "$agent" >/dev/null 2>&1 || {
+                echo "$agent is not installed; run: agent pick" >&2
+                exit 1
+              }
+
+              case "$agent:$permission" in
+                claude:ask) set -- claude ;;
+                claude:auto) set -- claude --permission-mode acceptEdits ;;
+                claude:unrestricted) set -- claude --dangerously-skip-permissions ;;
+                codex:ask) set -- codex ;;
+                codex:auto) set -- codex --approve-for-me ;;
+                codex:unrestricted) set -- codex --dangerously-bypass-approvals-and-sandbox ;;
+                *) echo "unsupported agent policy: $agent:$permission" >&2; exit 1 ;;
+              esac
+              [ -n "$prompt" ] && set -- "$@" "$prompt"
+              exec "$@"
+            '';
+          };
         in
         (with pkgs; [
+          agentLauncher
+          mise
           fastmod
           devenv
-          (writeShellApplication {
-            name = "ob";
-            text = ''
-              exec pnpm --allow-build=better-sqlite3 dlx obsidian-headless "$@"
-            '';
-            checkPhase = "";
-            runtimeInputs = [
-              nodejs
-              pnpm
-            ];
-          })
         ])
         ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
           pkgs.bubblewrap
@@ -35,31 +120,59 @@
           (pkgs.writeShellApplication {
             name = "claude";
             text = ''
+              set -Eeuo pipefail
+              # shellcheck disable=SC1091
               source ${aiEnv}
-              export PNPM_CONFIG_MINIMUM_RELEASE_AGE=0
-              exec pnpm dlx "@anthropic-ai/claude-code" "$@"
+              if [ -n "''${ANTHROPIC_MODEL:-}" ]; then
+                export ANTHROPIC_DEFAULT_FABLE_MODEL="$ANTHROPIC_MODEL"
+                export ANTHROPIC_DEFAULT_OPUS_MODEL="$ANTHROPIC_MODEL"
+                export ANTHROPIC_DEFAULT_SONNET_MODEL="$ANTHROPIC_MODEL"
+                export ANTHROPIC_DEFAULT_HAIKU_MODEL="$ANTHROPIC_MODEL"
+                export CLAUDE_CODE_SUBAGENT_MODEL="$ANTHROPIC_MODEL"
+              fi
+              exec ${lib.getExe pkgs.mise} exec --quiet claude-code -- claude "$@"
             '';
             checkPhase = "";
-            runtimeInputs = [
-              pkgs.nodejs
-              pkgs.pnpm
-            ];
+            runtimeInputs = [ pkgs.mise ];
             runtimeEnv = {
+              CLAUDE_CODE_ATTRIBUTION_HEADER = "0";
+              CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS = "1";
+              CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC = "1";
               CLAUDE_CONFIG_DIR = "${config.xdg.configHome}/claude";
+              DISABLE_TELEMETRY = "1";
             };
           })
           (pkgs.writeShellApplication {
             name = "codex";
             text = ''
+              set -Eeuo pipefail
+              # shellcheck disable=SC1091
               source ${aiEnv}
-              ${pkgs.gnused}/bin/sed -i 's|base_url = ".*"|base_url = "'"$OPENAI_BASE_URL"'"|g' "$CODEX_HOME/config.toml"
-              export PNPM_CONFIG_MINIMUM_RELEASE_AGE=0
-              exec pnpm dlx "@openai/codex" "$@"
+              mkdir -p "$CODEX_HOME"
+              config_file="$CODEX_HOME/config.toml"
+              if [ ! -e "$config_file" ]; then
+                install -m 600 ${codexTemplate} "$config_file"
+              fi
+              [ -f "$config_file" ] || {
+                echo "Codex config is not a regular file: $config_file" >&2
+                exit 1
+              }
+              [ -n "''${OPENAI_BASE_URL:-}" ] || {
+                echo "OPENAI_BASE_URL is required by the Codex wrapper" >&2
+                exit 1
+              }
+              escaped_base_url=$(printf '%s' "$OPENAI_BASE_URL" | sed 's/[&|\\]/\\&/g')
+              sed -i \
+                -e "s|^openai_base_url = \".*\"$|openai_base_url = \"$escaped_base_url\"|" \
+                -e "s|^base_url = \".*\"$|base_url = \"$escaped_base_url\"|" \
+                "$config_file"
+              exec ${lib.getExe pkgs.mise} exec --quiet codex -- codex "$@"
             '';
             checkPhase = "";
             runtimeInputs = [
-              pkgs.nodejs
-              pkgs.pnpm
+              pkgs.coreutils
+              pkgs.gnused
+              pkgs.mise
             ];
             runtimeEnv = {
               CODEX_HOME = "${config.xdg.configHome}/codex";
