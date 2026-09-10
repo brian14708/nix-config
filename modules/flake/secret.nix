@@ -14,7 +14,7 @@
           age.sshKeyPaths = [ ];
           age.keyFile = "/var/lib/sops-nix/keys.txt";
           gnupg.sshKeyPaths = [ ];
-          defaultSopsFile = inputs.self + /configs/secrets.yaml;
+          defaultSopsFile = inputs.self + /secrets/workstation.yaml;
 
           secrets = {
             # Shared config secrets (migrated from nix.orig/*/secrets.yaml).
@@ -44,7 +44,7 @@
           age.sshKeyPaths = [ ];
           age.keyFile = "/var/lib/sops-nix/keys.txt";
           gnupg.sshKeyPaths = [ ];
-          defaultSopsFile = inputs.self + /configs/secrets.yaml;
+          defaultSopsFile = inputs.self + /secrets/workstation.yaml;
 
           secrets = {
             "configs/aws-credentials" = {
@@ -64,7 +64,7 @@
           age.sshKeyPaths = [ ];
           age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
           gnupg.sshKeyPaths = [ ];
-          defaultSopsFile = inputs.self + /configs/secrets.yaml;
+          defaultSopsFile = inputs.self + /secrets/workstation.yaml;
           secrets = {
             "configs/aws-credentials" = {
               path = "${config.home.homeDirectory}/.aws/credentials";
