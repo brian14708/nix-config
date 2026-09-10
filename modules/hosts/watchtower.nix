@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, inputs, ... }:
 let
   inherit (config.flake.modules) nixos;
 in
@@ -21,9 +21,24 @@ in
         '');
     in
     {
-      imports = with nixos; [
-        lab-aliyun
+      imports = [
+        inputs.sops-nix.nixosModules.sops
+        nixos.lab-aliyun
       ];
+
+      # Watchtower is untrusted: it decrypts only secrets/lab.yaml, keyed by
+      # its SSH host key so no age key needs to be provisioned. Deliberately
+      # does NOT import the shared `sops` module, which would grant it the
+      # secrets/workstation.yaml secrets as well.
+      sops = {
+        defaultSopsFile = inputs.self + /secrets/lab.yaml;
+        age.keyFile = null;
+        age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+        gnupg.sshKeyPaths = [ ];
+        secrets = {
+          cloudflare-tunnel = { };
+        };
+      };
 
       networking = {
         hostName = "watchtower";
@@ -79,6 +94,7 @@ in
 
         tailscale = {
           enable = true;
+          # Auth key is delivered via terraform cloud-init (infra/lab/main.tf).
           authKeyFile = "/var/secrets/tailscale_key";
           derper = {
             enable = true;
@@ -146,7 +162,7 @@ in
         '';
         serviceConfig = {
           DynamicUser = true;
-          LoadCredential = "TUNNEL_TOKEN:/var/secrets/cloudflare_tunnel";
+          LoadCredential = "TUNNEL_TOKEN:${config.sops.secrets.cloudflare-tunnel.path}";
           Restart = "on-failure";
           Type = "notify";
           RestartSec = "5s";

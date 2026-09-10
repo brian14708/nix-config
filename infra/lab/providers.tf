@@ -23,6 +23,10 @@ terraform {
       source  = "hashicorp/google"
       version = "~> 8"
     }
+    tailscale = {
+      source  = "tailscale/tailscale"
+      version = "~> 0"
+    }
   }
 
   encryption {
@@ -63,3 +67,5 @@ provider "alicloud" {
 provider "sops" {}
 
 provider "google" {}
+
+provider "tailscale" {}
