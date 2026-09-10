@@ -22,7 +22,7 @@ Declarative Nix flake for personal machines, homelab, and lab cloud infrastructu
 - `modules/hosts/<hostname>.nix`: host entrypoints. A host file typically defines `flake.modules.nixos."hosts/<hostname>"` and may also define `flake.modules.homeManager."hosts/<hostname>"`.
 - `modules/nixos/`, `modules/home/`, `modules/darwin/`: reusable NixOS, home-manager, and nix-darwin modules.
 - `pkgs/by-name/<name>/package.nix`: in-tree packages discovered through `pkgs/default.nix`.
-- `configs/`: shared application config, patches, and encrypted secrets.
+- `configs/`: shared application config and patches. Encrypted secrets live in `secrets/`.
 - `infra/lab/`: OpenTofu code and encrypted lab secrets.
 - `templates/`: exported flake templates.
 - `.sops.yaml`: SOPS recipients and creation rules for encrypted files.
@@ -36,7 +36,7 @@ Declarative Nix flake for personal machines, homelab, and lab cloud infrastructu
 - `modules/flake/hosts.nix` auto-registers NixOS hosts from `flake.modules.nixos."hosts/*"`.
 - `modules/flake/home-manager.nix` attaches the matching `flake.modules.homeManager."hosts/<hostname>"` module using `networking.hostName`.
 - Keep package updates in `pkgs/by-name/<name>/package.nix` unless the overlay machinery itself is changing.
-- Secret material belongs in SOPS-managed files such as `configs/secrets.yaml` or `infra/lab/env.secrets.yaml`; update `.sops.yaml` when adding a new encrypted file or host key.
+- Secret material belongs in SOPS-managed files such as `secrets/workstation.yaml` or `infra/lab/env.secrets.yaml`; update `.sops.yaml` when adding a new encrypted file or host key.
 - Formatting is managed by treefmt. Lua uses `stylua` with 2-space indentation.
 
 ## Validation

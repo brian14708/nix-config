@@ -24,11 +24,6 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "lab" {
   }
 }
 
-data "cloudflare_zero_trust_tunnel_cloudflared_token" "lab" {
-  account_id = data.sops_file.vars.data["cloudflare_account_id"]
-  tunnel_id  = cloudflare_zero_trust_tunnel_cloudflared.lab.id
-}
-
 resource "cloudflare_dns_record" "lab_wildcard" {
   zone_id = data.sops_file.vars.data["cloudflare_zone_id"]
   name    = "*"
@@ -47,6 +42,16 @@ resource "cloudflare_dns_record" "jump" {
   proxied = false
 }
 
+resource "tailscale_tailnet_key" "lab" {
+  description         = "lab cloud-init"
+  reusable            = false
+  ephemeral           = false
+  preauthorized       = true
+  expiry              = 7776000
+  recreate_if_invalid = "always"
+  tags                = ["tag:lab"]
+}
+
 resource "alicloud_instance" "watchtower" {
   instance_name     = "watchtower"
   host_name         = "watchtower"
@@ -56,10 +61,11 @@ resource "alicloud_instance" "watchtower" {
   auto_renew_period = 12
   security_groups   = [alicloud_security_group.cn.id]
   vswitch_id        = alicloud_vswitch.cn.id
+  # Only the tailscale auth key is delivered via cloud-init; the cloudflared
+  # tunnel token comes from sops-nix (secrets/lab.yaml).
   user_data = base64gzip(templatefile("${path.module}/cloud-init.tpl", {
     secrets = {
-      tailscale_key     = data.sops_file.vars.data["ts_auth"]
-      cloudflare_tunnel = data.cloudflare_zero_trust_tunnel_cloudflared_token.lab.token
+      tailscale_key = tailscale_tailnet_key.lab.key
     }
   }))
   lifecycle {
