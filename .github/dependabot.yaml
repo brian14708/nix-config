@@ -8,3 +8,7 @@ updates:
     directory: "/infra/lab"
     schedule:
       interval: "weekly"
+    groups:
+      terraform:
+        patterns:
+          - "*"
