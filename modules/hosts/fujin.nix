@@ -37,6 +37,7 @@ in
         workstation
         secureboot
         locale-cn
+        k3s
         mihomo
         docker
         tailscale-subnet
