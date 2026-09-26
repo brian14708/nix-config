@@ -63,7 +63,6 @@ in
       networking.hostName = "shiva";
       system.stateVersion = "24.11";
       stylix.enable = true;
-      environment.systemPackages = [ pkgs.minikube ];
 
       services.tailscale = {
         useRoutingFeatures = "server";
