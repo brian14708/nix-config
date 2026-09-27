@@ -123,13 +123,6 @@
               set -Eeuo pipefail
               # shellcheck disable=SC1091
               source ${aiEnv}
-              if [ -n "''${ANTHROPIC_MODEL:-}" ]; then
-                export ANTHROPIC_DEFAULT_FABLE_MODEL="$ANTHROPIC_MODEL"
-                export ANTHROPIC_DEFAULT_OPUS_MODEL="$ANTHROPIC_MODEL"
-                export ANTHROPIC_DEFAULT_SONNET_MODEL="$ANTHROPIC_MODEL"
-                export ANTHROPIC_DEFAULT_HAIKU_MODEL="$ANTHROPIC_MODEL"
-                export CLAUDE_CODE_SUBAGENT_MODEL="$ANTHROPIC_MODEL"
-              fi
               exec ${lib.getExe pkgs.mise} exec --quiet claude-code -- claude "$@"
             '';
             checkPhase = "";
@@ -166,7 +159,7 @@
                 -e "s|^openai_base_url = \".*\"$|openai_base_url = \"$escaped_base_url\"|" \
                 -e "s|^base_url = \".*\"$|base_url = \"$escaped_base_url\"|" \
                 "$config_file"
-              exec ${lib.getExe pkgs.mise} exec --quiet codex -- codex "$@"
+              exec ${lib.getExe pkgs.mise} exec --quiet codex -- codex --sandbox danger-full-access --no-daemon "$@"
             '';
             checkPhase = "";
             runtimeInputs = [
