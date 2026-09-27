@@ -29,17 +29,32 @@ vim.opt.cursorline = true
 vim.opt.cursorlineopt = "number"
 vim.opt.scrolloff = 8
 vim.opt.sidescrolloff = 8
+vim.opt.wrap = false
+vim.opt.expandtab = true
+vim.opt.smartindent = true
+vim.opt.formatoptions = "jcroql"
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
 vim.opt.pumheight = 10
+vim.opt.completeopt = { "menuone", "noselect" }
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.shm:append("I")
+
+vim.diagnostic.config({
+  virtual_text = { spacing = 2, source = "if_many" },
+  signs = true,
+  underline = true,
+  update_in_insert = false,
+  severity_sort = true,
+  float = { border = "rounded", source = "if_many" },
+})
 
 vim.keymap.set({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank to clipboard" })
 vim.keymap.set({ "n", "v" }, "<leader>p", '"+p', { desc = "Paste from clipboard" })
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic location list" })
+vim.keymap.set("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Show diagnostic" })
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
 vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
@@ -51,6 +66,18 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
   callback = function()
     (vim.hl or vim.highlight).on_yank()
+  end,
+})
+
+vim.api.nvim_create_autocmd("BufReadPost", {
+  desc = "Restore the cursor position when reopening a file",
+  group = vim.api.nvim_create_augroup("restore-cursor", { clear = true }),
+  callback = function(event)
+    local mark = vim.api.nvim_buf_get_mark(event.buf, '"')
+    local line_count = vim.api.nvim_buf_line_count(event.buf)
+    if mark[1] > 0 and mark[1] <= line_count then
+      pcall(vim.api.nvim_win_set_cursor, 0, mark)
+    end
   end,
 })
 
@@ -208,7 +235,7 @@ require("lazy").setup({
 
   {
     "neovim/nvim-lspconfig",
-    event = { "FileType" },
+    event = { "BufReadPre", "BufNewFile" },
     dependencies = {
       "saghen/blink.cmp",
     },
@@ -259,9 +286,10 @@ require("lazy").setup({
             })
 
             vim.api.nvim_create_autocmd("LspDetach", {
-              group = vim.api.nvim_create_augroup("kickstart-lsp-detach", { clear = true }),
+              buffer = event.buf,
+              group = vim.api.nvim_create_augroup("kickstart-lsp-detach", { clear = false }),
               callback = function(event2)
-                vim.lsp.buf.clear_references()
+                vim.api.nvim_buf_call(event2.buf, vim.lsp.buf.clear_references)
                 vim.api.nvim_clear_autocmds({ group = "kickstart-lsp-highlight", buffer = event2.buf })
               end,
             })
@@ -269,7 +297,7 @@ require("lazy").setup({
 
           if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
             map("<leader>th", function()
-              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
+              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }), { bufnr = event.buf })
             end, "[T]oggle Inlay [H]ints")
           end
         end,
@@ -281,37 +309,48 @@ require("lazy").setup({
       local servers = {
         gopls = {
           cmd = { "nix", "run", "nixpkgs#gopls" },
+          settings = { gopls = { gofumpt = true, staticcheck = true } },
         },
         basedpyright = {
           cmd = { "nix", "shell", "nixpkgs#basedpyright", "--command", "basedpyright-langserver", "--stdio" },
+          settings = {
+            basedpyright = {
+              analysis = { diagnosticMode = "openFilesOnly", typeCheckingMode = "standard" },
+            },
+          },
         },
         rust_analyzer = {
           cmd = { "nix", "shell", "nixpkgs#rust-analyzer", "--command", "rust-analyzer" },
           cmd_env = {
-            RUSTC_BOOTSTRAP = "1",
             CARGO_TARGET_DIR = "target/analyzer",
           },
         },
-        zls = {
-          cmd = { "nix", "run", "nixpkgs#zls" },
-        },
-        elixirls = {
-          cmd = { "nix", "run", "nixpkgs#elixir-ls" },
-        },
-        ts_ls = {
-          cmd = { "nix", "run", "nixpkgs#typescript-language-server", "--", "--stdio" },
-        },
-        svelte = {
-          cmd = { "nix", "run", "nixpkgs#svelte-language-server", "--", "--stdio" },
-        },
-        nil_ls = {
-          cmd = { "nix", "run", "nixpkgs#nil" },
-        },
-        yamlls = {
-          cmd = { "nix", "run", "nixpkgs#yaml-language-server", "--", "--stdio" },
-        },
+        zls = { cmd = { "nix", "run", "nixpkgs#zls" } },
+        elixirls = { cmd = { "nix", "run", "nixpkgs#elixir-ls" } },
+        ts_ls = { cmd = { "nix", "run", "nixpkgs#typescript-language-server", "--", "--stdio" } },
+        svelte = { cmd = { "nix", "run", "nixpkgs#svelte-language-server", "--", "--stdio" } },
+        nil_ls = { cmd = { "nix", "run", "nixpkgs#nil" } },
+        yamlls = { cmd = { "nix", "run", "nixpkgs#yaml-language-server", "--", "--stdio" } },
         jsonls = {
-          cmd = { "nix", "run", "nixpkgs#vscode-json-languageserver", "--", "--stdio" },
+          cmd = {
+            "nix",
+            "shell",
+            "nixpkgs#vscode-langservers-extracted",
+            "--command",
+            "vscode-json-language-server",
+            "--stdio",
+          },
+        },
+        lua_ls = {
+          cmd = { "nix", "run", "nixpkgs#lua-language-server" },
+          settings = {
+            Lua = {
+              runtime = { version = "LuaJIT" },
+              diagnostics = { globals = { "vim" } },
+              workspace = { checkThirdParty = false },
+              telemetry = { enable = false },
+            },
+          },
         },
       }
 
@@ -319,13 +358,6 @@ require("lazy").setup({
         server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
         vim.lsp.config(name, server)
         vim.lsp.enable(name)
-      end
-
-      -- vim.lsp.enable's FileType autocmd registers after the triggering
-      -- buffer's FileType already fired; re-fire once for it.
-      local cur = vim.api.nvim_get_current_buf()
-      if vim.bo[cur].filetype ~= "" then
-        vim.api.nvim_exec_autocmds("FileType", { buffer = cur })
       end
     end,
   },

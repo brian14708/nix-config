@@ -13,6 +13,7 @@ in
       ];
       home = {
         packages = with pkgs; [
+          chromium
           nodejs
           pnpm
           python3
@@ -37,7 +38,6 @@ in
         workstation
         secureboot
         locale-cn
-        k3s
         mihomo
         docker
         tailscale-subnet

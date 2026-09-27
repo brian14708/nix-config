@@ -3,11 +3,11 @@
   <category>
     <title>Large Numbers</title>
     <variable>
-      <names>r:wan,a-c:w</names>
+      <names>r:wan,au:万,a-c:w</names>
       <value>10000</value>
     </variable>
     <variable>
-      <names>r:yi</names>
+      <names>r:yi,au:亿</names>
       <value>100000000</value>
     </variable>
   </category>

@@ -30,6 +30,8 @@ in
           [profile nix-cache-miecho3l]
           region = cn-beijing
           output = json
+          request_checksum_calculation = when_required
+          response_checksum_validation = when_required
           services = oss
           s3 =
               addressing_style = virtual
@@ -37,6 +39,8 @@ in
           [profile lab-oss]
           region = cn-beijing
           output = json
+          request_checksum_calculation = when_required
+          response_checksum_validation = when_required
           services = oss
           s3 =
               addressing_style = virtual
