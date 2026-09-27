@@ -37,11 +37,6 @@ in
             frame = "transparent";
           };
         };
-        jujutsu = {
-          settings = {
-            ui.pager = ":builtin";
-          };
-        };
       };
       xdg.configFile."ghostty/config".text = ''
         font-family = "Maple Mono NF CN"

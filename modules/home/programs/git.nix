@@ -15,6 +15,15 @@
       ];
 
       programs = {
+        delta = {
+          enable = true;
+          enableJujutsuIntegration = true;
+          options = {
+            minus-style = "syntax auto";
+            plus-style = "syntax auto";
+          };
+        };
+
         jujutsu = {
           enable = true;
           settings = {
@@ -100,11 +109,13 @@
             ".envrc"
             ".env"
             ".clangd/"
+            ".agents/"
             ".claude/"
             ".worktrees/"
             "CLAUDE.md"
+            "AGENTS.md"
             "PROMPT.md"
-            ".codex"
+            ".codex/"
           ];
         };
       };

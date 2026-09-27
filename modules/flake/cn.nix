@@ -102,7 +102,7 @@ in
       lib.mkMerge [
         {
           i18n.defaultLocale = "en_US.UTF-8";
-          time.timeZone = "Asia/Hong_Kong";
+          time.timeZone = "Etc/GMT-8";
           nix.settings = {
             substituters = [
               "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store?priority=10"
@@ -226,7 +226,7 @@ in
             substituters = [
               "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store?priority=10"
               "https://mirrors.ustc.edu.cn/nix-channels/store?priority=20"
-              "s3://nix-cache-miecho3l?endpoint=oss-cn-beijing.aliyuncs.com&addressing-style=virtual&profile=nix-cache-miecho3l&priority=30"
+              "s3://nix-cache-miecho3l?endpoint=https://oss-cn-beijing.aliyuncs.com&addressing-style=virtual&profile=nix-cache-miecho3l&priority=30"
               "https://cache.nixos.org?priority=100"
             ];
           };

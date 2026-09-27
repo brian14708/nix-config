@@ -29,7 +29,7 @@ update:
 cache host='':
     #!/usr/bin/env sh
     set -eu
-    dest='s3://nix-cache-miecho3l?endpoint=oss-cn-beijing.aliyuncs.com&addressing-style=virtual&profile=nix-cache-miecho3l'
+    dest='s3://nix-cache-miecho3l?endpoint=https://oss-cn-beijing.aliyuncs.com&addressing-style=virtual&profile=nix-cache-miecho3l'
     host='{{host}}'
     if [ -z "$host" ]; then
         host="$(hostname -s 2>/dev/null || hostname)"
