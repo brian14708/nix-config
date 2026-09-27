@@ -100,11 +100,13 @@
             ".envrc"
             ".env"
             ".clangd/"
+            ".agents/"
             ".claude/"
             ".worktrees/"
             "CLAUDE.md"
+            "AGENTS.md"
             "PROMPT.md"
-            ".codex"
+            ".codex/"
           ];
         };
       };

@@ -166,7 +166,7 @@
                 -e "s|^openai_base_url = \".*\"$|openai_base_url = \"$escaped_base_url\"|" \
                 -e "s|^base_url = \".*\"$|base_url = \"$escaped_base_url\"|" \
                 "$config_file"
-              exec ${lib.getExe pkgs.mise} exec --quiet codex -- codex "$@"
+              exec ${lib.getExe pkgs.mise} exec --quiet codex -- codex --sandbox danger-full-access --no-daemon "$@"
             '';
             checkPhase = "";
             runtimeInputs = [
