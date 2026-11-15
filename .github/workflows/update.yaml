@@ -18,7 +18,7 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@v23
 
       - name: Run update
-        run: nix run nixpkgs#just update
+        run: nix develop --command just update
 
       - name: Run flake check
         run: nix flake check

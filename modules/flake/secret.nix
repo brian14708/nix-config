@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, lib, ... }:
 {
   flake-file.inputs.sops-nix = {
     url = "github:Mic92/sops-nix";
@@ -7,7 +7,7 @@
 
   flake.modules = {
     nixos.sops =
-      { ... }:
+      { config, ... }:
       {
         imports = [ inputs.sops-nix.nixosModules.sops ];
         sops = {
@@ -24,10 +24,10 @@
             # configs can import `nixos.sops` without requiring those keys.
             "configs/mihomo-url" = { };
             "configs/dae-url" = { };
-            "configs/smartdns" = { };
-            "configs/unbound" = {
-              mode = "0444";
+            "configs/smartdns" = {
+              restartUnits = lib.optional config.services.smartdns.enable "smartdns.service";
             };
+            "configs/unbound" = { };
             "configs/aws-credentials" = {
               path = "/root/.aws/credentials";
               mode = "0600";

@@ -10,6 +10,7 @@ in
         workstation-linux
         cli
         catppuccin
+        gpg
       ];
       home = {
         packages = with pkgs; [
@@ -21,13 +22,6 @@ in
         ];
         sessionVariables.PNPM_HOME = "${config.xdg.dataHome}/pnpm";
         sessionPath = [ config.home.sessionVariables.PNPM_HOME ];
-      };
-      programs.gpg = {
-        enable = true;
-      };
-      services.gpg-agent = {
-        enable = true;
-        pinentry.package = pkgs.pinentry-tty;
       };
     };
 

@@ -16,6 +16,8 @@ in
         configFile = config.sops.templates."config.dae".path;
       };
 
+      sops.templates."config.dae".restartUnits = [ "dae.service" ];
+
       sops.templates."config.dae".content = ''
         global {
             tproxy_port: 12345

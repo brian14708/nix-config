@@ -16,13 +16,7 @@ in
     }:
     {
       imports = with hm; [
-        workstation-linux
-        niri
-        fcitx5
-        media
-        chromium
-        cli
-        catppuccin
+        desktop-linux
       ];
 
       my.desktop.enable = true;

@@ -16,7 +16,7 @@ in
     {
       imports = with hm; [
         git
-        vim
+        neovim
         qalculate
         locale-cn
       ];
@@ -94,59 +94,17 @@ in
 
       xdg.configFile = lib.optionalAttrs (!config.nix.enable) {
         "nix/nix.conf".source =
-          let
-            inherit (lib)
-              boolToString
-              concatStringsSep
-              escape
-              floatToString
-              isBool
-              isConvertibleWithToString
-              isDerivation
-              isFloat
-              isInt
-              isList
-              isString
-              mapAttrsToList
-              toPretty
-              ;
-            mkValueString =
-              v:
-              if v == null then
-                ""
-              else if isInt v then
-                toString v
-              else if isBool v then
-                boolToString v
-              else if isFloat v then
-                floatToString v
-              else if isList v then
-                toString v
-              else if isDerivation v then
-                toString v
-              else if builtins.isPath v then
-                toString v
-              else if isString v then
-                v
-              else if isConvertibleWithToString v then
-                toString v
-              else
-                abort "The nix conf value: ${toPretty { } v} can not be encoded";
-
-            mkKeyValue = k: v: "${escape [ "=" ] k} = ${mkValueString v}";
-
-            mkKeyValuePairs = attrs: concatStringsSep "\n" (mapAttrsToList mkKeyValue attrs);
-
-            cfg = config.nix;
-          in
-          pkgs.writeTextFile {
-            name = "nix.conf";
-            text = ''
-              # WARNING: this file is generated from the home-manager
-              ${mkKeyValuePairs cfg.settings}
-              ${cfg.extraOptions}
-            '';
-          };
+          (pkgs.formats.nixConf {
+            package = pkgs.nix;
+            inherit (pkgs.nix) version;
+            inherit (config.nix) extraOptions;
+            checkConfig = false;
+          }).generate
+            "nix.conf"
+            (
+              # nixConf expects list settings to be joined by the caller.
+              lib.mapAttrs (_: value: if builtins.isList value then toString value else value) config.nix.settings
+            );
       };
     };
 }

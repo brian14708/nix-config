@@ -36,7 +36,7 @@ in
           };
           prefer-no-csd = [ ];
           binds = {
-            "Mod+Space".spawn = "fuzzel";
+            "Mod+Space".spawn = lib.getExe config.programs.fuzzel.package;
             "Mod+Return".spawn = [
               (lib.getExe pkgs.ghostty)
               "--gtk-single-instance=true"
@@ -44,32 +44,32 @@ in
             "Mod+Ctrl+Return".spawn = [
               (lib.getExe pkgs.ghostty)
               "-e"
-              "herdr"
+              (lib.getExe config.programs.herdr.package)
             ];
             "Mod+x".spawn = [
-              "loginctl"
+              (lib.getExe' pkgs.systemd "loginctl")
               "lock-session"
             ];
             "XF86AudioRaiseVolume".spawn = [
-              "wpctl"
+              (lib.getExe' pkgs.wireplumber "wpctl")
               "set-volume"
               "@DEFAULT_AUDIO_SINK@"
               "0.1+"
             ];
             "XF86AudioLowerVolume".spawn = [
-              "wpctl"
+              (lib.getExe' pkgs.wireplumber "wpctl")
               "set-volume"
               "@DEFAULT_AUDIO_SINK@"
               "0.1-"
             ];
             "XF86AudioMute".spawn = [
-              "wpctl"
+              (lib.getExe' pkgs.wireplumber "wpctl")
               "set-mute"
               "@DEFAULT_AUDIO_SINK@"
               "toggle"
             ];
             "XF86AudioMicMute".spawn = [
-              "wpctl"
+              (lib.getExe' pkgs.wireplumber "wpctl")
               "set-mute"
               "@DEFAULT_AUDIO_SOURCE@"
               "toggle"

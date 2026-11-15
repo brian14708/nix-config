@@ -12,18 +12,12 @@ in
     }:
     let
       inherit (config) owner;
-      tls-cert =
-        cn:
-        (pkgs.runCommand "selfSignedCert" { buildInputs = [ pkgs.openssl ]; } ''
-          mkdir -p $out
-          openssl req -x509 -newkey ec -pkeyopt ec_paramgen_curve:secp384r1 -days 3650 -nodes \
-            -keyout $out/cert.key -out $out/cert.crt -subj "/CN=${cn}"
-        '');
     in
     {
       imports = [
         inputs.sops-nix.nixosModules.sops
         nixos.lab-aliyun
+        nixos.tailscale-derper
       ];
 
       # Watchtower is untrusted: it decrypts only secrets/lab.yaml, keyed by
@@ -36,7 +30,7 @@ in
         age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
         gnupg.sshKeyPaths = [ ];
         secrets = {
-          cloudflare-tunnel = { };
+          cloudflare-tunnel.restartUnits = [ "cloudflared-tunnel.service" ];
         };
       };
 
@@ -116,21 +110,15 @@ in
           recommendedGzipSettings = true;
           recommendedProxySettings = true;
           virtualHosts = {
-            "derp-901" =
-              let
-                cert = tls-cert "derp-901";
-              in
-              {
-                listen = [
-                  {
-                    addr = "0.0.0.0";
-                    port = 47321;
-                    ssl = true;
-                  }
-                ];
-                sslCertificate = "${cert}/cert.crt";
-                sslCertificateKey = "${cert}/cert.key";
-              };
+            "derp-901" = {
+              listen = [
+                {
+                  addr = "0.0.0.0";
+                  port = 47321;
+                  ssl = true;
+                }
+              ];
+            };
             "default" = {
               default = true;
               listen = [
@@ -157,8 +145,8 @@ in
         ];
         wantedBy = [ "multi-user.target" ];
         script = ''
-          export TUNNEL_TOKEN=$(${pkgs.systemd}/bin/systemd-creds cat TUNNEL_TOKEN)
-          exec ${lib.getExe pkgs.cloudflared} tunnel --no-autoupdate run
+          exec ${lib.getExe pkgs.cloudflared} tunnel --no-autoupdate run \
+            --token-file "$CREDENTIALS_DIRECTORY/TUNNEL_TOKEN"
         '';
         serviceConfig = {
           DynamicUser = true;
@@ -167,7 +155,7 @@ in
           Type = "notify";
           RestartSec = "5s";
           RuntimeDirectory = "cloudflared-tunnel";
-          RuntimeDirectoryMode = "0400";
+          RuntimeDirectoryMode = "0700";
         };
       };
     };

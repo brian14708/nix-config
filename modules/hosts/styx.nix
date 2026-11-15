@@ -3,26 +3,13 @@ let
   inherit (config.flake.modules) homeManager nixos;
 in
 {
-  flake.modules.homeManager."hosts/styx" =
-    { pkgs, ... }:
-    {
-      imports = with homeManager; [
-        workstation-linux
-        niri
-        fcitx5
-        media
-        chromium
-        vscode
-        cli
-        catppuccin
-      ];
-
-      programs.gpg.enable = true;
-      services.gpg-agent = {
-        enable = true;
-        pinentry.package = pkgs.pinentry-tty;
-      };
-    };
+  flake.modules.homeManager."hosts/styx" = {
+    imports = with homeManager; [
+      desktop-linux
+      vscode
+      gpg
+    ];
+  };
 
   flake.modules.nixos."hosts/styx" =
     { pkgs, ... }:

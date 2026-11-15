@@ -1,3 +1,9 @@
+local config_dir = vim.fs.dirname(debug.getinfo(1, "S").source:sub(2))
+-- Use the packaged configuration even when another Neovim config is installed.
+vim.opt.rtp:remove(vim.fn.stdpath("config"))
+vim.opt.rtp:remove(vim.fn.stdpath("config") .. "/after")
+vim.opt.rtp:prepend(config_dir)
+
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.have_nerd_font = true
@@ -81,17 +87,10 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
 })
 
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not (vim.uv or vim.loop).fs_stat(lazypath) then
-  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
-  if vim.v.shell_error ~= 0 then
-    error("Error cloning lazy.nvim:\n" .. out)
-  end
-end
-vim.opt.rtp:prepend(lazypath)
-
 require("lazy").setup({
+  -- Nix manages Lazy itself; exclude its read-only files from Lazy's update tasks.
+  { "folke/lazy.nvim", enabled = false },
+
   { "tpope/vim-sleuth", event = { "BufReadPost", "BufNewFile" } },
 
   {
@@ -228,7 +227,7 @@ require("lazy").setup({
       end, { desc = "[S]earch [/] in Open Files" })
 
       vim.keymap.set("n", "<leader>sn", function()
-        fzf.files({ cwd = vim.fn.stdpath("config") })
+        fzf.files({ cwd = config_dir })
       end, { desc = "[S]earch [N]eovim files" })
     end,
   },
@@ -529,7 +528,7 @@ require("lazy").setup({
 
   { import = "plugins" },
 }, {
-  -- stdpath("config") is the read-only Nix store; keep the lockfile in state.
+  -- Plugin versions remain managed by Lazy, with its lockfile in writable state.
   lockfile = vim.fn.stdpath("state") .. "/lazy-lock.json",
   rocks = { enabled = false },
   ui = { border = "single" },
@@ -537,6 +536,7 @@ require("lazy").setup({
     cache = { enabled = true },
     reset_packpath = true,
     rtp = {
+      reset = false,
       disabled_plugins = {
         "2html_plugin",
         "tohtml",

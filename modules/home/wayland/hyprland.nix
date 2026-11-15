@@ -11,7 +11,8 @@ in
       ...
     }:
     let
-      launcher = "uwsm app -- ";
+      launcher = "${lib.getExe pkgs.uwsm} app -- ";
+      wpctl = lib.getExe' pkgs.wireplumber "wpctl";
     in
     {
       imports = [ hm.wayland ];
@@ -33,7 +34,7 @@ in
           ];
           bind = [
             "$mod, Return, exec, ${launcher}${lib.getExe pkgs.ghostty} --gtk-single-instance=true"
-            "$mod CONTROL, Return, exec, ${launcher}${lib.getExe pkgs.ghostty} -e herdr"
+            "$mod CONTROL, Return, exec, ${launcher}${lib.getExe pkgs.ghostty} -e ${lib.getExe config.programs.herdr.package}"
             "$mod, Space, exec, ${lib.getExe pkgs.fuzzel} --launch-prefix=\"${launcher}\""
             "$mod, Tab, layoutmsg, swapwithmaster"
             "$mod, f, fullscreen, 1"
@@ -64,7 +65,7 @@ in
             "$mod SHIFT, 9, movetoworkspace, 9"
             "$mod SHIFT, 0, movetoworkspace, 10"
 
-            "$mod, x, exec, loginctl lock-session"
+            "$mod, x, exec, ${lib.getExe' pkgs.systemd "loginctl"} lock-session"
 
             (
               "$mod, P, exec, "
@@ -76,10 +77,10 @@ in
               + "${lib.getExe pkgs.grim} -g \"$(${lib.getExe pkgs.slurp})\" - |"
               + "${pkgs.wl-clipboard}/bin/wl-copy -t image/png"
             )
-            ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-            ", XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
-            ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"
-            ", XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+"
+            ", XF86AudioMute, exec, ${wpctl} set-mute @DEFAULT_AUDIO_SINK@ toggle"
+            ", XF86AudioMicMute, exec, ${wpctl} set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+            ", XF86AudioLowerVolume, exec, ${wpctl} set-volume @DEFAULT_AUDIO_SINK@ 0.1-"
+            ", XF86AudioRaiseVolume, exec, ${wpctl} set-volume @DEFAULT_AUDIO_SINK@ 0.1+"
             ", XF86AudioPlay, exec, ${lib.getExe pkgs.playerctl} play-pause"
             ", XF86AudioStop, exec, ${lib.getExe pkgs.playerctl} stop"
             ", XF86AudioNext, exec, ${lib.getExe pkgs.playerctl} next"

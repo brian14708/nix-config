@@ -29,7 +29,6 @@
         "x86_64-linux"
         "aarch64-linux"
         "aarch64-darwin"
-        "x86_64-darwin"
       ];
       perSystem =
         {
@@ -40,7 +39,13 @@
         }:
         let
           rustToolchain = p: p.rust-bin.stable.latest.default;
-          craneLib = (crane.mkLib pkgs).overrideToolchain rustToolchain;
+          craneLib =
+            ((crane.mkLib pkgs).overrideScope (
+              _final: _prev: {
+                stdenvSelector = p: p.clangStdenv;
+              }
+            )).overrideToolchain
+              rustToolchain;
           pname = "hello";
         in
         {
@@ -58,8 +63,7 @@
                     pkgs.stdenvAdapters.useMoldLinker pkgs.clangStdenv;
               };
             })
-              {
-              };
+              { };
 
           treefmt = {
             projectRootFile = "flake.nix";
@@ -87,7 +91,6 @@
                   inherit pname;
                   src = craneLib.cleanCargoSource ./.;
                   strictDeps = true;
-                  stdenv = p: p.clangStdenv;
                 };
               in
               craneLib.buildPackage (
@@ -96,6 +99,8 @@
                   cargoArtifacts = craneLib.buildDepsOnly commonArgs;
                 }
               );
+          }
+          // pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
             oci = pkgs.dockerTools.buildImage {
               name = pname;
               tag = "latest";
@@ -105,11 +110,7 @@
               };
             };
           };
-          checks = {
-          }
-          // (pkgs.lib.mapAttrs' (n: pkgs.lib.nameValuePair "package-${n}") self'.packages);
+          checks = pkgs.lib.mapAttrs' (n: pkgs.lib.nameValuePair "package-${n}") self'.packages;
         };
-      flake = {
-      };
     };
 }

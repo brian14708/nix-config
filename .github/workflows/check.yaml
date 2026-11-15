@@ -18,3 +18,6 @@ jobs:
 
       - name: Run flake check
         run: nix flake check
+
+      - name: Evaluate all supported systems
+        run: nix flake check --all-systems --no-build

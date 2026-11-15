@@ -1,25 +1,30 @@
 {
   flake.modules.homeManager.wayland =
-    { pkgs, lib, ... }:
+    {
+      config,
+      pkgs,
+      lib,
+      ...
+    }:
     let
-      timeoutCommand = builtins.toString (
-        pkgs.writeScript "timeout-command" ''
-          #!${pkgs.dash}/bin/dash
-          case "$XDG_CURRENT_DESKTOP" in
-          niri) niri msg action power-off-monitors ;;
-          Hyprland) hyprctl dispatch dpms off ;;
-          esac
-        ''
-      );
-      resumeCommand = builtins.toString (
-        pkgs.writeScript "resume-command" ''
-          #!${pkgs.dash}/bin/dash
-          case "$XDG_CURRENT_DESKTOP" in
-          niri) niri msg action power-on-monitors ;;
-          Hyprland) hyprctl dispatch dpms on ;;
-          esac
-        ''
-      );
+      displayPowerCommand =
+        name: niriAction: hyprlandState:
+        lib.getExe (
+          pkgs.writeShellApplication {
+            inherit name;
+            runtimeInputs =
+              lib.optional config.wayland.windowManager.niri.enable config.wayland.windowManager.niri.package
+              ++ lib.optional config.wayland.windowManager.hyprland.enable config.wayland.windowManager.hyprland.package;
+            text = ''
+              case ":''${XDG_CURRENT_DESKTOP:-}:" in
+                *:niri:*) niri msg action ${niriAction} ;;
+                *:Hyprland:*) hyprctl dispatch dpms ${hyprlandState} ;;
+              esac
+            '';
+          }
+        );
+      timeoutCommand = displayPowerCommand "desktop-displays-off" "power-off-monitors" "off";
+      resumeCommand = displayPowerCommand "desktop-displays-on" "power-on-monitors" "on";
     in
     {
       home.pointerCursor.enable = true;
@@ -53,9 +58,6 @@
             window-inherit-working-directory = false;
           };
         };
-        neovim.extraPackages = [
-          pkgs.wl-clipboard
-        ];
       };
 
       services = {
@@ -69,15 +71,15 @@
           enable = true;
           settings = {
             general = {
-              before_sleep_cmd = "loginctl lock-session";
+              before_sleep_cmd = "${lib.getExe' pkgs.systemd "loginctl"} lock-session";
               after_sleep_cmd = resumeCommand;
-              lock_cmd = "pidof hyprlock || ${lib.getExe pkgs.hyprlock}";
+              lock_cmd = "${lib.getExe' pkgs.procps "pidof"} hyprlock || ${lib.getExe config.programs.hyprlock.package}";
             };
 
             listener = [
               {
                 timeout = 120;
-                on-timeout = lib.getExe pkgs.hyprlock;
+                on-timeout = lib.getExe config.programs.hyprlock.package;
               }
               {
                 timeout = 180;

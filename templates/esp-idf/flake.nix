@@ -1,10 +1,10 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    # ESP-IDF's binary tools require the nixpkgs version tested upstream.
+    nixpkgs.follows = "esp-idf/nixpkgs";
     flake-parts.url = "github:hercules-ci/flake-parts";
     esp-idf = {
       url = "github:mirrexagon/nixpkgs-esp-dev";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
@@ -26,22 +26,11 @@
       ];
       perSystem =
         {
-          pkgs,
           system,
           ...
         }:
         {
-          _module.args.pkgs = import inputs.nixpkgs {
-            inherit system;
-            overlays = [
-              inputs.esp-idf.overlays.default
-            ];
-          };
-          devShells.default = pkgs.mkShell {
-            packages = with pkgs; [
-              esp-idf-full
-            ];
-          };
+          devShells.default = inputs.esp-idf.devShells.${system}.default;
           treefmt.programs = {
             cmake-format.enable = true;
             clang-format.enable = true;

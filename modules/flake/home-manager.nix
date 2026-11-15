@@ -2,6 +2,23 @@ toplevel@{
   inputs,
   ...
 }:
+let
+  hm = toplevel.config.flake.modules.homeManager;
+  mkHomeManager = host: home: {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users.${host.owner.username} = {
+      imports = [
+        hm.base
+        (hm."hosts/${host.networking.hostName}" or { })
+      ];
+      home = {
+        inherit (host.owner) username;
+      }
+      // home;
+    };
+  };
+in
 {
   flake-file.inputs.home-manager = {
     url = "github:nix-community/home-manager";
@@ -21,22 +38,8 @@ toplevel@{
       {
         imports = [ inputs.home-manager.nixosModules.home-manager ];
 
-        home-manager = {
-          useGlobalPkgs = true;
-          useUserPackages = true;
-          users.${config.owner.username}.imports = [
-            (
-              { osConfig, ... }:
-              {
-                home = {
-                  inherit (config.owner) username;
-                  inherit (osConfig.system) stateVersion;
-                };
-              }
-            )
-            toplevel.config.flake.modules.homeManager.base
-            (toplevel.config.flake.modules.homeManager."hosts/${config.networking.hostName}" or { })
-          ];
+        home-manager = mkHomeManager config {
+          inherit (config.system) stateVersion;
         };
       };
 
@@ -45,19 +48,7 @@ toplevel@{
       {
         imports = [ inputs.home-manager.darwinModules.home-manager ];
 
-        home-manager = {
-          useGlobalPkgs = true;
-          useUserPackages = true;
-          users.${config.owner.username}.imports = [
-            {
-              home = {
-                inherit (config.owner) username;
-              };
-            }
-            toplevel.config.flake.modules.homeManager.base
-            (toplevel.config.flake.modules.homeManager."hosts/${config.networking.hostName}" or { })
-          ];
-        };
+        home-manager = mkHomeManager config { };
       };
   };
 }

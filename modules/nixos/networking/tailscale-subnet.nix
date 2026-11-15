@@ -19,5 +19,11 @@ in
         enable = true;
         settings.include = config.sops.secrets."configs/unbound".path;
       };
+
+      sops.secrets."configs/unbound" = {
+        owner = config.services.unbound.user;
+        group = config.services.unbound.group;
+        restartUnits = [ "unbound.service" ];
+      };
     };
 }

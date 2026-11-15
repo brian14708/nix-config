@@ -7,23 +7,13 @@ in
     { pkgs, ... }:
     {
       imports = with homeManager; [
-        workstation-linux
-        niri
-        fcitx5
-        media
-        chromium
+        desktop-linux
         vscode
-        cli
-        catppuccin
+        gpg
       ];
 
       home.packages = with pkgs; [ obsidian ];
 
-      programs.gpg.enable = true;
-      services.gpg-agent = {
-        enable = true;
-        pinentry.package = pkgs.pinentry-tty;
-      };
     };
 
   flake.modules.nixos."hosts/aether" = {

@@ -1,3 +1,4 @@
+{ self, ... }:
 {
   flake.modules.homeManager.catppuccin =
     {
@@ -13,9 +14,6 @@
       flavor = "mocha";
       codeFont = "Maple Mono NF CN";
       accent = "blue";
-      mkUpper =
-        str:
-        (lib.toUpper (builtins.substring 0 1 str)) + (builtins.substring 1 (builtins.stringLength str) str);
       accentVariant = if flavor == "latte" then "light" else "dark";
     in
     {
@@ -44,13 +42,14 @@
         opacity.terminal = 0.9;
         cursor = {
           name = "catppuccin-${flavor}-${accentVariant}-cursors";
-          package = pkgs.catppuccin-cursors.${flavor + mkUpper accentVariant};
+          package = pkgs.catppuccin-cursors.${flavor + lib.toSentenceCase accentVariant};
           size = 24;
         };
         targets = {
           waybar.enable = false;
           fcitx5.enable = false;
           vscode.enable = false;
+          # Pinned Stylix still uses the deprecated programs.rofi.font option.
           rofi.enable = false;
         };
       };
@@ -238,28 +237,19 @@
         };
       };
 
-      xdg.configFile."nvim/override/lua/theme.lua".text = ''
-        vim.g.neovide_opacity = 0.8
-        vim.g.neovide_normal_opacity = 0.8
-        vim.g.neovide_padding_top = 4
-        vim.g.neovide_padding_bottom = 4
-        vim.g.neovide_padding_right = 4
-        vim.g.neovide_padding_left = 4
+      my.neovim.package = self.packages.${pkgs.stdenv.hostPlatform.system}.nvim.override {
+        extraLuaConfig = ''
+          vim.g.nvim_theme = "catppuccin"
+          vim.g.catppuccin_flavor = "${flavor}"
+          vim.g.neovide_opacity = 0.8
+          vim.g.neovide_normal_opacity = 0.8
+          vim.g.neovide_padding_top = 4
+          vim.g.neovide_padding_bottom = 4
+          vim.g.neovide_padding_right = 4
+          vim.g.neovide_padding_left = 4
 
-        return {
-          "catppuccin/nvim",
-          name = "catppuccin",
-          priority = 1000,
-          opts = {
-            flavor = "${flavor}",
-            term_colors = true,
-            transparent_background = not vim.g.neovide,
-          },
-          init = function()
-            vim.cmd.colorscheme("catppuccin")
-          end,
-        };
-      '';
+        '';
+      };
 
       i18n.inputMethod.fcitx5 = {
         addons = [ pkgs.catppuccin-fcitx5 ];

@@ -1,3 +1,7 @@
+{ config, ... }:
+let
+  hm = config.flake.modules.homeManager;
+in
 {
   flake.modules.homeManager.cli =
     {
@@ -22,6 +26,8 @@
       };
     in
     {
+      imports = [ hm.shell ];
+
       xdg.configFile."mise/config.toml".source = (pkgs.formats.toml { }).generate "mise.toml" {
         settings = {
           minimum_release_age = "0";
@@ -47,7 +53,6 @@
             ];
             text = ''
               set -Eeuo pipefail
-              IFS=$'\n\t'
               state_file="''${XDG_STATE_HOME:-$HOME/.local/state}/desktop-agent/default"
               configured="codex"
               permission="auto"
@@ -125,7 +130,6 @@
               source ${aiEnv}
               exec ${lib.getExe pkgs.mise} exec --quiet claude-code -- claude "$@"
             '';
-            checkPhase = "";
             runtimeInputs = [ pkgs.mise ];
             runtimeEnv = {
               CLAUDE_CODE_ATTRIBUTION_HEADER = "0";
@@ -161,7 +165,6 @@
                 "$config_file"
               exec ${lib.getExe pkgs.mise} exec --quiet codex -- codex --sandbox danger-full-access --no-daemon "$@"
             '';
-            checkPhase = "";
             runtimeInputs = [
               pkgs.coreutils
               pkgs.gnused
@@ -210,24 +213,6 @@
           };
         };
         jq.enable = true;
-        starship.enable = true;
-        zoxide.enable = true;
-        direnv = {
-          enable = true;
-          nix-direnv.enable = true;
-        };
-        carapace.enable = true;
-        bash = {
-          enable = true;
-          bashrcExtra = lib.mkAfter ''
-            if command -v direnv >/dev/null 2>&1; then
-              if [ -n "$CLAUDECODE" ]; then
-                eval "$(direnv hook bash)"
-                eval "$(DIRENV_LOG_FORMAT= direnv export bash)"
-              fi
-            fi
-          '';
-        };
       };
     };
 }

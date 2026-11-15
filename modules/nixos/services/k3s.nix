@@ -17,7 +17,10 @@
           "servicelb"
           "traefik"
         ];
-        extraFlags = [ "--write-kubeconfig-mode=0644" ];
+        extraFlags = [
+          "--write-kubeconfig-mode=0640"
+          "--write-kubeconfig-group=wheel"
+        ];
       };
 
       environment = {

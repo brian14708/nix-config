@@ -18,6 +18,8 @@ in
         tunMode = true;
       };
 
+      sops.templates."mihomo.yaml".restartUnits = [ "mihomo.service" ];
+
       sops.templates."mihomo.yaml".content = ''
         proxy-providers:
           proxy:
