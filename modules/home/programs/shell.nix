@@ -1,7 +1,6 @@
 let
-  agentDirenvHook = ''
+  agentDirenvExport = ''
     if command -v direnv >/dev/null 2>&1 && [ -n "''${CLAUDECODE:-}" ]; then
-      eval "$(direnv hook bash)"
       eval "$(DIRENV_LOG_FORMAT= direnv export bash)"
     fi
   '';
@@ -20,7 +19,7 @@ in
         carapace.enable = true;
         bash = {
           enable = true;
-          bashrcExtra = lib.mkAfter agentDirenvHook;
+          bashrcExtra = lib.mkAfter agentDirenvExport;
         };
       };
     };
@@ -103,7 +102,7 @@ in
         eval "$(${lib.getExe pkgs.zoxide} init bash)"
         eval "$(${lib.getExe pkgs.starship} init bash)"
         eval "$(${lib.getExe pkgs.direnv} hook bash)"
-        ${agentDirenvHook}
+        ${agentDirenvExport}
       '';
     in
     {
@@ -114,9 +113,9 @@ in
           EDITOR = lib.getExe self'.packages.nvim;
           VISUAL = lib.getExe self'.packages.nvim;
           PAGER = "${lib.getExe pkgs.less} -RXF";
-          DIRENV_CONFIG = direnvConfig;
         };
         text = ''
+          export DIRENV_CONFIG="''${DIRENV_CONFIG:-${direnvConfig}}"
           export SHELL="$0"
           exec ${lib.getExe pkgs.bashInteractive} --noprofile --rcfile ${bashrc} "$@"
         '';

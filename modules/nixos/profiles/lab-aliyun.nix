@@ -30,6 +30,12 @@ in
           "223.6.6.6"
         ];
 
+        networking.nftables.enable = true;
+        # Allow bootstrap SSH from the lab VSwitch before Tailnet enrollment.
+        networking.firewall.extraInputRules = lib.mkIf (!config.services.tailscale.enable) ''
+          ip saddr 172.30.80.0/20 tcp dport 22 accept
+        '';
+
         system.stateVersion = lib.mkDefault "24.11";
 
         # Roughly mirrors nix.orig's `hosts/profiles/linux.nix` baseline.

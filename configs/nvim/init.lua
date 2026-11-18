@@ -211,17 +211,22 @@ require("lazy").setup({
 
       vim.keymap.set("n", "<leader>s/", function()
         local paths = {}
-        for _, b in ipairs(vim.api.nvim_list_bufs()) do
-          if vim.api.nvim_buf_is_loaded(b) and vim.bo[b].buflisted then
-            local n = vim.api.nvim_buf_get_name(b)
-            if n ~= "" and vim.uv.fs_stat(n) then
-              table.insert(paths, vim.fn.shellescape(n))
+        for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+          if vim.api.nvim_buf_is_loaded(bufnr) and vim.bo[bufnr].buflisted and vim.bo[bufnr].buftype == "" then
+            local name = vim.api.nvim_buf_get_name(bufnr)
+            local stat = name ~= "" and vim.uv.fs_stat(name)
+            if stat and stat.type == "file" then
+              paths[#paths + 1] = name
             end
           end
         end
+        if #paths == 0 then
+          vim.notify("No open files to search", vim.log.levels.INFO)
+          return
+        end
         fzf.live_grep({
-          cmd = "rg --column --line-number --no-heading --color=always --smart-case -- {q} "
-            .. table.concat(paths, " "),
+          rg_opts = "--column --line-number --no-heading --color=always --smart-case --",
+          search_paths = paths,
           prompt = "Live Grep (open files)> ",
         })
       end, { desc = "[S]earch [/] in Open Files" })
@@ -239,6 +244,9 @@ require("lazy").setup({
       "saghen/blink.cmp",
     },
     config = function()
+      local highlight_group = vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = true })
+      local highlight_method = vim.lsp.protocol.Methods.textDocument_documentHighlight
+
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
         callback = function(event)
@@ -267,29 +275,31 @@ require("lazy").setup({
           map("<C-k>", vim.lsp.buf.signature_help, "Signature Help", "i")
 
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if
-            client
-            and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, { bufnr = event.buf })
-          then
-            local highlight_augroup = vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
+          if client and client:supports_method(highlight_method, event.buf) then
+            vim.api.nvim_clear_autocmds({ group = highlight_group, buffer = event.buf })
             vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
               buffer = event.buf,
-              group = highlight_augroup,
+              group = highlight_group,
               callback = vim.lsp.buf.document_highlight,
             })
 
             vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
               buffer = event.buf,
-              group = highlight_augroup,
+              group = highlight_group,
               callback = vim.lsp.buf.clear_references,
             })
 
             vim.api.nvim_create_autocmd("LspDetach", {
               buffer = event.buf,
-              group = vim.api.nvim_create_augroup("kickstart-lsp-detach", { clear = false }),
-              callback = function(event2)
-                vim.api.nvim_buf_call(event2.buf, vim.lsp.buf.clear_references)
-                vim.api.nvim_clear_autocmds({ group = "kickstart-lsp-highlight", buffer = event2.buf })
+              group = highlight_group,
+              callback = function(detach)
+                for _, attached in ipairs(vim.lsp.get_clients({ bufnr = detach.buf, method = highlight_method })) do
+                  if attached.id ~= detach.data.client_id then
+                    return
+                  end
+                end
+                vim.api.nvim_buf_call(detach.buf, vim.lsp.buf.clear_references)
+                vim.api.nvim_clear_autocmds({ group = highlight_group, buffer = detach.buf })
               end,
             })
           end

@@ -16,8 +16,5 @@ jobs:
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v23
 
-      - name: Run flake check
-        run: nix flake check
-
-      - name: Evaluate all supported systems
-        run: nix flake check --all-systems --no-build
+      - name: Check all supported systems
+        run: nix flake check --all-systems --option allow-import-from-derivation false

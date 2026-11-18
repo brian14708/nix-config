@@ -1,4 +1,4 @@
-{ self, ... }:
+{ inputs, self, ... }:
 {
   flake.modules.homeManager.catppuccin =
     {
@@ -23,7 +23,7 @@
         enable = true;
         enableReleaseChecks = lib.mkDefault false;
         polarity = "dark";
-        base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-${flavor}.yaml";
+        base16Scheme = "${inputs.base16-schemes}/base16/catppuccin-${flavor}.yaml";
         fonts = {
           serif = {
             name = "serif";

@@ -134,7 +134,6 @@ in
       networking = {
         hostName = "macbookpro-vm";
         networkmanager.enable = true;
-        firewall.enable = false;
       };
 
       users = {

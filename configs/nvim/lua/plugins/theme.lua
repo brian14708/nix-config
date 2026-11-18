@@ -8,7 +8,8 @@ if vim.g.nvim_theme == "catppuccin" then
       term_colors = true,
       transparent_background = not vim.g.neovide,
     },
-    init = function()
+    config = function(_, opts)
+      require("catppuccin").setup(opts)
       vim.cmd.colorscheme("catppuccin")
     end,
   }
@@ -20,7 +21,8 @@ return {
   opts = {
     transparent = not vim.g.neovide,
   },
-  init = function()
+  config = function(_, opts)
+    require("tokyonight").setup(opts)
     vim.cmd.colorscheme("tokyonight-night")
   end,
 }

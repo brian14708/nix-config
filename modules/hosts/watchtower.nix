@@ -17,6 +17,7 @@ in
       imports = [
         inputs.sops-nix.nixosModules.sops
         nixos.lab-aliyun
+        nixos.tailnet-ssh
         nixos.tailscale-derper
       ];
 
@@ -43,9 +44,6 @@ in
         firewall.allowedUDPPorts = [
           47320
         ];
-        firewall.trustedInterfaces = [
-          config.services.tailscale.interfaceName
-        ];
       };
       system.stateVersion = "24.11";
 
@@ -68,13 +66,11 @@ in
             42222
           ];
           extraConfig = ''
+            Match LocalPort 22
+              AllowUsers ops
+
             Match LocalPort 42222
               AllowUsers jump
-              AuthenticationMethods publickey
-              KbdInteractiveAuthentication no
-              PasswordAuthentication no
-              PubkeyAuthentication yes
-              PermitRootLogin no
               AllowAgentForwarding no
               AllowStreamLocalForwarding no
               AllowTcpForwarding local

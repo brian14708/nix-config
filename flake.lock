@@ -51,6 +51,23 @@
         "type": "github"
       }
     },
+    "base16-schemes": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1768516483,
+        "narHash": "sha256-AWTIYZ1tZab0YwAQwgt5yO4ucqZoc4iXX002Byy7pRY=",
+        "owner": "tinted-theming",
+        "repo": "schemes",
+        "rev": "43dd14f6466a782bd57419fdfb5f398c74d6ac53",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tinted-theming",
+        "repo": "schemes",
+        "rev": "43dd14f6466a782bd57419fdfb5f398c74d6ac53",
+        "type": "github"
+      }
+    },
     "base16-vim": {
       "flake": false,
       "locked": {
@@ -408,6 +425,7 @@
     },
     "root": {
       "inputs": {
+        "base16-schemes": "base16-schemes",
         "deploy-rs": "deploy-rs",
         "disko": "disko",
         "flake-file": "flake-file",

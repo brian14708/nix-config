@@ -3,6 +3,15 @@ let
   inherit (config.flake.modules) nixos;
 in
 {
+  flake.modules.nixos.tailnet-ssh =
+    { config, ... }:
+    {
+      # Let the host enforce its input policy even when Tailscale accepts traffic.
+      networking.nftables.enable = true;
+      networking.firewall.interfaces.${config.services.tailscale.interfaceName}.allowedTCPPorts = [ 22 ];
+      services.tailscale.openFirewall = true;
+    };
+
   flake.modules.nixos.tailscale-subnet =
     { config, lib, ... }:
     {

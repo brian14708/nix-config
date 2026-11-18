@@ -22,7 +22,7 @@ in
   };
 
   flake.deploy.nodes = {
-    watchtower = mkNode "watchtower" "watchtower";
+    watchtower = mkNode "watchtower" "watchtower.tail2d58.ts.net";
   };
 
   perSystem =

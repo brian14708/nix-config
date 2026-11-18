@@ -15,6 +15,10 @@
   };
 
   inputs = {
+    base16-schemes = {
+      url = "github:tinted-theming/schemes/43dd14f6466a782bd57419fdfb5f398c74d6ac53";
+      flake = false;
+    };
     deploy-rs = {
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";

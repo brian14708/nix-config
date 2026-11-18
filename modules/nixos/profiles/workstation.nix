@@ -21,6 +21,7 @@ toplevel@{
         inputs.disko.nixosModules.disko
         sops
         comma
+        tailnet-ssh
       ];
 
       # Host-specific secrets for workstation machines.
@@ -132,10 +133,6 @@ toplevel@{
         enable = true;
         wifi.backend = "iwd";
       };
-      networking.firewall.trustedInterfaces = [
-        config.services.tailscale.interfaceName
-      ];
-
       hardware.enableRedistributableFirmware = true;
       services.logind.settings.Login = {
         HandleLidSwitch = "suspend-then-hibernate";

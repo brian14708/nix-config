@@ -10,6 +10,16 @@ in
 {
   flake.modules.nixos.base = {
     imports = [ config.flake.modules.generic.owner ];
+
+    services.openssh = {
+      openFirewall = false;
+      settings = {
+        AuthenticationMethods = "publickey";
+        PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
+        PermitRootLogin = "no";
+      };
+    };
   };
   flake.nixosConfigurations = lib.pipe config.flake.modules.nixos [
     (lib.filterAttrs (name: _: lib.hasPrefix prefix name))
